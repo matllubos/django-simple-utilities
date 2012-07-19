@@ -1,0 +1,55 @@
+form#car_form {
+	min-width: 900px;
+}
+
+
+fieldset, .submit-row
+{
+	clear: both;
+}
+
+fieldset.columns
+{
+	float: left;
+	clear: none;
+	margin-right: 5px;
+	width: 49% !important;
+	margin: 0 2.5px 5px 2.5px !important;
+}
+
+fieldset.columns textarea
+{
+	width: 200px !important;
+}
+
+
+fieldset.table-layout div.form-row 
+{
+	float: left;
+}
+
+fieldset.table-layout div.form-row label
+{
+	display: block;
+	float: none;
+}
+
+fieldset.wrapper
+{
+	visibility:hidden;
+}
+
+fieldset h2 
+{
+	display: none;
+}
+
+div#header, div.breadcrumbs, ul.object-tools, div.submit-row
+{
+	display: none;
+}
+
+p.help
+{
+	display: none;
+}
