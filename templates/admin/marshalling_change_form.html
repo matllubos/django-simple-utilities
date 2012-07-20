@@ -1,0 +1,13 @@
+{% extends "admin_tp/change_form.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
+     {% if has_change_permission %}{% if parent %}<a href="../../{{ parent }}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% endif%}{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo;
+     {% if add %}{% trans "Add" %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endif %}{% endblock %}

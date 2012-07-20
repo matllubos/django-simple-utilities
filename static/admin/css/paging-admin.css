@@ -1,0 +1,26 @@
+a.nextlink span.ico
+{
+	display: block;
+	float: right;
+	width: 9px;
+	height: 8px;
+	background-image: url("/static/utils/admin/image/arrow-white-right.gif");
+	margin: 3px 0 3px 3px;
+}
+
+a.prevlink span.ico
+{
+	display: block;
+	float: left;
+	width: 9px;
+	height: 8px;
+	background-image: url("/static/utils/admin/image/arrow-white-left.gif");
+	margin: 3px 3px 3px 0;
+}
+
+li.separator
+{
+	background: none;
+	margin: 0 10px;
+	padding: 0;
+}

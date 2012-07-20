@@ -1,0 +1,14 @@
+{% extends "admin_tp/change_list.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+
+{% block object-tools-items %}
+	{% for child in childs %}
+		<li>
+			<a href="../{{ child.name }}/add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
+				{% blocktrans with child.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+			</a>
+		</li>
+	{% endfor %}
+{% endblock %}

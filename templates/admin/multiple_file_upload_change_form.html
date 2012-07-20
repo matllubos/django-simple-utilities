@@ -1,0 +1,8 @@
+{% extends "admin_tp/change_form.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+
+{% block after_field_sets %}
+    	<label>{% trans "Nahrát soubory" %}</label><input type="file" id="id_files" name="files[]" multiple> 
+{% endblock %}

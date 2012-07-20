@@ -1,0 +1,38 @@
+form#car_form {
+	min-width: 900px;
+}
+
+
+fieldset, .submit-row
+{
+	clear: both;
+}
+
+fieldset.columns
+{
+	float: left;
+	clear: none;
+	margin-right: 5px;
+	min-width: 300px;
+}
+
+fieldset.table-layout
+{
+	max-width: 40%;
+}
+
+fieldset.table-layout div.form-row 
+{
+	float: left;
+}
+
+fieldset.table-layout div.form-row label
+{
+	display: block;
+	float: none;
+}
+
+fieldset.wrapper
+{
+	visibility:hidden;
+}

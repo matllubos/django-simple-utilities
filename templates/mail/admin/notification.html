@@ -1,0 +1,64 @@
+<html>
+    <head>
+    	<style type="text/css">
+    		div {
+    			padding: 20px;
+    		}
+    		
+    		h1 {
+    			font-size: 18px;
+    			color: #363636;
+    		}
+    		
+    		table {
+    			border-collapse: collapse;
+    			margin-bottom: 8px;
+    		}
+    		
+    		table tr td, table tr th {
+    			padding: 10px;
+    			border-top: 1px solid #eeeeee;
+    			text-align: left;
+    			color: #363636;
+    		}
+    		
+    		table tr td{
+    			border-right: 1px solid #aaaaaa
+    		} 
+    		
+    		
+    		table tr th {
+    			border-left: 1px solid #aaaaaa;
+    		}
+    		
+    		table tr:first-child td, table tr:first-child th {
+    			border-top: 1px solid #aaaaaa;
+    		}
+    		
+    		table tr:last-child td, table tr:last-child th {
+    			border-bottom: 1px solid #aaaaaa;
+    		}
+    		
+    		a  {
+    			color: #05326b;
+    			text-decoration: none;
+    			padding: 5px;
+    		}
+    		
+    		a:hover {
+    			color: #1163c9;
+    		}
+    	</style>
+	</head>
+    <body>
+   		<div>
+			<h1>Byla vytvořena nová položka: {{ obj_verbose_name }}</h1>
+			<table>
+				{% for k, v in data.items %}
+					<tr><th>{{ k }}:</th><td>{{ v }}</td></tr>
+				{% endfor%}
+			</table>
+			<a href="http://{{ SITE_URL }}/admin/{{ obj_app_label }}/{{ obj_name|lower  }}/{{ obj.id }}/">Zobrazit v administraci</a>
+		</div>
+    </body>
+</html>
