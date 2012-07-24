@@ -153,7 +153,7 @@ class PhoneField(models.CharField):
    
     def pre_save(self, model_instance, add):
         if (self.format == 'CZ' and model_instance.phone):
-            m = re.match(r'^(\+?\d{3})? ?(\d{3}) ?(\d{3}) ?(\d{3})$', model_instance.phone)
+            m = re.match(r'^(\+?\d{3})? ?(\d{3}) ?(\d{3}) ?(\d{3})$', getattr(model_instance, self.attname))
             out = '+420'
             if (m.group(1)): out = '+'+re.sub(r'\+', '', m.group(1))
             return '{0} {1} {2} {3}'.format(out, m.group(2), m.group(3), m.group(4))
@@ -171,7 +171,7 @@ class PSCField(models.CharField):
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
     
     def pre_save(self, model_instance, add):
-        m = re.match(r'^(\d{3}) ?(\d{2})$', model_instance.psc)
+        m = re.match(r'^(\d{3}) ?(\d{2})$', getattr(model_instance, self.attname))
         return '{0} {1}'.format(m.group(1), m.group(2))
     
 class DICField(models.CharField):
@@ -301,10 +301,10 @@ class GoogleMapURLFormField(forms.URLField):
         m = re.match(r"^.*src=\"([^\"]+)\".*$", value)
         if (m):
             value = m.group(1)
-        if (not re.match(r"output=embed", value)):
+        if (not re.search(r"output\=embed", value)):
             value += '&amp;output=embed'
 
-        if (not re.search(r"^https://maps\.google\.cz/maps/ms", value)):
+        if (not re.search(r"^https?://maps\.google\.cz/maps", value)):
             raise ValidationError(_(u'Toto není správné URL google map'))
         return super(GoogleMapURLFormField, self).clean(value)   
 
