@@ -1,10 +1,12 @@
 # coding: utf-8
-from django.forms.util import flatatt
+import re
 
+from datetime import date
+
+from django.forms.util import flatatt
 from django.db import models
 from django.utils.encoding import smart_str
 from django import forms
-import re
 from django.db.models.fields import PositiveIntegerField
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
@@ -14,16 +16,17 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core import validators     
 from django.utils.translation import ugettext_lazy as _
-from sorl.thumbnail import ImageField
 from django.db.models.fields.files import FieldFile
-from utils.utils import fit
-from datetime import date
+
+from sorl.thumbnail import ImageField
+
+from utilities.utils import fit
 
 class FieldsWidget(forms.TextInput):
     class Media:
         js = (
-              '%sutils/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
-              '%sutils/js/models/fields.js' % settings.STATIC_URL,
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/models/fields.js' % settings.STATIC_URL,
               )
 
 class MeasureWidget(FieldsWidget):
@@ -45,8 +48,8 @@ class MeasureWidget(FieldsWidget):
 class HtmlWidget(forms.Textarea):
     class Media:
         js = (
-              '%sutils/js/models/tinymce/jscripts/tiny_mce/tiny_mce.js' % settings.STATIC_URL,
-              '%sutils/js/models/textareas.js' % settings.STATIC_URL,
+              '%sutilities/js/models/tinymce/jscripts/tiny_mce/tiny_mce.js' % settings.STATIC_URL,
+              '%sutilities/js/models/textareas.js' % settings.STATIC_URL,
               )
                 
 class WidgetFactory:
@@ -147,6 +150,8 @@ class PhoneField(models.CharField):
         
         elif (self.format == 'DE'):
             defaults = {'regex':r'^(((((((00|\+)49[ \-/]?)|0)[1-9][0-9]{1,4})[ \-/]?)|((((00|\+)49\()|\(0)[1-9][0-9]{1,4}\)[ \-/]?))[0-9]{1,7}([ \-/]?[0-9]{1,5})?)$',} 
+        elif (self.format == 'OPEN'):
+            defaults = {'regex':r'^[\d-\(\) ]$',} 
         defaults['widget'] = WidgetFactory().create(FieldsWidget, {'class': '%s-phone' % self.format}, kwargs.get('widget', None))
         defaults.update(kwargs)
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
@@ -422,12 +427,12 @@ class SelectDateField(models.DateField):
 class OrderWidget(forms.TextInput):
     class Media:
         js = (
-              '%sutils/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
-              '%sutils/js/order/jquery.ui.core.js' % settings.STATIC_URL,
-              '%sutils/js/order/jquery.ui.widget.js' % settings.STATIC_URL,
-              '%sutils/js/order/jquery.ui.mouse.js' % settings.STATIC_URL,
-              '%sutils/js/order/jquery.ui.sortable.js' % settings.STATIC_URL,
-              '%sutils/js/order/menu-sort.js' % settings.STATIC_URL,
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/order/jquery.ui.core.js' % settings.STATIC_URL,
+              '%sutilities/js/order/jquery.ui.widget.js' % settings.STATIC_URL,
+              '%sutilities/js/order/jquery.ui.mouse.js' % settings.STATIC_URL,
+              '%sutilities/js/order/jquery.ui.sortable.js' % settings.STATIC_URL,
+              '%sutilities/js/order/menu-sort.js' % settings.STATIC_URL,
             )
 
 class OrderField(models.PositiveIntegerField):

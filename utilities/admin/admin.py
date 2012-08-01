@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect
 from django.utils.encoding import force_unicode, smart_str
 from django.contrib.admin.views.main import ChangeList
 from django.contrib import messages
-from utils.deep_copy import deep_copy
+from utilities.deep_copy import deep_copy
 from django.views.decorators.csrf import csrf_protect
 from django.db import transaction, router
 from django.http import Http404
@@ -31,7 +31,7 @@ def get_related_delete(deleted_objects):
     
 
 class UpdateRelatedAdmin(admin.ModelAdmin):
-    delete_confirmation_template = 'utils/admin/delete_confirmation.html'
+    delete_confirmation_template = 'utilities/admin/delete_confirmation.html'
     
     @csrf_protect_m
     @transaction.commit_on_success
@@ -156,8 +156,8 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
     
         
         js = ['%s%s' % (settings.ADMIN_MEDIA_PREFIX, url) for url in js]
-        js.append('%sutils/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
-        js.append('%sutils/admin/js/RelatedObjectLookups.js' % settings.STATIC_URL)
+        js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
+        js.append('%sutilities/admin/js/RelatedObjectLookups.js' % settings.STATIC_URL)
         #.append('%sjs/admin/RelatedObjectLookups.js' % settings.STATIC_URL)
         return forms.Media(js=js)
     media = property(_media)
@@ -181,8 +181,8 @@ class MarshallingAdmin(UpdateRelatedAdmin):
     real_type_field = 'real_type'
     parent = None
     childs = []
-    change_form_template = 'utils/admin/marshalling_change_form.html'
-    change_list_template = 'utils/admin/marshalling_change_list.html'
+    change_form_template = 'utilities/admin/marshalling_change_form.html'
+    change_list_template = 'utilities/admin/marshalling_change_list.html'
    
     def get_changelist(self, request, **kwargs):
         return MarshallingChangeList 
@@ -289,7 +289,7 @@ class MultipleFilesImport(UpdateRelatedAdmin):
         
         return super(MultipleFilesImport, self).response_change(request, obj) 
     
-    change_form_template = 'utils/admin/multiple_file_upload_change_form.html'
+    change_form_template = 'utilities/admin/multiple_file_upload_change_form.html'
     
     
 class CloneModelAdmin(UpdateRelatedAdmin):
@@ -312,12 +312,12 @@ class CloneModelAdmin(UpdateRelatedAdmin):
         
         return super(CloneModelAdmin, self).response_change(request, obj) 
     
-    change_form_template = 'utils/admin/clone_change_form.html'
+    change_form_template = 'utilities/admin/clone_change_form.html'
 
 
 class AdminPagingMixin(object): 
     
-    change_form_template = 'utils/admin/paging_change_form.html'
+    change_form_template = 'utilities/admin/paging_change_form.html'
     page_ordering = 'pk'
     
     def add_view(self, request, form_url='', extra_context={}):
@@ -350,3 +350,42 @@ class AdminPagingMixin(object):
             extra_context['prev_obj'] = None
         extra_context['prev_change_form_template'] = sup.change_form_template
         return sup.change_view(request, object_id, extra_context)
+    
+
+class ChangeTree(ChangeList):
+    
+    def tree_sort(self, parent):
+        result = []
+        ordering = self.model_admin.ordering
+        filter_values = {self.model_admin.parent: parent}
+        
+        qs = self.result_list.filter(**filter_values)
+        if (ordering):
+            qs.order_by(ordering)
+        for obj in qs:
+            result = result + [obj.pk] + self.tree_sort(obj)
+        return result
+    
+    def get_depth(self, obj):
+        depth = 0
+        parent =  getattr(obj, self.model_admin.parent)
+        obj.parent
+        while(parent != None):
+            parent = getattr(parent, self.model_admin.parent)
+            depth += 1
+        return depth
+    
+class TreeModelAdmin(UpdateRelatedAdmin):
+    
+    parent = None
+    change_list_template = 'admin/change_tree.html'
+    
+    def queryset(self, request):
+        qs = super(TreeModelAdmin, self).queryset(request)
+        
+        for obj in qs:
+            obj.depth = 0
+        return qs
+    
+    def get_changelist(self, request, **kwargs):
+        return ChangeTree 
