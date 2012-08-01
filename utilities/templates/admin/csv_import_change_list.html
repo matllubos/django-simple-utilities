@@ -3,7 +3,7 @@
 {% load adminmedia admin_list i18n %}
 
 {% block extrastyle %}
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}utils/admin/css/csvadmin.css" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}utilities/admin/css/csvadmin.css" />
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
   {% if cl.formset %}

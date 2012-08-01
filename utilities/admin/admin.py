@@ -31,7 +31,7 @@ def get_related_delete(deleted_objects):
     
 
 class UpdateRelatedAdmin(admin.ModelAdmin):
-    delete_confirmation_template = 'utilities/admin/delete_confirmation.html'
+    delete_confirmation_template = 'admin/delete_confirmation.html'
     
     @csrf_protect_m
     @transaction.commit_on_success
@@ -181,8 +181,8 @@ class MarshallingAdmin(UpdateRelatedAdmin):
     real_type_field = 'real_type'
     parent = None
     childs = []
-    change_form_template = 'utilities/admin/marshalling_change_form.html'
-    change_list_template = 'utilities/admin/marshalling_change_list.html'
+    change_form_template = 'admin/marshalling_change_form.html'
+    change_list_template = 'admin/marshalling_change_list.html'
    
     def get_changelist(self, request, **kwargs):
         return MarshallingChangeList 
@@ -289,7 +289,7 @@ class MultipleFilesImport(UpdateRelatedAdmin):
         
         return super(MultipleFilesImport, self).response_change(request, obj) 
     
-    change_form_template = 'utilities/admin/multiple_file_upload_change_form.html'
+    change_form_template = 'admin/multiple_file_upload_change_form.html'
     
     
 class CloneModelAdmin(UpdateRelatedAdmin):
@@ -312,12 +312,12 @@ class CloneModelAdmin(UpdateRelatedAdmin):
         
         return super(CloneModelAdmin, self).response_change(request, obj) 
     
-    change_form_template = 'utilities/admin/clone_change_form.html'
+    change_form_template = 'admin/clone_change_form.html'
 
 
 class AdminPagingMixin(object): 
     
-    change_form_template = 'utilities/admin/paging_change_form.html'
+    change_form_template = 'admin/paging_change_form.html'
     page_ordering = 'pk'
     
     def add_view(self, request, form_url='', extra_context={}):

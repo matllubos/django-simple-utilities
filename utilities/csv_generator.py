@@ -339,7 +339,7 @@ class CSVImportForm(forms.Form):
        
 
 class CSVImportAdmin(UpdateRelatedAdmin):
-    change_list_template = 'utils/admin/csv_import_change_list.html'
+    change_list_template = 'admin/csv_import_change_list.html'
     delimiter = ';'
     csv_fields = ()
     csv_formatters = {}

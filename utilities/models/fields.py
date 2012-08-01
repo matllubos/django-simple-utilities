@@ -147,11 +147,10 @@ class PhoneField(models.CharField):
     def formfield(self, **kwargs):
         if (self.format == 'CZ'):
             defaults = {'regex':r'^(\+?\d{3})? ?\d{3} ?\d{3} ?\d{3}$',}
-        
         elif (self.format == 'DE'):
             defaults = {'regex':r'^(((((((00|\+)49[ \-/]?)|0)[1-9][0-9]{1,4})[ \-/]?)|((((00|\+)49\()|\(0)[1-9][0-9]{1,4}\)[ \-/]?))[0-9]{1,7}([ \-/]?[0-9]{1,5})?)$',} 
         elif (self.format == 'OPEN'):
-            defaults = {'regex':r'^[\d-\(\) ]$',} 
+            defaults = {'regex':r'^[\+\d\-\(\) ]+$',} 
         defaults['widget'] = WidgetFactory().create(FieldsWidget, {'class': '%s-phone' % self.format}, kwargs.get('widget', None))
         defaults.update(kwargs)
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
