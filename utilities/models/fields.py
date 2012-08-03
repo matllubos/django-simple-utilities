@@ -495,15 +495,10 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
         return [None, None]
     
     def render(self, name, value, attrs=None):
-        print self.attrs
-        print attrs
-        print list(self.attrs['choices'])
         attrs['class'] = 'other-select'
         choices = list(self.attrs['choices'])
         choices.append(('other', self.attrs['other']))
         self.widgets[0].choices = choices
-        print attrs
-        print 'render proč ne?'
         return super(OtherSelectWidget, self).render(name, value, attrs=attrs)
     
 class OtherSelectField(forms.MultiValueField):
@@ -556,7 +551,5 @@ class OtherCharField(models.CharField):
             'other': self.other
         }
         defaults.update(kwargs)
-        print 'tefdsa'
         t =  super(OtherCharField, self).formfield(form_class=OtherSelectField, **defaults)
-        print 'dfsa'
         return t
