@@ -228,7 +228,6 @@ function otherSelectFields() {
 			if (select.val() == 'other') {
 				select.parent().find('input[type=text]').css('display', 'inline');
 			} else {
-				select.parent().find('input[type=text]').val('');
 				select.parent().find('input[type=text]').css('display', 'none');
 			}
 		}
