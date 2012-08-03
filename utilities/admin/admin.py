@@ -1,8 +1,7 @@
 # coding: utf-8
 from django.contrib import admin
-from widgets import UpdateRelatedFieldWidgetWrapper
 from django.db import models
-from django.utils.translation import ugettext_lazy, ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.utils.html import escape, escapejs
 from django import forms
@@ -10,16 +9,18 @@ from django.http import HttpResponseRedirect
 from django.utils.encoding import force_unicode, smart_str
 from django.contrib.admin.views.main import ChangeList
 from django.contrib import messages
-from utilities.deep_copy import deep_copy
-from django.views.decorators.csrf import csrf_protect
 from django.db import transaction, router
 from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.contrib.admin.util import get_deleted_objects
 from django.contrib.admin.util import unquote
-from django.utils.decorators import method_decorator
 from django.contrib.admin.options import csrf_protect_m
-from django.views.generic.create_update import delete_object
+from django.template.defaultfilters import slugify
+
+from utilities.deep_copy import deep_copy
+from utilities.csv_generator import CsvGenerator
+
+from widgets import UpdateRelatedFieldWidgetWrapper
 
 def get_related_delete(deleted_objects):
     if not isinstance(deleted_objects, list):
@@ -389,3 +390,56 @@ class TreeModelAdmin(UpdateRelatedAdmin):
     
     def get_changelist(self, request, **kwargs):
         return ChangeTree 
+    
+    
+class CSVImportForm(forms.Form):
+    csv_file = forms.FileField(max_length=50)
+       
+
+class CSVImportAdmin(UpdateRelatedAdmin):
+    change_list_template = 'admin/csv_import_change_list.html'
+    delimiter = ';'
+    csv_fields = ()
+    csv_formatters = {}
+    csv_quotechar = '"'
+    bom = False
+    
+    def pre_import_save(self, obj):
+        pass
+    
+    def import_csv(self, f):
+        csv_generator = CsvGenerator(self.model,self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
+        obj = csv_generator.import_csv(f, self)
+        return obj
+
+    def export_csv(self, request, queryset):
+        response = HttpResponse(mimetype='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(queryset.model.__name__)
+        if self.bom:
+            response.write("\xEF\xBB\xBF\n")
+        csv_generator = CsvGenerator(self.model, self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
+        csv_generator.export_csv(response, queryset)
+        return response
+        
+    export_csv.short_description = _(u"Exportovat do formátu CSV")
+    
+    def changelist_view(self, request, extra_context={}):
+        import_form = CSVImportForm()
+        if ('_csv-import' in request.POST):
+            import_form = CSVImportForm(request.POST, request.FILES)
+            
+            if(import_form.is_valid()):
+                #try:
+                self.import_csv(request.FILES['csv_file'])
+                #    messages.info(request, _(u'CSV import byl úspěšně dokončen'))
+                #except:
+                #    messages.error(request, _(u'Špatný formát CSV souboru'))
+            else:
+                messages.error(request, _(u'Pro import je nutné vložit sobor ve formátu CSV'))
+            return HttpResponseRedirect('')
+        import_context = {
+            'import_form': import_form,
+        }
+        
+        extra_context.update(import_context)
+        return super(CSVImportAdmin, self).changelist_view(request, extra_context=extra_context)

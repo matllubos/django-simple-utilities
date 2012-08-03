@@ -220,6 +220,23 @@ function hideFields(){
 
 }
 
+
+function otherSelectFields() {
+	$(".other-select").each( function() {
+		var select = $(this);
+		var otherSelectFunc = function() {
+			if (select.val() == 'other') {
+				select.parent().find('input[type=text]').css('display', 'inline');
+			} else {
+				select.parent().find('input[type=text]').val('');
+				select.parent().find('input[type=text]').css('display', 'none');
+			}
+		}
+		select.change(otherSelectFunc);
+		otherSelectFunc();
+	});
+}
+
 validators = {"phone":PhoneValidator,"psc":PscValidator}
 
 
@@ -230,6 +247,7 @@ $(document).ready(function(){
 		//psc();
 		
 		hideFields();
+		otherSelectFields();
 		
 		/*$("#id_is_dynamic").click(
 				function(){hideHTML()}

@@ -1,27 +1,11 @@
 # coding: utf-8
 import csv
-from django.http import HttpResponse
-from django.template.defaultfilters import slugify
+from datetime import datetime
+
 from django.template import defaultfilters
 from django.db.models.fields import FieldDoesNotExist
-from django import forms
-from django.contrib import admin 
-from datetime import datetime
-from django.utils import translation
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext_lazy as _
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.conf import settings
-from admin.admin import UpdateRelatedAdmin
-import zipfile
-import Image
-from django.utils.translation import ugettext_lazy as _
-from watermarker.utils import watermark
-from watermarker import utils
-from watermarker.models import Watermark
 
-QUALITY = getattr(settings, 'WATERMARKING_QUALITY', 85)
 
 class CSVError(Exception):
     """Base class for errors in this module."""
@@ -334,60 +318,6 @@ class CsvGenerator:
  
 import re
    
-class CSVImportForm(forms.Form):
-    csv_file = forms.FileField(max_length=50)
-       
-
-class CSVImportAdmin(UpdateRelatedAdmin):
-    change_list_template = 'admin/csv_import_change_list.html'
-    delimiter = ';'
-    csv_fields = ()
-    csv_formatters = {}
-    csv_quotechar = '"'
-    bom = False
-    
-    def pre_import_save(self, obj):
-        pass
-    
-    def import_csv(self, f):
-        csv_generator = CsvGenerator(self.model,self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
-        obj = csv_generator.import_csv(f, self)
-        return obj
-
-    def export_csv(self, request, queryset):
-        
-        translation.activate("de")
-        
-        response = HttpResponse(mimetype='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(queryset.model.__name__)
-        if self.bom:
-            response.write("\xEF\xBB\xBF\n")
-        csv_generator = CsvGenerator(self.model, self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
-        csv_generator.export_csv(response, queryset)
-        return response
-        
-    export_csv.short_description = _(u"Exportovat do formátu CSV")
-    
-    def changelist_view(self, request, extra_context={}):
-        import_form = CSVImportForm()
-        if ('_csv-import' in request.POST):
-            import_form = CSVImportForm(request.POST, request.FILES)
-            
-            if(import_form.is_valid()):
-                #try:
-                self.import_csv(request.FILES['csv_file'])
-                #    messages.info(request, _(u'CSV import byl úspěšně dokončen'))
-                #except:
-                #    messages.error(request, _(u'Špatný formát CSV souboru'))
-            else:
-                messages.error(request, _(u'Pro import je nutné vložit sobor ve formátu CSV'))
-            return HttpResponseRedirect('')
-        import_context = {
-            'import_form': import_form,
-        }
-        
-        extra_context.update(import_context)
-        return super(CSVImportAdmin, self).changelist_view(request, extra_context=extra_context)
  
 import cStringIO
 
@@ -398,66 +328,3 @@ def dirname(p):
     if head and head != '/'*len(head):
         head = head.rstrip('/')
     return head
-
-class VehicleCSVImportAdmin(CSVImportAdmin):   
-    def export_zip_csv(self, request, queryset):
-        """                                                                         
-        Create a ZIP file on disk and transmit it in chunks of 8KB,                 
-        without loading the whole file into memory. A similar approach can          
-        be used for large dynamic PDF files.                                        
-        """
-        translation.activate("de")
-        buffer = cStringIO.StringIO()
-        archive = zipfile.ZipFile(buffer, 'w')
-        
-        temp = cStringIO.StringIO()
-        
-        csv_generator = CsvGenerator(self.model, self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
-        csv_generator.export_csv(temp, queryset)
-        archive.writestr('car.csv',temp.getvalue())
-        
-        for car in queryset:
-            i = 1
-            for image in car.images.filter(export = True):
-                
-                try:
-                    mark_watermark = Watermark.objects.get(name='Netautos', is_active=True)
-                    target = Image.open(image.image.path)
-                    mark = Image.open(mark_watermark.image.path)
-
-                    wathermarked_image = watermark(target, mark, opacity=0.35, scale = utils.determine_scale('f', target, mark), position = utils.determine_position('c', target, mark), tile=1)
-                    wathermarked_image_name = '%s_%s.jpg' % (car.id, i)
-                    wathermarked_image_path = '%s/exported/%s' % (dirname(image.image.path), wathermarked_image_name)
-                    wathermarked_image.save(wathermarked_image_path, quality=QUALITY)
-                except Watermark.DoesNotExist:
-                    wathermarked_image_path = image.image.path
-
-                archive.write(wathermarked_image_path, '%s_%s.jpg' % (car.id, i), zipfile.ZIP_DEFLATED) 
-                i += 1 
-                if (i > 15):
-                    break 
-
-        archive.close()
-        buffer.flush() 
-        ret_zip = buffer.getvalue()
-        buffer.close()
-        response = HttpResponse(mimetype='application/zip')
-        response['Content-Disposition'] = 'attachment; filename=export.zip'
-        response.write(ret_zip)
-
-        return response
-    export_zip_csv.short_description = _(u"Exportovat do formátu CSV i s obrázky")
-    
-    
-    def export_delete_images_csv(self, request, queryset):
-        translation.activate("de")
-        csv_fields = list(self.csv_fields)
-        csv_fields[26] = DefaultValue('delete-images')
-        response = HttpResponse(mimetype='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(queryset.model.__name__)
-        if self.bom:
-            response.write("\xEF\xBB\xBF\n")
-        csv_generator = CsvGenerator(self.model, csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
-        csv_generator.export_csv(response, queryset)
-        return response
-    export_delete_images_csv.short_description = _(u"Exportovat do formátu CSV, který odstraní obrázky")    

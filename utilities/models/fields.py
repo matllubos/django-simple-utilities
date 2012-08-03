@@ -1,9 +1,11 @@
 # coding: utf-8
 import re
+import datetime
+import time
 
 from datetime import date
 
-from django.forms.util import flatatt
+from django.forms.util import flatatt, ErrorList
 from django.db import models
 from django.utils.encoding import smart_str
 from django import forms
@@ -17,6 +19,12 @@ from django.core.exceptions import ValidationError
 from django.core import validators     
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import FieldFile
+from django.utils.dates import MONTHS
+from django.utils.safestring import mark_safe
+from django.utils.formats import get_format
+from django.conf import settings
+from django.utils import datetime_safe
+
 
 from sorl.thumbnail import ImageField
 
@@ -334,13 +342,6 @@ class ResizableImageField(ImageField):
     attr_class = ResizableFieldFile
     
 
-from django.utils.dates import MONTHS
-from django.utils.safestring import mark_safe
-from django.utils.formats import get_format
-from django.conf import settings
-from django.utils import datetime_safe
-import datetime
-import time
 
 RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
 
@@ -456,11 +457,106 @@ class FullSizeModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         
 class FullSizeManyToManyField(models.ManyToManyField):
     def formfield(self, **kwargs):
-        print 'Ted'
         defaults = {
             'form_class': FullSizeModelMultipleChoiceField,
         }
         defaults.update(kwargs)
         return super(FullSizeManyToManyField, self).formfield(**defaults)
        
+
+
+
+
+
+
+
+class OtherSelectWidget(forms.widgets.MultiWidget):
+    class Media:
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/models/fields.js' % settings.STATIC_URL,
+              )
         
+    def __init__(self, attrs=None):
+        widgets = (
+                   forms.Select(choices=[('other', _(u'Other'))]),
+                   forms.TextInput(),
+       
+        )
+        
+        super(OtherSelectWidget, self).__init__(widgets, attrs=attrs)
+        
+    def decompress(self, value):
+        if value:
+            if force_unicode(value) in [i[0] for i in self.attrs['choices']]:
+                return [value, None]
+            else:
+                return ['other', value]
+        return [None, None]
+    
+    def render(self, name, value, attrs=None):
+        print self.attrs
+        print attrs
+        print list(self.attrs['choices'])
+        attrs['class'] = 'other-select'
+        choices = list(self.attrs['choices'])
+        choices.append(('other', self.attrs['other']))
+        self.widgets[0].choices = choices
+        print attrs
+        print 'render proč ne?'
+        return super(OtherSelectWidget, self).render(name, value, attrs=attrs)
+    
+class OtherSelectField(forms.MultiValueField):
+
+    def __init__(self, choices=[], other=_(u'Other'), *args, **kwargs):
+        kwargs['widget'] = OtherSelectWidget
+        del kwargs['max_length']
+        
+        self.other_choices = choices
+        self.other = other
+        
+        fields = (forms.CharField(required=True),
+                  forms.CharField(required=False),)
+        self.fields = fields
+        
+        super(forms.MultiValueField, self).__init__(*args, **kwargs)
+
+    def clean(self, value):
+        if not value:
+            if self.required:
+                raise ValidationError(self.error_messages['required'])
+
+        out = self.compress(value)
+        self.validate(out)
+        return out
+    
+    def compress(self, data_list):
+        if data_list:
+            if (data_list[0] == 'other'):
+                return data_list[1]
+            return data_list[0]
+        return None
+    
+    def widget_attrs(self, widget):
+        return {'choices': self.other_choices, 'other':self.other}
+
+class OtherCharField(models.CharField):
+    
+    def __init__(self, verbose_name=None, name=None, choices=None, other=_(u'Other'), **kwargs):
+        
+        super(OtherCharField, self).__init__(verbose_name, name,  **kwargs)
+        #self.choices = choices
+        self.choices_val = choices
+        self.other = other
+        
+    def formfield(self, **kwargs):
+        print kwargs
+        defaults = {
+            'choices': self.choices_val,
+            'other': self.other
+        }
+        defaults.update(kwargs)
+        print 'tefdsa'
+        t =  super(OtherCharField, self).formfield(form_class=OtherSelectField, **defaults)
+        print 'dfsa'
+        return t
