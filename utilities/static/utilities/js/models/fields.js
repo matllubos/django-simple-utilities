@@ -225,7 +225,7 @@ function otherSelectFields() {
 	$(".other-select").each( function() {
 		var select = $(this);
 		var otherSelectFunc = function() {
-			if (select.val() == 'other') {
+			if (select.val() == '__other__') {
 				select.parent().find('input[type=text]').css('display', 'inline');
 			} else {
 				select.parent().find('input[type=text]').css('display', 'none');
