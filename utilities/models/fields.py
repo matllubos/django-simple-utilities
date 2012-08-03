@@ -488,15 +488,15 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
         
     def decompress(self, value):
         if value:
-            if force_unicode(value) in [force_unicode(i[0]) for i in self.attrs['choices']]:
+            if value in [i[0] for i in self.attrs['choices']]:
                 return [value, None]
             else:
-                return ['__other__', value]
+                return [u'__other__', value]
         return [None, None]
     
     def render(self, name, value, attrs=None):
         choices = list(self.attrs['choices'])
-        choices.append(('other', self.attrs['other']))
+        choices.append(('__other__', self.attrs['other']))
         self.widgets[0].choices = choices
         return super(OtherSelectWidget, self).render(name, value, attrs=attrs)
     
@@ -526,7 +526,7 @@ class OtherSelectField(forms.MultiValueField):
     
     def compress(self, data_list):
         if data_list:
-            if (data_list[0] == u'__other__'):
+            if (data_list[0] == '__other__'):
                 return data_list[1]
             return data_list[0]
         return None
