@@ -488,7 +488,7 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
         
     def decompress(self, value):
         if value:
-            if value in [i[0] for i in self.attrs['choices']]:
+            if unicode(value) in [i[0] for i in self.attrs['choices']]:
                 return [value, None]
             else:
                 return [u'__other__', value]
