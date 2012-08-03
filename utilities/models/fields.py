@@ -479,7 +479,7 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
         
     def __init__(self, attrs=None):
         widgets = (
-                   forms.Select(choices=[('other', _(u'Other'))]),
+                   forms.Select(choices=[(u'other', _(u'Other'))]),
                    forms.TextInput(),
        
         )
@@ -488,7 +488,7 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
         
     def decompress(self, value):
         if value:
-            if force_unicode(value) in [i[0] for i in self.attrs['choices']]:
+            if str(value) in [i[0] for i in self.attrs['choices']]:
                 return [value, None]
             else:
                 return ['other', value]
@@ -527,7 +527,7 @@ class OtherSelectField(forms.MultiValueField):
     
     def compress(self, data_list):
         if data_list:
-            if (data_list[0] == 'other'):
+            if (data_list[0] == u'other'):
                 return data_list[1]
             return data_list[0]
         return None
