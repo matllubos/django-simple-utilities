@@ -477,43 +477,41 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
               '%sutilities/js/models/fields.js' % settings.STATIC_URL,
               )
         
-    def __init__(self, attrs=None):
+    def __init__(self, choices, other_label, attrs=None):
+        choices_with_other = list(choices)
+        choices_with_other.append((u'__other__', other_label))
+        
         widgets = (
-                   forms.Select(choices=[(u'__other__', _(u'Other'))], attrs={'class':'other-select'}),
+                   forms.Select(choices = choices_with_other, attrs={'class':'other-select'}),
                    forms.TextInput(),
        
         )
         
         super(OtherSelectWidget, self).__init__(widgets, attrs=attrs)
+        self.choices = choices
+        self.other_label = other_label
         
     def decompress(self, value):
         if value:
-            if unicode(value) in [i[0] for i in self.attrs['choices']]:
+            if unicode(value) in [i[0] for i in self.choices]:
                 return [value, None]
             else:
                 return [u'__other__', value]
         return [None, None]
     
     def render(self, name, value, attrs=None):
-        choices = list(self.attrs['choices'])
-        choices.append(('__other__', self.attrs['other']))
-        self.widgets[0].choices = choices
         return super(OtherSelectWidget, self).render(name, value, attrs=attrs)
     
 class OtherSelectField(forms.MultiValueField):
 
-    def __init__(self, choices=[], other=_(u'Other'), *args, **kwargs):
-        kwargs['widget'] = OtherSelectWidget
-        del kwargs['max_length']
-        
-        self.other_choices = choices
-        self.other = other
-        
+    def __init__(self, choices=[], other_label=_(u'Other'), *args, **kwargs):
         fields = (forms.CharField(required=True),
-                  forms.CharField(required=False),)
+                  forms.CharField(required=False, max_length = kwargs['max_length']),)
+        del kwargs['max_length']
+        del kwargs['widget']
         self.fields = fields
         
-        super(forms.MultiValueField, self).__init__(*args, **kwargs)
+        super(forms.MultiValueField, self).__init__(widget = OtherSelectWidget(choices, other_label), *args, **kwargs)
 
     def clean(self, value):
         if not value:
@@ -531,9 +529,6 @@ class OtherSelectField(forms.MultiValueField):
             return data_list[0]
         return None
     
-    def widget_attrs(self, widget):
-        return {'choices': self.other_choices, 'other':self.other}
-
 class OtherCharField(models.CharField):
     
     def __init__(self, verbose_name=None, name=None, choices=None, other=_(u'Other'), **kwargs):
@@ -544,10 +539,9 @@ class OtherCharField(models.CharField):
         self.other = other
         
     def formfield(self, **kwargs):
-        print kwargs
         defaults = {
             'choices': self.choices_val,
-            'other': self.other
+            'other_label': self.other
         }
         defaults.update(kwargs)
         t =  super(OtherCharField, self).formfield(form_class=OtherSelectField, **defaults)
