@@ -442,7 +442,6 @@ class CSVImportMixin(object):
             return HttpResponseRedirect('')
         extra_context['csvimportmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         extra_context['import_form'] = import_form
-        print extra_context
         return sup.changelist_view(request, extra_context=extra_context)
     
 class DashboardMixin(object):

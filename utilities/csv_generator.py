@@ -249,7 +249,6 @@ class CsvGenerator:
                     else:
                         val = ''
                   
-                    val = force_unicode(val)
                     row.append(val)
                                     
             writer.writerow(row)
