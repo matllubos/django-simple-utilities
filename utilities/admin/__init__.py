@@ -323,7 +323,7 @@ class AdminPagingMixin(object):
     
     def add_view(self, request, form_url='', extra_context={}):
         sup = super(AdminPagingMixin, self)
-        extra_context['super_template'] = sup.change_form_template
+        extra_context['pagingmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
         return sup.add_view(request, form_url, extra_context)
         
     def change_view(self, request, object_id, extra_context={}):
@@ -438,7 +438,7 @@ class CSVImportMixin(object):
             else:
                 messages.error(request, _(u'Pro import je nutné vložit sobor ve formátu CSV'))
             return HttpResponseRedirect('')
-        extra_context['csvimportmixin_super_template'] = sup.change_form_template or 'admin/change_list.html'
+        extra_context['csvimportmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         extra_context['import_form'] = import_form
         print extra_context
         return sup.changelist_view(request, extra_context=extra_context)
@@ -458,7 +458,7 @@ class DashboardMixin(object):
             dashboard_table.append(dashboard_table_row)    
             
         extra_context['dashboard_table'] = dashboard_table
-        extra_context['dashboardmixin_super_template'] = sup.change_form_template or 'admin/change_list.html'
+        extra_context['dashboardmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         return sup.changelist_view(request, extra_context=extra_context)
     
     
