@@ -317,7 +317,6 @@ class CloneModelAdmin(UpdateRelatedAdmin):
 
 
 class AdminPagingMixin(object): 
-    
     change_form_template = 'admin/paging_change_form.html'
     page_ordering = 'pk'
     
@@ -398,26 +397,29 @@ class CSVImportForm(forms.Form):
 
 class CSVImportMixin(object):
     change_list_template = 'admin/csv_import_change_list.html'
-    delimiter = ';'
+    csv_delimiter = ';'
     csv_fields = ()
     csv_formatters = {}
     csv_quotechar = '"'
-    bom = False
+    csv_header = False
+    csv_DB_values = False
+    csv_bom = False
+    csv_encoding = 'utf-8'
     
     def pre_import_save(self, obj):
         pass
     
     def import_csv(self, f):
-        csv_generator = CsvGenerator(self.model,self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
+        csv_generator = CsvGenerator(self.model,self.csv_fields, header=self.csv_header, delimiter=self.csv_delimiter, quotechar = self.csv_quotechar, DB_values = self.csv_DB_values, csv_formatters=self.csv_formatters, encoding=self.csv_encoding)
         obj = csv_generator.import_csv(f, self)
         return obj
 
     def export_csv(self, request, queryset):
         response = HttpResponse(mimetype='text/csv')
         response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(queryset.model.__name__)
-        if self.bom:
+        if self.csv_bom:
             response.write("\xEF\xBB\xBF\n")
-        csv_generator = CsvGenerator(self.model, self.csv_fields, header=False, bom=False, delimiter=self.delimiter, quotation_marks = True, DB_values = True, csv_formatters=self.csv_formatters)
+        csv_generator = CsvGenerator(self.model,self.csv_fields, header=self.csv_header, delimiter=self.csv_delimiter, quotechar = self.csv_quotechar, DB_values = self.csv_DB_values, csv_formatters=self.csv_formatters, encoding=self.csv_encoding)
         csv_generator.export_csv(response, queryset)
         return response
         

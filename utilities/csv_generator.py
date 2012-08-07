@@ -5,6 +5,7 @@ from datetime import datetime
 from django.template import defaultfilters
 from django.db.models.fields import FieldDoesNotExist
 from django.utils.html import strip_tags
+from django.utils.encoding import force_unicode
 
 
 class CSVError(Exception):
@@ -185,44 +186,43 @@ class DateFormatter(DefaultFormatter):
     
 class CsvGenerator:
     
-    def __init__(self, model,csv_fields, header = True, bom=True, delimiter=';',  quotation_marks = False, DB_values = False, csv_formatters = {}):
+    def __init__(self, model, csv_fields, header = True, delimiter=';',  quotechar = '"', DB_values = False, csv_formatters = {}, encoding='utf-8'):
         self.header = header
-        self.bom = bom
-        self.quotation_marks = quotation_marks
+        self.quotechar = quotechar
         self.DB_values = DB_values
         self.csv_formatters = csv_formatters
         self.model = model
         self.delimiter = delimiter
         self.csv_fields = csv_fields
+        self.encoding = encoding
         
     def export_csv(self, output_stream, qs):
-        writer = csv.writer(output_stream, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+        if self.quotechar:
+            writer = csv.writer(output_stream, delimiter=self.delimiter, quotechar=self.quotechar, quoting=csv.QUOTE_ALL)
+        else:
+            writer = csv.writer(output_stream, delimiter=self.delimiter)
+        
         # Write headers to CSV file
         
         fields = self.csv_fields
         
         headers = []
         
-        '''
+
         if self.header:
             for field in fields:
                 if (isinstance(field, DefaultValue)):
                     headers.append(field.name)
                 elif (field):
                     try: 
-                        headers.append(model._meta.get_field(field).verbose_name.encode('utf-8'))
+                        headers.append(self.model._meta.get_field(field).verbose_name.encode(self.encoding, 'ignore'))
                     except FieldDoesNotExist:
-                        headers.append(getattr(model(), field).short_description.encode('utf-8'))
+                        headers.append(getattr(self.model(), field).short_description.encode(self.encoding, 'ignore'))
                 else:
-                    headers.append('""')
+                    headers.append('')
 
             writer.writerow(headers)
 
-        
-        for field in fields:
-            headers.append(field)
-        writer.writerow(headers)
-        '''
         # Write data to CSV file
         for obj in qs:
             row = []
@@ -245,15 +245,11 @@ class CsvGenerator:
 
                         if (not val):
                             val = ''
-                        val = unicode(val).encode('iso-8859-15', 'ignore')
+                        val = unicode(val).encode(self.encoding, 'ignore')
                     else:
                         val = ''
                   
-
-                         
-                    if self.quotation_marks:
-                        val = '%s' % val
-
+                    val = force_unicode(val)
                     row.append(val)
                                     
             writer.writerow(row)
