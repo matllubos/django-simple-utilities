@@ -30,8 +30,6 @@ class DashboardFormatter(object):
     def render(self, qs):
         values = self.get_values(qs)
         model = qs.model  
-        print values
-        print u'<th>%s:</th><td>%s %s</td>' % (force_unicode(self.get_title(model)), force_unicode(values), force_unicode(self.get_measure(model)))
         return mark_safe(u'<th>%s:</th><td>%s %s</td>' % (force_unicode(self.get_title(model)), force_unicode(values), force_unicode(self.get_measure(model))))
         
     def get_field_values(self, qs):
