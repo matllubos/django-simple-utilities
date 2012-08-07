@@ -7,8 +7,7 @@ from django.db.models.fields.related import ManyToOneRel
 
 class UpdateRelatedFieldWidgetWrapper(widgets.RelatedFieldWidgetWrapper):
     
-        
-    
+
     def render(self, name, value, *args, **kwargs):
         rel_to = self.rel.to
         

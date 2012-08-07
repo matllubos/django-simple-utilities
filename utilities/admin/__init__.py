@@ -323,7 +323,7 @@ class AdminPagingMixin(object):
     
     def add_view(self, request, form_url='', extra_context={}):
         sup = super(AdminPagingMixin, self)
-        extra_context['prev_change_form_template'] = sup.change_form_template
+        extra_context['super_template'] = sup.change_form_template
         return sup.add_view(request, form_url, extra_context)
         
     def change_view(self, request, object_id, extra_context={}):
@@ -349,7 +349,7 @@ class AdminPagingMixin(object):
             extra_context['prev_obj'] = {'app': prev_qs[0]._meta.app_label, 'obj':prev_qs[0]._meta.object_name.lower(), 'pk':prev_qs[0]._get_pk_val(), 'verbose_name': prev_qs[0]._meta.verbose_name}
         else:
             extra_context['prev_obj'] = None
-        extra_context['prev_change_form_template'] = sup.change_form_template
+        extra_context['pagingmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
         return sup.change_view(request, object_id, extra_context)
     
 
@@ -396,7 +396,7 @@ class CSVImportForm(forms.Form):
     csv_file = forms.FileField(max_length=50)
        
 
-class CSVImportAdmin(UpdateRelatedAdmin):
+class CSVImportMixin(object):
     change_list_template = 'admin/csv_import_change_list.html'
     delimiter = ';'
     csv_fields = ()
@@ -424,6 +424,7 @@ class CSVImportAdmin(UpdateRelatedAdmin):
     export_csv.short_description = _(u"Exportovat do formátu CSV")
     
     def changelist_view(self, request, extra_context={}):
+        sup = super(CSVImportMixin, self)  
         import_form = CSVImportForm()
         if ('_csv-import' in request.POST):
             import_form = CSVImportForm(request.POST, request.FILES)
@@ -437,13 +438,27 @@ class CSVImportAdmin(UpdateRelatedAdmin):
             else:
                 messages.error(request, _(u'Pro import je nutné vložit sobor ve formátu CSV'))
             return HttpResponseRedirect('')
-        import_context = {
-            'import_form': import_form,
-        }
-        
-        extra_context.update(import_context)
-        return super(CSVImportAdmin, self).changelist_view(request, extra_context=extra_context)
+        extra_context['csvimportmixin_super_template'] = sup.change_form_template or 'admin/change_list.html'
+        extra_context['import_form'] = import_form
+        print extra_context
+        return sup.changelist_view(request, extra_context=extra_context)
     
-class DashboardAdmin(UpdateRelatedAdmin):
+class DashboardMixin(object):
     change_list_template = 'admin/dashboard_change_list.html'
+    dashboard_table = []
+    
+    def changelist_view(self, request, extra_context={}):   
+        sup = super(DashboardMixin, self)    
+        dashboard_table = []       
+        qs = self.queryset(request) 
+        for row in self.dashboard_table:
+            dashboard_table_row = []
+            for col in row:
+                dashboard_table_row.append(col.render(qs))
+            dashboard_table.append(dashboard_table_row)    
+            
+        extra_context['dashboard_table'] = dashboard_table
+        extra_context['dashboardmixin_super_template'] = sup.change_form_template or 'admin/change_list.html'
+        return sup.changelist_view(request, extra_context=extra_context)
+    
     
