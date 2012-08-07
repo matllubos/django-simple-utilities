@@ -1,0 +1,19 @@
+{% extends "admin_tp/change_list.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+{% block extrastyle %}
+ 	{{ block.super }}
+{% endblock %}
+
+{% block extrahead %}
+	{{ block.super }}
+{% endblock extrahead %}
+
+{% block object-tools-items %}
+    <li><a href="" class="dashboard-link">{% trans 'Statistika' %}</a></li>
+    {{block.super}}
+{% endblock %}
+
+
+

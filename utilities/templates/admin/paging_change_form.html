@@ -10,6 +10,6 @@
 {% block object-tools-items %}
     {{block.super}}
     {% if prev_obj or next_obj %} <li class="separator">|</li> {% endif %}
-    {% if prev_obj %}<li><a href="../../../{{ prev_obj.app }}/{{ prev_obj.obj }}/{{ prev_obj.pk }}" class="prevlink"><span class="ico"></span>{% trans 'předchozí' %} {{ prev_obj.verbose_name }}</a></li>{% endif %}
-    {% if next_obj %}<li><a href="../../../{{ next_obj.app }}/{{ next_obj.obj }}/{{ next_obj.pk }}" class="nextlink"><span class="ico"></span>{% trans 'následující' %} {{ next_obj.verbose_name }}</a></li>{% endif %}
+    {% if prev_obj %}<li><a href="../../../{{ prev_obj.app }}/{{ prev_obj.obj }}/{{ prev_obj.pk }}/" class="prevlink"><span class="ico"></span>{% trans 'předchozí' %} {{ prev_obj.verbose_name }}</a></li>{% endif %}
+    {% if next_obj %}<li><a href="../../../{{ next_obj.app }}/{{ next_obj.obj }}/{{ next_obj.pk }}/" class="nextlink"><span class="ico"></span>{% trans 'následující' %} {{ next_obj.verbose_name }}</a></li>{% endif %}
 {% endblock %}
