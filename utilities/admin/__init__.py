@@ -455,7 +455,7 @@ class DashboardMixin(object):
         for row in self.dashboard_table:
             dashboard_table_row = []
             for col in row:
-                dashboard_table_row.append(col.render(qs))
+                dashboard_table_row.append(col.render(qs, self))
             dashboard_table.append(dashboard_table_row)    
             
         extra_context['dashboard_table'] = dashboard_table

@@ -13,24 +13,27 @@ class DashboardFormatter(object):
         self.title = title
         self.measure = measure
     
-    def get_title(self, model):
+    def get_title(self, model, admin):
         if self.title:
             return self.title
         else:
             try: 
                 return model._meta.get_field(self.field_name).verbose_name
             except FieldDoesNotExist: 
-                return getattr(model, self.field_name).short_description
-    
+                try:
+                    return getattr(admin, self.field_name).short_description
+                except AttributeError:
+                    return getattr(model, self.field_name).short_description
+                
     def get_measure(self, model):
         if self.measure:
             return self.measure
         return ''
           
-    def render(self, qs):
-        values = self.get_values(qs)
+    def render(self, qs, admin):
+        values = self.get_values(qs, admin)
         model = qs.model  
-        return mark_safe(u'<th>%s:</th><td>%s %s</td>' % (force_unicode(self.get_title(model)), force_unicode(values), force_unicode(self.get_measure(model))))
+        return mark_safe(u'<th>%s:</th><td>%s %s</td>' % (force_unicode(self.get_title(model, admin)), force_unicode(values), force_unicode(self.get_measure(model))))
         
     def get_field_values(self, qs):
         return None
@@ -38,12 +41,18 @@ class DashboardFormatter(object):
     def get_method_values(self, qs):
         return None
     
-    def get_values(self, qs):
+    def get_admin_method_values(self, qs, admin):
+        return None
+    
+    def get_values(self, qs, admin):
         try: 
             qs.model._meta.get_field(self.field_name) 
             return self.get_field_values(qs)
         except FieldDoesNotExist: 
-            return self.get_method_values(qs)
+            try:
+                return self.get_admin_method_values(qs, admin)
+            except AttributeError:
+                return self.get_method_values(qs)
 
 class SumDashboardFormatter(DashboardFormatter):
      
@@ -55,7 +64,12 @@ class SumDashboardFormatter(DashboardFormatter):
         for obj in qs:
             values += getattr(obj, self.field_name)()
         return values
-       
+      
+    def get_admin_method_values(self, qs, admin):
+        values = 0
+        for obj in qs:
+            values += getattr(admin, self.field_name)(obj)
+        return values 
     
 class AvgDashboardFormatter(DashboardFormatter):
      
@@ -69,6 +83,14 @@ class AvgDashboardFormatter(DashboardFormatter):
                 values += getattr(obj, self.field_name)()
             values /= qs.count()
         return values 
+    
+    def get_admin_method_values(self, qs, admin):
+        values = 0
+        if qs.count() > 0:
+            for obj in qs:
+                values += getattr(admin, self.field_name)(obj)
+            values /= qs.count()
+        return values 
 
 class TableDashboardFormatter(DashboardFormatter):
      
@@ -76,11 +98,11 @@ class TableDashboardFormatter(DashboardFormatter):
         super(TableDashboardFormatter, self).__init__(field_name, *args, **kwargs)
         self.other_title = other_title
     
-    def render(self, qs):
-        values = self.get_values(qs)
+    def render(self, qs, admin):
+        values = self.get_values(qs, admin)
         model = qs.model  
         rows = []      
-        rows.append(u'<tr><th>%s</th><th></th></tr>' % self.get_title(model))
+        rows.append(u'<tr><th>%s</th><th></th></tr>' % self.get_title(model, admin))
         
         for key, value in values.items():
             rows.append(u'<tr><td>%s</td><td>%s %s</td></tr>' % (force_unicode(key), force_unicode(value), force_unicode(self.get_measure(model)))) 
@@ -129,4 +151,16 @@ class TableDashboardFormatter(DashboardFormatter):
                 values[val] += 1
             else:
                 values[val] = 1
+        return values 
+    
+    def get_admin_method_values(self, qs, admin):
+        values = SortedDict()
+        for obj in qs:
+            val = getattr(admin, self.field_name)(obj)
+            if (not val): val = self.other_title
+            if (values.has_key(val)):
+                values[val] += 1
+            else:
+                values[val] = 1
+        print values
         return values 
