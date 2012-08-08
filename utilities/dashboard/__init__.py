@@ -162,5 +162,4 @@ class TableDashboardFormatter(DashboardFormatter):
                 values[val] += 1
             else:
                 values[val] = 1
-        print values
         return values 

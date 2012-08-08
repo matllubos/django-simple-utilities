@@ -215,9 +215,9 @@ class CsvGenerator:
                     headers.append(field.name)
                 elif (field):
                     try: 
-                        headers.append(self.model._meta.get_field(field).verbose_name.encode(self.encoding, 'ignore'))
+                        headers.append(force_unicode(self.model._meta.get_field(field).verbose_name).encode(self.encoding, 'ignore'))
                     except FieldDoesNotExist:
-                        headers.append(getattr(self.model(), field).short_description.encode(self.encoding, 'ignore'))
+                        headers.append(force_unicode(getattr(self.model(), field).short_description).encode(self.encoding, 'ignore'))
                 else:
                     headers.append('')
 
