@@ -1,85 +1,21 @@
 # coding: utf-8
 import re
-import datetime
-import time
 
 from datetime import date
 
-from django.forms.util import flatatt, ErrorList
 from django.db import models
-from django.utils.encoding import smart_str
 from django import forms
 from django.db.models.fields import PositiveIntegerField
-from django.utils.safestring import mark_safe
-from django.utils.encoding import force_unicode
-from django.contrib.admin import widgets 
-from django.forms import extras
-from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.core import validators     
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import FieldFile
-from django.utils.dates import MONTHS
-from django.utils.safestring import mark_safe
-from django.utils.formats import get_format
 from django.conf import settings
-from django.utils import datetime_safe
-
 
 from sorl.thumbnail import ImageField
 
 from utilities.utils import fit
-
-class FieldsWidget(forms.TextInput):
-    class Media:
-        js = (
-              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
-              '%sutilities/js/models/fields.js' % settings.STATIC_URL,
-              )
-
-class MeasureWidget(FieldsWidget):
-    
-    def __init__(self, attrs=None, measure=''):
-        super(MeasureWidget, self).__init__(attrs=attrs)
-        self.measure = measure
-            
-    def render(self, name, value, attrs=None):
-        if value is None:
-            value = ''
-        
-        final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
-        if value != '':
-            # Only add the 'value' attribute if a value is non-empty.
-            final_attrs['value'] = force_unicode(self._format_value(value))
-        return mark_safe(u'<input%s /> <strong>%s</strong>' % (flatatt(final_attrs),self.measure))
-
-class HtmlWidget(forms.Textarea):
-    class Media:
-        js = (
-              '%sutilities/js/models/tinymce/jscripts/tiny_mce/tiny_mce.js' % settings.STATIC_URL,
-              '%sutilities/js/models/textareas.js' % settings.STATIC_URL,
-              )
-                
-class WidgetFactory:
-    
-    def create(self, widget , attrs,  old_widget, **kwargs):
-        
-        try:
-            if (old_widget):
-                old_attrs = old_widget.attrs
-            else:
-                old_attrs = {}
-        except AttributeError:
-            old_attrs = {}
-            
-        for k, v in attrs.iteritems():
-            try:
-                old_attrs[k] += ' '+v
-            except KeyError:
-                old_attrs[k] = v
-        
-        return widget(attrs=old_attrs, **kwargs) 
-    
+from utilities.forms.widgets import CommaWidget, WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget
+from utilities.forms import CommaDecimalField, StylizedIntegerField, GoogleMapUrlFormField, FullSizeModelMultipleChoiceField, OtherSelectField
 
 class IntegerRangeField(models.IntegerField):
     
@@ -93,19 +29,7 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
-class CommaWidget(forms.widgets.TextInput):
-    def render(self, name, value, attrs=None):
-        if (value):
-            return super(CommaWidget, self).render(name, smart_str(value).replace('.', ','))
-        return super(CommaWidget, self).render(name, value)
-
-
-class CommaDecimalField(forms.FloatField):
-
-    def clean(self, value):
-        value = smart_str(value).replace(',', '.')
-        return super(CommaDecimalField, self).clean(value)
-       
+      
 class FloatRangeField(models.FloatField):
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
         self.min_value, self.max_value = min_value, max_value
@@ -164,12 +88,12 @@ class PhoneField(models.CharField):
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
    
     def pre_save(self, model_instance, add):
-        if (self.format == 'CZ' and model_instance.phone):
+        if (self.format == 'CZ' and getattr(model_instance, self.attname)):
             m = re.match(r'^(\+?\d{3})? ?(\d{3}) ?(\d{3}) ?(\d{3})$', getattr(model_instance, self.attname))
             out = '+420'
             if (m.group(1)): out = '+'+re.sub(r'\+', '', m.group(1))
             return '{0} {1} {2} {3}'.format(out, m.group(2), m.group(3), m.group(4))
-        return model_instance.phone
+        return getattr(model_instance, self.attname)
 
 class PSCField(models.CharField):
 
@@ -196,12 +120,6 @@ class DICField(models.CharField):
         defaults.update(kwargs)
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
     
-class StylizedIntegerField(forms.IntegerField):
-    
-    def clean(self, value):
-        value = smart_str(value).replace(' ', '')
-        return super(StylizedIntegerField, self).clean(value)
-
 
 class HtmlField(models.TextField):
    
@@ -288,13 +206,6 @@ class PositiveIntegerMeasureField(PositiveIntegerField):
         return super(PositiveIntegerMeasureField, self).formfield(**kwargs)
     
 
-class CommaMeasureWidget(MeasureWidget):
-    
-    def render(self, name, value, attrs=None):
-        if (value):
-            return super(CommaMeasureWidget, self).render(name, smart_str(value).replace('.', ','))
-        return super(CommaMeasureWidget, self).render(name, value)
-    
 class FloatMeasureField(models.FloatField):
 
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, **kwargs):
@@ -303,22 +214,10 @@ class FloatMeasureField(models.FloatField):
         self.measure = measure
            
     def formfield(self, **kwargs):
-        kwargs['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), **{'measure':self.measure})
+        kwargs['widget'] = WidgetFactory().create(CommaWidget, {'class': 'float'}, kwargs.get('widget', None), **{'measure':self.measure})
         defaults = {'min_value': self.min_value, 'max_value':self.max_value}
         defaults.update(kwargs)
         return super(FloatMeasureField, self).formfield(form_class=CommaDecimalField, **defaults)
-
-class GoogleMapURLFormField(forms.URLField):
-    def clean(self, value):
-        m = re.match(r"^.*src=\"([^\"]+)\".*$", value)
-        if (m):
-            value = m.group(1)
-        if (not re.search(r"output\=embed", value)):
-            value += '&amp;output=embed'
-
-        if (not re.search(r"^https?://maps\.google\.cz/maps", value)):
-            raise ValidationError(_(u'Toto není správné URL google map'))
-        return super(GoogleMapURLFormField, self).clean(value)   
 
 class GoogleMapUrlField(models.URLField):
 
@@ -328,7 +227,7 @@ class GoogleMapUrlField(models.URLField):
         self.validators.append(validators.URLValidator(verify_exists=verify_exists))
         
     def formfield(self, **kwargs):
-        return super(GoogleMapUrlField, self).formfield(form_class=GoogleMapURLFormField, **kwargs)
+        return super(GoogleMapUrlField, self).formfield(form_class=GoogleMapUrlFormField, **kwargs)
 
 class ResizableFieldFile(FieldFile):
     
@@ -338,85 +237,8 @@ class ResizableFieldFile(FieldFile):
 
         
 class ResizableImageField(ImageField):
-    
     attr_class = ResizableFieldFile
     
-
-
-RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
-
-def _parse_date_fmt():
-    fmt = get_format('DATE_FORMAT')
-    escaped = False
-    output = []
-    for char in fmt:
-        if escaped:
-            escaped = False
-        elif char == '\\':
-            escaped = True
-        elif char in 'Yy':
-            output.append('year')
-            #if not self.first_select: self.first_select = 'year'
-        elif char in 'bEFMmNn':
-            output.append('month')
-            #if not self.first_select: self.first_select = 'month'
-        elif char in 'dj':
-            output.append('day')
-            #if not self.first_select: self.first_select = 'day'
-    return output
-
-class SelectMonthYearWidget(extras.SelectDateWidget):
-    def render(self, name, value, attrs=None):
-        try:
-            year_val, month_val = value.year, value.month
-        except AttributeError:
-            year_val = month_val = None
-            if isinstance(value, basestring):
-                if settings.USE_L10N:
-                    try:
-                        input_format = get_format('DATE_INPUT_FORMATS')[0]
-                        v = datetime.datetime(*(time.strptime(value, input_format)[0:6]))
-                        year_val, month_val = v.year, v.month
-                    except ValueError:
-                        pass
-                else:
-                    match = RE_DATE.match(value)
-                    if match:
-                        year_val, month_val = [int(v) for v in match.groups()]
-        choices = [(i, i) for i in self.years]
-        year_html = self.create_select(name, self.year_field, value, year_val, choices)
-        choices = MONTHS.items()
-        month_html = self.create_select(name, self.month_field, value, month_val, choices)
-        choices = [(i, i) for i in range(1, 32)]
-    
-        output = []
-        for field in _parse_date_fmt():
-            if field == 'year':
-                output.append(year_html)
-            elif field == 'month':
-                output.append(month_html)
-        return mark_safe(u'\n'.join(output))
-    
-    def value_from_datadict(self, data, files, name):
-        y = data.get(self.year_field % name)
-        m = data.get(self.month_field % name)
-        d = 1
-        if y == m == "0":
-            return None
-        if y and m and d:
-            if settings.USE_L10N:
-                input_format = get_format('DATE_INPUT_FORMATS')[0]
-                try:
-                    date_value = datetime.date(int(y), int(m), int(d))
-                except ValueError:
-                    return '%s-%s-%s' % (y, m, d)
-                else:
-                    date_value = datetime_safe.new_date(date_value)
-                    return date_value.strftime(input_format)
-            else:
-                return '%s-%s-%s' % (y, m, d)
-        return data.get(name, None)
-
 class SelectDateField(models.DateField):
 
     def formfield(self, **kwargs):
@@ -424,17 +246,6 @@ class SelectDateField(models.DateField):
         kwargs['widget'] = SelectMonthYearWidget(years=range(year, year+20))
         return super(SelectDateField, self).formfield(form_class=forms.DateField, **kwargs)
     
-class OrderWidget(forms.TextInput):
-    class Media:
-        js = (
-              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
-              '%sutilities/js/order/jquery.ui.core.js' % settings.STATIC_URL,
-              '%sutilities/js/order/jquery.ui.widget.js' % settings.STATIC_URL,
-              '%sutilities/js/order/jquery.ui.mouse.js' % settings.STATIC_URL,
-              '%sutilities/js/order/jquery.ui.sortable.js' % settings.STATIC_URL,
-              '%sutilities/js/order/menu-sort.js' % settings.STATIC_URL,
-            )
-
 class OrderField(models.PositiveIntegerField):
    
     def formfield(self, **kwargs):
@@ -442,19 +253,6 @@ class OrderField(models.PositiveIntegerField):
         return super(OrderField, self).formfield(**kwargs)        
 
 
-class FullSizeMultipleSelect(forms.SelectMultiple):
-    def render(self, name, value, attrs={}, choices=()):
-        attrs['size'] = '%s' % len(self.choices)
-        if len(self.choices) < 5: 
-            attrs['size'] = '5'
-            
-        return super(FullSizeMultipleSelect, self).render(name, value, attrs, choices)
-
-
-class FullSizeModelMultipleChoiceField(forms.ModelMultipleChoiceField):
-    widget = FullSizeMultipleSelect
-
-        
 class FullSizeManyToManyField(models.ManyToManyField):
     def formfield(self, **kwargs):
         defaults = {
@@ -462,73 +260,7 @@ class FullSizeManyToManyField(models.ManyToManyField):
         }
         defaults.update(kwargs)
         return super(FullSizeManyToManyField, self).formfield(**defaults)
-       
-
-
-
-
-
-
-
-class OtherSelectWidget(forms.widgets.MultiWidget):
-    class Media:
-        js = (
-              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
-              '%sutilities/js/models/fields.js' % settings.STATIC_URL,
-              )
-        
-    def __init__(self, choices, other_label, attrs=None):
-        choices_with_other = list(choices)
-        choices_with_other.append((u'__other__', other_label))
-        
-        widgets = (
-                   forms.Select(choices = choices_with_other, attrs={'class':'other-select'}),
-                   forms.TextInput(),
-       
-        )
-        
-        super(OtherSelectWidget, self).__init__(widgets, attrs=attrs)
-        self.choices = choices
-        self.other_label = other_label
-        
-    def decompress(self, value):
-        if value:
-            if unicode(value) in [i[0] for i in self.choices]:
-                return [value, None]
-            else:
-                return [u'__other__', value]
-        return [None, None]
-    
-    def render(self, name, value, attrs=None):
-        return super(OtherSelectWidget, self).render(name, value, attrs=attrs)
-    
-class OtherSelectField(forms.MultiValueField):
-
-    def __init__(self, choices=[], other_label=_(u'Other'), *args, **kwargs):
-        fields = (forms.CharField(required=True),
-                  forms.CharField(required=False, max_length = kwargs['max_length']),)
-        del kwargs['max_length']
-        del kwargs['widget']
-        self.fields = fields
-        
-        super(forms.MultiValueField, self).__init__(widget = OtherSelectWidget(choices, other_label), *args, **kwargs)
-
-    def clean(self, value):
-        if not value:
-            if self.required:
-                raise ValidationError(self.error_messages['required'])
-
-        out = self.compress(value)
-        self.validate(out)
-        return out
-    
-    def compress(self, data_list):
-        if data_list:
-            if (data_list[0] == '__other__'):
-                return data_list[1]
-            return data_list[0]
-        return None
-    
+   
 class OtherCharField(models.CharField):
     
     def __init__(self, verbose_name=None, name=None, choices=None, other=_(u'Other'), **kwargs):

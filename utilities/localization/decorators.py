@@ -1,11 +1,11 @@
 from django.contrib.admin.options import BaseModelAdmin
 from django.db.models.base import ModelBase
+from django.conf import settings
 
 from easymode.i18n.admin import forms
 from easymode.i18n.admin.generic import LocalizableGenericInlineFormSet
 from easymode.utils.languagecode import get_all_language_codes, localize_fieldnames, get_real_fieldname
 from easymode.i18n.admin.decorators import compute_prohibited, lazy_localized_list
-from django.conf import settings
 from easymode.utils.languagecode import get_real_fieldname
 
 def all_localize_fieldnames(fields, internationalized_fields):
