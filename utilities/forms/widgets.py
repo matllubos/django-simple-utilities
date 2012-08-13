@@ -162,7 +162,7 @@ class FullSizeMultipleSelectWidget(forms.SelectMultiple):
         return super(FullSizeMultipleSelectWidget, self).render(name, value, attrs, choices) 
 
 
-class HideSelectWidget(forms.Select):
+class HideSelectWidget(forms.Select):        
     def __init__(self, attrs=None, choices=(), hide_relations=None):
         super(HideSelectWidget, self).__init__(attrs=attrs, choices=choices)
         self.hide_relations = hide_relations
@@ -184,7 +184,13 @@ class HideSelectWidget(forms.Select):
                 else:
                     attrs['class'] = 'select-hide %s' % ' '.join(class_names)
         return super(HideSelectWidget, self).render(name, value, attrs, choices)   
-      
+    
+    class Media:
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/models/fields.js' % settings.STATIC_URL,
+              )
+        
 class OtherSelectWidget(forms.widgets.MultiWidget):
     class Media:
         js = (
