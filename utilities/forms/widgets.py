@@ -160,7 +160,31 @@ class FullSizeMultipleSelectWidget(forms.SelectMultiple):
         if len(self.choices) < 5: 
             attrs['size'] = '5'
         return super(FullSizeMultipleSelectWidget, self).render(name, value, attrs, choices) 
+
+
+class HideSelectWidget(forms.Select):
+    def __init__(self, attrs=None, choices=(), hide_relations=None):
+        super(HideSelectWidget, self).__init__(attrs=attrs, choices=choices)
+        self.hide_relations = hide_relations
     
+    def render(self, name, value, attrs={}, choices=()):
+        if self.hide_relations:
+            class_names = [];
+            for key, hides in self.hide_relations.items():
+                for hide in hides:
+                    class_name = 'set'
+                    if (hide.hide_if_set):
+                        class_name = 'notset'
+                    class_names.append('%s-%s-%s' % (key, class_name, hide.field))
+            if (class_names):
+                if (attrs.has_key('class')):
+                    attrs['class'] = '%s %s' % (attrs['class'], 'select-hide %s' % ' '.join(class_names))
+                elif (self.attrs.has_key('class')):
+                    attrs['class'] = '%s %s' % (self.attrs['class'], 'select-hide %s' % ' '.join(class_names))
+                else:
+                    attrs['class'] = 'select-hide %s' % ' '.join(class_names)
+        return super(HideSelectWidget, self).render(name, value, attrs, choices)   
+      
 class OtherSelectWidget(forms.widgets.MultiWidget):
     class Media:
         js = (
@@ -168,12 +192,12 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
               '%sutilities/js/models/fields.js' % settings.STATIC_URL,
               )
         
-    def __init__(self, choices, other_label, attrs=None):
+    def __init__(self, choices, other_label, hide_relations=None, attrs=None):
         choices_with_other = list(choices)
         choices_with_other.append((u'__other__', other_label))
         
         widgets = (
-                   forms.Select(choices = choices_with_other, attrs={'class':'other-select'}),
+                   HideSelectWidget(choices = choices_with_other, attrs={'class':'other-select'}, hide_relations=hide_relations),
                    forms.TextInput(),
        
         )

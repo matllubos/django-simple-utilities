@@ -14,8 +14,10 @@ from django.conf import settings
 from sorl.thumbnail import ImageField
 
 from utilities.utils import fit
-from utilities.forms.widgets import CommaWidget, WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget
+from utilities.forms.widgets import CommaWidget, WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
+    HideSelectWidget
 from utilities.forms import CommaDecimalField, StylizedIntegerField, GoogleMapUrlFormField, FullSizeModelMultipleChoiceField, OtherSelectField
+from django.utils.functional import curry
 
 class IntegerRangeField(models.IntegerField):
     
@@ -156,16 +158,8 @@ class HideCharField(models.CharField):
         self.hide_relations = hide_relations
         
     def formfield(self, **kwargs):
-        class_names = [];
-        
-        for key, hides in self.hide_relations.items():
-            for hide in hides:
-                class_name = 'set'
-                if (hide.hide_if_set):
-                    class_name = 'notset'
-                class_names.append('%s-%s-%s' % (key, class_name, hide.field))
-        if (class_names):
-            kwargs['widget'] = WidgetFactory().create(forms.Select, {'class': 'select-hide '+(' '.join(class_names))}, kwargs.get('widget', None))
+        if (self.hide_relations):
+            kwargs['widget'] = HideSelectWidget(hide_relations=self.hide_relations)
         return super(HideCharField, self).formfield(**kwargs)
 
 
@@ -263,18 +257,38 @@ class FullSizeManyToManyField(models.ManyToManyField):
    
 class OtherCharField(models.CharField):
     
-    def __init__(self, verbose_name=None, name=None, choices=None, other=_(u'Other'), **kwargs):
-        
+    def __init__(self, verbose_name=None, name=None, choices=None, other_label=_(u'Other'), hide_relations=None, **kwargs):
         super(OtherCharField, self).__init__(verbose_name, name,  **kwargs)
-        #self.choices = choices
-        self.choices_val = choices
-        self.other = other
+        self.other_choices = choices
+        self.other_label = other_label
+        self.hide_relations = hide_relations
         
     def formfield(self, **kwargs):
         defaults = {
-            'choices': self.choices_val,
-            'other_label': self.other
+            'choices': self.other_choices,
+            'other_label': self.other_label,
+            'hide_relations': self.hide_relations
         }
         defaults.update(kwargs)
         t =  super(OtherCharField, self).formfield(form_class=OtherSelectField, **defaults)
         return t
+    
+    '''
+    Z důvodu get_FOO_display, původně jsem chtěl udělat pomocí přepsání formfield a nastavení choices ale to bych musel přepsat i validaci a celou metodu formfield
+    '''
+    def contribute_to_class(self, cls, name):
+        self.set_attributes_from_name(name)
+        self.model = cls
+        cls._meta.add_field(self)
+        if self.other_choices:
+            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))
+            
+    def _get_flatchoices(self):
+        flat = []
+        for choice, value in self.other_choices:
+            if isinstance(value, (list, tuple)):
+                flat.extend(value)
+            else:
+                flat.append((choice,value))
+        return flat
+    flatchoices = property(_get_flatchoices)

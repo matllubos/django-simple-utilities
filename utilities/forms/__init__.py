@@ -38,14 +38,13 @@ class FullSizeModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     
 class OtherSelectField(forms.MultiValueField):
 
-    def __init__(self, choices=[], other_label=_(u'Other'), *args, **kwargs):
+    def __init__(self, choices=[], other_label=_(u'Other'), hide_relations=None, *args, **kwargs):
         fields = (forms.CharField(required=True),
                   forms.CharField(required=False, max_length = kwargs['max_length']),)
         del kwargs['max_length']
-        del kwargs['widget']
+        kwargs['widget'] = OtherSelectWidget(choices, other_label, hide_relations=hide_relations)
         self.fields = fields
-        
-        super(forms.MultiValueField, self).__init__(widget = OtherSelectWidget(choices, other_label), *args, **kwargs)
+        super(forms.MultiValueField, self).__init__(*args, **kwargs)
 
     def clean(self, value):
         if not value:
