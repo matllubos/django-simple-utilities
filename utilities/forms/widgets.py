@@ -32,8 +32,6 @@ class WidgetFactory:
                     old_attrs[k] = v
             return widget(attrs=old_attrs, **kwargs)
         elif isinstance(old_widget, widget):
-            print 'update kwargs'
-            
             for k, v in kwargs.iteritems():
                 try:
                     if not getattr(old_widget, k):
@@ -41,7 +39,6 @@ class WidgetFactory:
                 except AttributeError:
                     setattr(old_widget, k, v)
                 
-            print 'update attrs'
             for k, v in attrs.iteritems():
                 try:
                     values = ('%s %s' % (old_attrs[k], v)).split(' ')
