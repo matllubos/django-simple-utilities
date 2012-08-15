@@ -114,15 +114,12 @@ class PSCField(models.CharField):
     def pre_save(self, model_instance, add):
         m = re.match(r'^(\d{3}) ?(\d{2})$', getattr(model_instance, self.attname))
         return '{0} {1}'.format(m.group(1), m.group(2))
-        
 
 
 
 
 
 
- 
- 
  
            
 class IntegerRangeField(models.IntegerField):

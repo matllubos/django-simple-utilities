@@ -15,16 +15,15 @@ from django.forms import extras
 
 class WidgetFactory:
     def create(self, widget , attrs,  old_widget, **kwargs):
-        if not old_widget or inspect.isclass(old_widget) or isinstance(old_widget, widget):
-            print 'ok'
-            try:
-                if (old_widget):
-                    old_attrs = old_widget.attrs
-                else:
-                    old_attrs = {}
-            except AttributeError:
+        try:
+            if (old_widget):
+                old_attrs = old_widget.attrs
+            else:
                 old_attrs = {}
-                
+        except AttributeError:
+            old_attrs = {}
+        
+        if not old_widget or inspect.isclass(old_widget):                
             for k, v in attrs.iteritems():
                 try:
                     values = ('%s %s' % (old_attrs[k], v)).split(' ')
@@ -32,6 +31,25 @@ class WidgetFactory:
                 except KeyError:
                     old_attrs[k] = v
             return widget(attrs=old_attrs, **kwargs)
+        elif isinstance(old_widget, widget):
+            print 'update kwargs'
+            
+            for k, v in kwargs.iteritems():
+                try:
+                    if not getattr(old_widget, k):
+                        setattr(old_widget, k, v)
+                except AttributeError:
+                    setattr(old_widget, k, v)
+                
+            print 'update attrs'
+            for k, v in attrs.iteritems():
+                try:
+                    values = ('%s %s' % (old_attrs[k], v)).split(' ')
+                    old_attrs[k] = ' '.join(set(values))
+                except KeyError:
+                    old_attrs[k] = v
+                
+        
         return old_widget
     
     
