@@ -5,7 +5,7 @@ class MultiFieldsValidator(object):
     
     fields = ()
     error_messages = {
-        'invalid' : _(u'Hodnota není platná')
+        'invalid' : _(u'Value is not valid.')
     }
     
     def raise_error(self, form, error="invalid"):

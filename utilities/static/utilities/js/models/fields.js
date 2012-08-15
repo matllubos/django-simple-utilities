@@ -236,9 +236,32 @@ function otherSelectFields() {
 	});
 }
 
-validators = {"phone":PhoneValidator,"psc":PscValidator}
+validators = {"CZ-phone":PhoneValidator,"psc":PscValidator}
 
 
+function styleIntegerInput(el) {
+	val = el.val().split(' ').join('').replace(/^[0]+(\d)/g,"$1").replace(/[^\d]/g, "");	
+	out = ''
+	j = 0;
+	for (i=val.length - 1; i>=0;i--){
+		if (j % 3 == 0){
+			out = ' '+out
+		}
+		out = val.charAt(i) + out;		
+		j++;
+	}
+	el.val(out.trim());
+}
+
+function autoFormatInteger() {
+	$('input.integer.auto-format').each(function(){
+        styleIntegerInput($(this));
+		$(this).keyup(function(objEvent){
+			styleIntegerInput($(this));
+		});
+	});
+	
+}
 
 $(document).ready(function(){
 		//phone();
@@ -247,12 +270,10 @@ $(document).ready(function(){
 		
 		hideFields();
 		otherSelectFields();
-		
+		autoFormatInteger();
 		/*$("#id_is_dynamic").click(
 				function(){hideHTML()}
 		);  */
-		
-		test = PhoneValidator;
 		
 		for(var key in validators)
 	    {

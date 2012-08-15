@@ -79,12 +79,6 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
         
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Hook for specifying the form Field instance for a given database Field
-        instance.
-
-        If kwargs are given, they're passed to the form Field's constructor.
-        """
         request = kwargs.pop("request", None)
 
         # If the field specifies choices, we don't need to look for special
@@ -241,9 +235,6 @@ class MarshallingAdmin(UpdateRelatedAdmin):
         return super(MarshallingAdmin, self).response_change(request, obj) 
             
     def response_add(self, request, obj, post_url_continue='../%s/'):
-        """
-        Determines the HttpResponse for the add_view stage.
-        """
         opts = obj._meta
         pk_value = obj._get_pk_val()
 
@@ -274,7 +265,7 @@ class MultipleFilesImport(UpdateRelatedAdmin):
             for file in request.FILES.getlist('files[]'):
                 self.received_file(obj, file)
         except:
-            messages.error(request, _(u'Nelze uložit soubory.'))
+            messages.error(request, _(u'Cannot safe files.'))
             return HttpResponseRedirect('')
         
         return super(MultipleFilesImport, self).response_add(request, obj, post_url_continue) 
@@ -285,7 +276,7 @@ class MultipleFilesImport(UpdateRelatedAdmin):
             for file in request.FILES.getlist('files[]'):
                 self.received_file(obj, file)
         except:
-            messages.error(request, _(u'Nelze uložit soubory.'))
+            messages.error(request, _(u'Cannot safe files.'))
             return HttpResponseRedirect('')
         
         return super(MultipleFilesImport, self).response_change(request, obj) 
@@ -305,7 +296,7 @@ class CloneModelAdmin(UpdateRelatedAdmin):
         if ('_clone' in request.POST):
             copied_obj = deep_copy(obj, False)
 
-            self.message_user(request, msg + " " + _(u"prosím upravte další hodnoty"))
+            self.message_user(request, msg + " " + _(u'Please update another values'))
             if "_popup" in request.REQUEST:
                 return HttpResponseRedirect(request.path + "../%s?_popup=1"% copied_obj.pk)
             else:
@@ -438,7 +429,7 @@ class CSVImportMixin(object):
                 #except:
                 #    messages.error(request, _(u'Špatný formát CSV souboru'))
             else:
-                messages.error(request, _(u'Pro import je nutné vložit sobor ve formátu CSV'))
+                messages.error(request, _(u'File must be in CSV format.'))
             return HttpResponseRedirect('')
         extra_context['csvimportmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         extra_context['import_form'] = import_form
@@ -461,5 +452,4 @@ class DashboardMixin(object):
         extra_context['dashboard_table'] = dashboard_table
         extra_context['dashboardmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         return sup.changelist_view(request, extra_context=extra_context)
-    
     

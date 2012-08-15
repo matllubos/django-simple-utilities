@@ -1,6 +1,7 @@
 import datetime
 import re
 import time
+import inspect
 
 from django import forms
 from django.conf import settings
@@ -14,22 +15,24 @@ from django.forms import extras
 
 class WidgetFactory:
     def create(self, widget , attrs,  old_widget, **kwargs):
-        
-        try:
-            if (old_widget):
-                old_attrs = old_widget.attrs
-            else:
-                old_attrs = {}
-        except AttributeError:
-            old_attrs = {}
-            
-        for k, v in attrs.iteritems():
+        if not old_widget or inspect.isclass(old_widget) or isinstance(old_widget, widget):
+            print 'ok'
             try:
-                old_attrs[k] += ' '+v
-            except KeyError:
-                old_attrs[k] = v
-        
-        return widget(attrs=old_attrs, **kwargs)
+                if (old_widget):
+                    old_attrs = old_widget.attrs
+                else:
+                    old_attrs = {}
+            except AttributeError:
+                old_attrs = {}
+                
+            for k, v in attrs.iteritems():
+                try:
+                    values = ('%s %s' % (old_attrs[k], v)).split(' ')
+                    old_attrs[k] = ' '.join(set(values))
+                except KeyError:
+                    old_attrs[k] = v
+            return widget(attrs=old_attrs, **kwargs)
+        return old_widget
     
     
 class FieldsWidget(forms.TextInput):
@@ -45,7 +48,7 @@ class MeasureWidget(FieldsWidget):
         super(MeasureWidget, self).__init__(attrs=attrs)
         self.measure = measure
             
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None):        
         if value is None:
             value = ''
         
@@ -53,21 +56,28 @@ class MeasureWidget(FieldsWidget):
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
             final_attrs['value'] = force_unicode(self._format_value(value))
-        return mark_safe(u'<input%s /> <strong>%s</strong>' % (flatatt(final_attrs),self.measure))
-    
+        if self.measure:
+            return mark_safe(u'<input%s /> %s' % (flatatt(final_attrs),self.measure))
+        return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
+class CommaMeasureWidget(MeasureWidget):
+    def render(self, name, value, attrs=None):
+        if (value):
+            return super(CommaMeasureWidget, self).render(name, smart_str(value).replace('.', ','))
+        return super(CommaMeasureWidget, self).render(name, value)
+    
 class HtmlWidget(forms.Textarea):
     class Media:
         js = (
               '%sutilities/js/models/tinymce/jscripts/tiny_mce/tiny_mce.js' % settings.STATIC_URL,
               '%sutilities/js/models/textareas.js' % settings.STATIC_URL,
               )
-        
+
 class CommaWidget(forms.widgets.TextInput):
     def render(self, name, value, attrs=None):
         if (value):
             return super(CommaWidget, self).render(name, smart_str(value).replace('.', ','))
-        return super(CommaWidget, self).render(name, value)
+        return super(CommaWidget, self).render(name, value)        
     
 RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
 
