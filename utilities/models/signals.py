@@ -73,7 +73,7 @@ class NotificationPostSave(DefaultPostSave):
             content_type = ContentType.objects.get_for_model(instance)
             codename = 'can_receive_notification_%s' % content_type.model
             perm = Permission.objects.get(content_type=content_type, codename=codename)
-            mail_sender.send_admin_mail(_(u'Nový záznam v administraci'), 'utils/mail/admin/notification.html', context, perm=perm)
+            mail_sender.send_admin_mail(_(u'Nový záznam v administraci'), 'utilities/mail/admin/notification.html', context, perm=perm)
 
 class SendCustomerNotificationPostSave(DefaultPostSave):
     
