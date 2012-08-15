@@ -183,9 +183,10 @@ class MarshallingAdmin(UpdateRelatedAdmin):
         return MarshallingChangeList 
     
     def get_model_perms(self, *args, **kwargs):
-        perms = admin.ModelAdmin.get_model_perms(self, *args, **kwargs)
+        perms = super(MarshallingAdmin, self).get_model_perms(*args, **kwargs)
         if (self.parent != self.model):
             perms['list_hide'] = True
+        perms['hide_add'] = True
         return perms
     
     def queryset(self, request, parent = False):
@@ -218,6 +219,40 @@ class MarshallingAdmin(UpdateRelatedAdmin):
             extra_context['childs'] = childs
         return super(MarshallingAdmin, self).changelist_view(request, extra_context=extra_context)
 
+    @csrf_protect_m
+    @transaction.commit_on_success
+    def delete_view(self, request, object_id, extra_context={}):
+        if request.POST and not "_popup" in request.POST:
+            opts = self.model._meta
+            obj = self.get_object(request, unquote(object_id))
+    
+            if not self.has_delete_permission(request, obj):
+                raise PermissionDenied
+    
+            if obj is None:
+                raise Http404(_('%(name)s object with primary key %(key)r does not exist.') % {'name': force_unicode(opts.verbose_name), 'key': escape(object_id)})
+    
+            using = router.db_for_write(self.model)
+    
+            # Populate deleted_objects, a data structure of all related objects that
+            # will also be deleted.
+            (deleted_objects, perms_needed, protected) = get_deleted_objects(
+                [obj], opts, request.user, self.admin_site, using)
+
+
+            if perms_needed:
+                raise PermissionDenied
+            obj_display = force_unicode(obj)
+            self.log_deletion(request, obj, obj_display)
+            self.delete_model(request, obj)
+
+            self.message_user(request, _('The %(name)s "%(obj)s" was deleted successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj_display)})
+
+            if not self.has_change_permission(request, None):
+                return HttpResponseRedirect("../../../../")
+            return HttpResponseRedirect("../../../%s/" % self.parent.__name__.lower())
+        return super(MarshallingAdmin, self).delete_view(request, object_id, extra_context=extra_context)
+     
     def response_change(self, request, obj):
         opts = obj._meta
         verbose_name = opts.verbose_name
@@ -252,7 +287,7 @@ class MarshallingAdmin(UpdateRelatedAdmin):
                 post_url = '../../../'
             return HttpResponseRedirect(post_url)
         return super(MarshallingAdmin, self).response_add(request, obj, post_url_continue)  
-    
+
     
 class MultipleFilesImport(UpdateRelatedAdmin):
     file_field = None

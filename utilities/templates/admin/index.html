@@ -19,7 +19,7 @@
 		                <th scope="row">{{ model.name }}</th>
 		            {% endif %}
 		
-		            {% if model.perms.add %}
+		            {% if model.perms.add and not model.perms.hide_add %}
 		                <td><a href="{{ model.admin_url }}add/" class="addlink">{% trans 'Add' %}</a></td>
 		            {% else %}
 		                <td>&nbsp;</td>
