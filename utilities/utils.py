@@ -41,4 +41,4 @@ def remove_nonspacing_marks(s):
     
 def quote(url):
     url = django_quote(remove_nonspacing_marks(url))
-    return re.sub(r' ', '__', url)
+    return re.sub(r' ', '-', url)
