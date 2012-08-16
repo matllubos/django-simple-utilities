@@ -1,5 +1,6 @@
 # coding: utf-8
 import re
+import unicodedata
 
 from django.contrib.admin.util import quote as django_quote, unquote as django_unquote
 from django.utils.encoding import force_unicode
@@ -34,10 +35,10 @@ def fit(file_path, max_width=None, max_height=None, save_as=None):
 
     return True
 
-def quote(url):
-    url = django_quote(url)
-    return re.sub(r' ', '__', url)
 
-def unquote(url):
-    url = re.sub(r'__', ' ', force_unicode(url))
-    return django_unquote(url)
+def remove_nonspacing_marks(s):
+    return ''.join(c for c in unicodedata.normalize('NFKD', unicode(s)) if unicodedata.category(c) != 'Mn')
+    
+def quote(url):
+    url = django_quote(remove_nonspacing_marks(url))
+    return re.sub(r' ', '__', url)
