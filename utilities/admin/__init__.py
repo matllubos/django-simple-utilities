@@ -31,7 +31,7 @@ def get_related_delete(deleted_objects):
     return out
     
 
-class UpdateRelatedAdmin(admin.ModelAdmin):
+class RelatedToolsAdmin(admin.ModelAdmin):
     delete_confirmation_template = 'admin/delete_confirmation.html'
     
     @csrf_protect_m
@@ -39,7 +39,6 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
     def delete_view(self, request, object_id, extra_context={}):
         if request.POST and "_popup" in request.POST:
             opts = self.model._meta
-            app_label = opts.app_label
 
             obj = self.get_object(request, unquote(object_id))
 
@@ -51,8 +50,6 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
 
             using = router.db_for_write(self.model)
 
-        # Populate deleted_objects, a data structure of all related objects that
-        # will also be deleted.
             (deleted_objects, perms_needed, protected) = get_deleted_objects(
             [obj], opts, request.user, self.admin_site, using)
 
@@ -69,42 +66,26 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
                 m = re.match('.*href="/admin/([^/]*)/([^/]*)/([^/]*)/".*', unicode(url))
                 del_objects.append({'app': smart_str(m.group(1)), 'model': smart_str(m.group(2)), 'id':smart_str(m.group(3))})
 
-            pk_value = obj._get_pk_val()
             return HttpResponse(u'<script type="text/javascript">opener.dismissDeletePopup(window, %s);</script>' % \
                                 del_objects)
         
         extra_context['is_popup'] = "_popup" in request.REQUEST
-        return super(UpdateRelatedAdmin, self).delete_view(request, object_id, extra_context=extra_context)
+        return super(RelatedToolsAdmin, self).delete_view(request, object_id, extra_context=extra_context)
             
         
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        request = kwargs.pop("request", None)
-
-        # If the field specifies choices, we don't need to look for special
-        # admin widgets - we just need to use a select widget of some kind.
-        if db_field.choices:
-            return self.formfield_for_choice_field(db_field, request, **kwargs)
-
-        # ForeignKey or ManyToManyFields
         if isinstance(db_field, (models.ForeignKey, models.ManyToManyField)):
-            # Combine the field kwargs with any options for formfield_overrides.
-            # Make sure the passed in **kwargs override anything in
-            # formfield_overrides because **kwargs is more specific, and should
-            # always win.
+            request = kwargs.pop("request", None)
             if db_field.__class__ in self.formfield_overrides:
                 kwargs = dict(self.formfield_overrides[db_field.__class__], **kwargs)
 
-            # Get the correct formfield.
             if isinstance(db_field, models.ForeignKey):
                 formfield = self.formfield_for_foreignkey(db_field, request, **kwargs)
             elif isinstance(db_field, models.ManyToManyField):
                 formfield = self.formfield_for_manytomany(db_field, request, **kwargs)
 
-            # For non-raw_id fields, wrap the widget with a wrapper that adds
-            # extra HTML -- the "add other" interface -- to the end of the
-            # rendered output. formfield can be None if it came from a
-            # OneToOneField with parent_link=True or a M2M intermediary.
+
             if formfield and db_field.name not in self.raw_id_fields:
                 related_modeladmin = self.admin_site._registry.get(
                                                             db_field.rel.to)
@@ -115,26 +96,15 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
                             can_add_related=can_add_related)
 
             return formfield
-
-        # If we've got overrides for the formfield defined, use 'em. **kwargs
-        # passed to formfield_for_dbfield override the defaults.
-        for klass in db_field.__class__.mro():
-            if klass in self.formfield_overrides:
-                kwargs = dict(self.formfield_overrides[klass], **kwargs)
-                return db_field.formfield(**kwargs)
-
-        # For any other type of field, just call its formfield() method.
-        return db_field.formfield(**kwargs)
+        return super(RelatedToolsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
     
-    def response_change(self, request, obj):
-        pk_value = obj._get_pk_val()
-        
+    def response_change(self, request, obj):     
         if "_popup" in request.POST:
+            pk_value = obj._get_pk_val()
             return HttpResponse('<script type="text/javascript">opener.dismissEditPopup(window, "%s", "%s");</script>' % \
                 # escape() calls force_unicode.
                 (escape(pk_value), escapejs(obj)))
-        else:
-            return super(UpdateRelatedAdmin, self).response_change(request, obj)
+        return super(RelatedToolsAdmin, self).response_change(request, obj)
         
     def _media(self):
         from django.conf import settings
@@ -148,21 +118,22 @@ class UpdateRelatedAdmin(admin.ModelAdmin):
             js.append('js/prepopulate.min.js')
         if self.opts.get_ordered_objects():
             js.extend(['js/getElementsBySelector.js', 'js/dom-drag.js' , 'js/admin/ordering.js'])
-    
-        
         js = ['%s%s' % (settings.ADMIN_MEDIA_PREFIX, url) for url in js]
         js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
         js.append('%sutilities/admin/js/RelatedObjectLookups.js' % settings.STATIC_URL)
-        #.append('%sjs/admin/RelatedObjectLookups.js' % settings.STATIC_URL)
         return forms.Media(js=js)
     media = property(_media)
         
-class HiddenModelAdmin(UpdateRelatedAdmin):
+class HiddenModelMixin(object):
     def get_model_perms(self, *args, **kwargs):
-        perms = admin.ModelAdmin.get_model_perms(self, *args, **kwargs)
+        perms = super(HiddenModelMixin, self).get_model_perms(*args, **kwargs)
         perms['list_hide'] = True
         return perms
  
+ 
+class HiddenModelAdmin(HiddenModelMixin, RelatedToolsAdmin):
+    pass
+
 from django.contrib.admin.util import quote
  
 class MarshallingChangeList(ChangeList):
@@ -171,7 +142,7 @@ class MarshallingChangeList(ChangeList):
         return "../%s/%s/" % (getattr(result, self.model_admin.real_type_field).model, quote(getattr(result, self.pk_attname)))
        
  
-class MarshallingAdmin(UpdateRelatedAdmin):  
+class MarshallingAdmin(RelatedToolsAdmin):  
      
     real_type_field = 'real_type'
     parent = None
@@ -233,9 +204,6 @@ class MarshallingAdmin(UpdateRelatedAdmin):
                 raise Http404(_('%(name)s object with primary key %(key)r does not exist.') % {'name': force_unicode(opts.verbose_name), 'key': escape(object_id)})
     
             using = router.db_for_write(self.model)
-    
-            # Populate deleted_objects, a data structure of all related objects that
-            # will also be deleted.
             (deleted_objects, perms_needed, protected) = get_deleted_objects(
                 [obj], opts, request.user, self.admin_site, using)
 
@@ -253,16 +221,12 @@ class MarshallingAdmin(UpdateRelatedAdmin):
             return HttpResponseRedirect("../../../%s/" % self.parent.__name__.lower())
         return super(MarshallingAdmin, self).delete_view(request, object_id, extra_context=extra_context)
      
-    def response_change(self, request, obj):
-        opts = obj._meta
-        verbose_name = opts.verbose_name
-        msg = _('The %(name)s "%(obj)s" was changed successfully.') % {'name': force_unicode(verbose_name), 'obj': force_unicode(obj)}
-        
+    def response_change(self, request, obj): 
         if "_save" in request.POST:
+            opts = obj._meta
+            verbose_name = opts.verbose_name
+            msg = _('The %(name)s "%(obj)s" was changed successfully.') % {'name': force_unicode(verbose_name), 'obj': force_unicode(obj)}
             self.message_user(request, msg)
-            # Figure out where to redirect. If the user has change permission,
-            # redirect to the change-list page for this object. Otherwise,
-            # redirect to the admin index.
             if self.has_change_permission(request, None):
                 return HttpResponseRedirect('../../%s' % self.parent.__name__.lower())
             else:
@@ -270,17 +234,10 @@ class MarshallingAdmin(UpdateRelatedAdmin):
         return super(MarshallingAdmin, self).response_change(request, obj) 
             
     def response_add(self, request, obj, post_url_continue='../%s/'):
-        opts = obj._meta
-        pk_value = obj._get_pk_val()
-
-        msg = _('The %(name)s "%(obj)s" was added successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj)}
-        
         if "_save" in request.POST:
+            opts = obj._meta
+            msg = _('The %(name)s "%(obj)s" was added successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj)}
             self.message_user(request, msg)
-
-            # Figure out where to redirect. If the user has change permission,
-            # redirect to the change-list page for this object. Otherwise,
-            # redirect to the admin index.
             if self.has_change_permission(request, None):
                 post_url = '../../%s' % self.parent.__name__.lower()
             else:
@@ -289,8 +246,8 @@ class MarshallingAdmin(UpdateRelatedAdmin):
         return super(MarshallingAdmin, self).response_add(request, obj, post_url_continue)  
 
     
-class MultipleFilesImport(UpdateRelatedAdmin):
-    file_field = None
+class MultipleFilesImportMixin(object):
+    change_form_template = 'admin/multiple_file_upload_change_form.html'
     
     def received_file(self, obj, file):
         pass
@@ -303,8 +260,7 @@ class MultipleFilesImport(UpdateRelatedAdmin):
             messages.error(request, _(u'Cannot safe files.'))
             return HttpResponseRedirect('')
         
-        return super(MultipleFilesImport, self).response_add(request, obj, post_url_continue) 
-    
+        return super(MultipleFilesImportMixin, self).response_add(request, obj, post_url_continue) 
         
     def response_change(self, request, obj):
         try:
@@ -314,32 +270,48 @@ class MultipleFilesImport(UpdateRelatedAdmin):
             messages.error(request, _(u'Cannot safe files.'))
             return HttpResponseRedirect('')
         
-        return super(MultipleFilesImport, self).response_change(request, obj) 
+        return super(MultipleFilesImportMixin, self).response_change(request, obj) 
+
+    def add_view(self, request, form_url='', extra_context={}):
+        sup = super(MultipleFilesImportMixin, self)
+        extra_context['multiplefilesimportmixin_super_template'] = sup.add_form_template or sup.change_form_template or 'admin/change_form.html'
+        return sup.add_view(request, form_url, extra_context)
+        
+    def change_view(self, request, object_id, extra_context={}):
+        sup = super(MultipleFilesImportMixin, self)
+        extra_context['multiplefilesimportmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
+        return sup.change_view(request, object_id, extra_context)
     
-    change_form_template = 'admin/multiple_file_upload_change_form.html'
     
-    
-class CloneModelAdmin(UpdateRelatedAdmin):
-    
+class CloneModelMixin(object):
+    change_form_template = 'admin/clone_change_form.html'
+        
     def pre_clone_save(self, obj):
         pass
         
     def response_change(self, request, obj):
-        opts = self.model._meta
-        msg = _('The %(name)s "%(obj)s" was added successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj)}
-        
         if ('_clone' in request.POST):
+            opts = self.model._meta
+            msg = _(u'The %(name)s "%(obj)s" was added successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj)}
             copied_obj = deep_copy(obj, False)
 
-            self.message_user(request, msg + " " + _(u'Please update another values'))
+            self.message_user(request, force_unicode(msg)+ " " + force_unicode(_(u'Please update another values')))
             if "_popup" in request.REQUEST:
                 return HttpResponseRedirect(request.path + "../%s?_popup=1"% copied_obj.pk)
             else:
                 return HttpResponseRedirect(request.path + "../%s" % copied_obj.pk)
         
-        return super(CloneModelAdmin, self).response_change(request, obj) 
+        return super(CloneModelMixin, self).response_change(request, obj) 
     
-    change_form_template = 'admin/clone_change_form.html'
+    def add_view(self, request, form_url='', extra_context={}):
+        sup = super(CloneModelMixin, self)
+        extra_context['clonemodelmixin_super_template'] = sup.add_form_template or sup.change_form_template or 'admin/change_form.html'
+        return sup.add_view(request, form_url, extra_context)
+        
+    def change_view(self, request, object_id, extra_context={}):
+        sup = super(CloneModelMixin, self)
+        extra_context['clonemodelmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
+        return sup.change_view(request, object_id, extra_context)
 
 
 class AdminPagingMixin(object): 
@@ -348,12 +320,10 @@ class AdminPagingMixin(object):
     
     def add_view(self, request, form_url='', extra_context={}):
         sup = super(AdminPagingMixin, self)
-        extra_context['pagingmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
+        extra_context['pagingmixin_super_template'] = sup.add_form_template or sup.change_form_template or 'admin/change_form.html'
         return sup.add_view(request, form_url, extra_context)
         
     def change_view(self, request, object_id, extra_context={}):
-        #TODO: zdá se mi divné že extra_context už je předvyplněný
-       
         sup = super(AdminPagingMixin, self)
         
         obj = sup.get_object(request, object_id)
@@ -378,7 +348,7 @@ class AdminPagingMixin(object):
         return sup.change_view(request, object_id, extra_context)
     
 
-class ChangeTree(ChangeList):
+class TreeChangeList(ChangeList):
     
     def tree_sort(self, parent):
         result = []
@@ -401,21 +371,26 @@ class ChangeTree(ChangeList):
             depth += 1
         return depth
     
-class TreeModelAdmin(UpdateRelatedAdmin):
+class TreeModelMixin(object):
     
     parent = None
     change_list_template = 'admin/change_tree.html'
     
     def queryset(self, request):
-        qs = super(TreeModelAdmin, self).queryset(request)
+        qs = super(TreeModelMixin, self).queryset(request)
         
         for obj in qs:
             obj.depth = 0
         return qs
     
     def get_changelist(self, request, **kwargs):
-        return ChangeTree 
-    
+        return TreeChangeList 
+
+    def changelist_view(self, request, extra_context={}):
+        sup = super(TreeModelMixin, self)
+        extra_context['treemodelmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
+        return sup.changelist_view(request, extra_context)
+
     
 class CSVImportForm(forms.Form):
     csv_file = forms.FileField(max_length=50)

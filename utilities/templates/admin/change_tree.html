@@ -1,4 +1,4 @@
-{% extends "admin_tp/change_list.html" %}
+{% extends treemodelmixin_super_template %}
 {% load adminmedia admin_list admin_tree i18n %}
 
 {% block result_list %}
@@ -6,4 +6,3 @@
 		{% result_tree cl %}
 	{% if action_form and actions_on_bottom and cl.full_result_count %}{% admin_actions %}{% endif %}
 {% endblock %}
-{% block pagination %}{% pagination cl %}{% endblock %}

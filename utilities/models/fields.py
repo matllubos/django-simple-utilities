@@ -119,34 +119,6 @@ class PSCField(models.CharField):
 
 
 
-
- 
-           
-class IntegerRangeField(models.IntegerField):
-    
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
-        self.min_value, self.max_value = min_value, max_value
-        models.IntegerField.__init__(self, verbose_name, name, **kwargs)
-    
-    def formfield(self, **kwargs):
-        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
-        defaults.update(kwargs)
-        return super(IntegerRangeField, self).formfield(**defaults)
-
-
-      
-class FloatRangeField(models.FloatField):
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
-        self.min_value, self.max_value = min_value, max_value
-        models.FloatField.__init__(self, verbose_name, name, **kwargs)
-    
-    def formfield(self, **kwargs):
-        kwargs['widget'] = CommaWidget(attrs={'class': 'integer'})
-        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
-        defaults.update(kwargs)
-        return super(FloatRangeField, self).formfield(form_class=CommaDecimalField, **defaults)
-
-
 class NumericIdField(models.CharField):
     
     def __init__(self, verbose_name=None, name=None, places=4, **kwargs):
@@ -185,14 +157,8 @@ class HtmlField(models.TextField):
    
     def formfield(self, **kwargs):
         kwargs['widget'] = HtmlWidget(attrs={'class': 'tinymce'})
-        return super(HtmlField, self).formfield(**kwargs)
-       
-class StylizedPositiveIntegerField(PositiveIntegerField):
-    
-    def formfield(self, **kwargs):
-        kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'integer'}, kwargs.get('widget', None))
-        return super(StylizedPositiveIntegerField, self).formfield(form_class=StylizedIntegerField, **kwargs)
-    
+        return super(HtmlField, self).formfield(**kwargs)     
+  
 class PageUrlField(models.CharField):
     def formfield(self, **kwargs):
         kwargs['widget'] = WidgetFactory().create(forms.TextInput, {'class': 'page-url'}, kwargs.get('widget', None))
@@ -236,41 +202,7 @@ class HideBooelanField(models.BooleanField):
         if (self.hide):
             kwargs['widget'] = WidgetFactory().create(forms.CheckboxInput, {'class': '%s-%s' % (class_name, self.hide)}, kwargs.get('widget', None))
         return super(HideBooelanField, self).formfield(**kwargs)
-    
-class IntegerMeasureField(IntegerRangeField):
-
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, **kwargs):
-        super(IntegerMeasureField, self).__init__(verbose_name, name, min_value, max_value, **kwargs)
-        self.measure = measure
-           
-    def formfield(self, **kwargs):
-        kwargs['widget'] = MeasureWidget(attrs={'class': 'integer'}, measure=self.measure)
-        return super(IntegerMeasureField, self).formfield(**kwargs)
-
-class PositiveIntegerMeasureField(PositiveIntegerField):
-
-    def __init__(self, verbose_name=None, name=None, measure=None, **kwargs):
-        super(PositiveIntegerMeasureField, self).__init__(verbose_name, name, **kwargs)
-        self.measure = measure
-           
-    def formfield(self, **kwargs):
-        kwargs['widget'] = MeasureWidget(attrs={'class': 'integer'}, measure=self.measure)
-        return super(PositiveIntegerMeasureField, self).formfield(**kwargs)
-    
-
-class FloatMeasureField(models.FloatField):
-
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, **kwargs):
-        super(FloatMeasureField, self).__init__(verbose_name, name,  **kwargs)
-        self.min_value, self.max_value = min_value, max_value
-        self.measure = measure
-           
-    def formfield(self, **kwargs):
-        kwargs['widget'] = WidgetFactory().create(CommaWidget, {'class': 'float'}, kwargs.get('widget', None), **{'measure':self.measure})
-        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
-        defaults.update(kwargs)
-        return super(FloatMeasureField, self).formfield(form_class=CommaDecimalField, **defaults)
-
+   
 class GoogleMapUrlField(models.URLField):
 
     def __init__(self, verbose_name=None, name=None, verify_exists=True, **kwargs):
