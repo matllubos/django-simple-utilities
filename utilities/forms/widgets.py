@@ -76,8 +76,9 @@ class MeasureWidget(FieldsWidget):
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
 class CommaMeasureWidget(MeasureWidget):
+    
     def render(self, name, value, attrs=None):
-        if (value):
+        if value:
             return super(CommaMeasureWidget, self).render(name, smart_str(value).replace('.', ','))
         return super(CommaMeasureWidget, self).render(name, value)
     

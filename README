@@ -1,0 +1,102 @@
+Instalation:
+
+pip install -U django-simple-utilities
+
+
+Configuration:
+
+Add utilitiesto INSTALLED_APPS in settings.py before django.contrib.admin:
+
+INSTALLED_APPS = (
+    …
+    'utilities',
+    'django.contrib.admin',
+    …
+)
+
+Run manage.py collectstatic
+
+
+Model fields:
+
+django-simple-utilities adds same model fields which simplify your work. All this fields is in utilities.models.fields file. There is its list:
+	
+	* IntegerField
+		constructor: IntegerField(min_value=None, max_value=None, measure=None, auto_format=False, **kwargs)
+		
+			min_value	- adds validation to min value
+			max_value	- adds validation to max value
+			measure		- you can add measure which will be display after input. For example if measure='EUR', genereted input HTML will be <input ... /> EUR
+			auto_format - integer will be automatic formated using spaces for thousands. This use JavaScript.
+			
+	* PositiveIntegerField
+		constructor: IntegerField(min_value=0, max_value=None, measure=None, auto_format=False, **kwargs)
+		
+		this is the same as IntegerField bud min_value must be higher than 0 and is set to 0 by default
+		
+	* FloatField
+		constructor: FloatField(min_value=0, max_value=None, measure=None, auto_format=False, comma=True, **kwargs)
+		
+			comma	- if comma is set to True input use comma without decimal point 
+		
+	* PhoneField
+		constructor:  PhoneField(format='CZ', **kwargs):
+			
+			format	- has choices : CZ, DE, OPEN
+			
+			in CZ format is number automaticly formatted by JavaScript and user can insert only real cz phone number
+			
+	* PSCField
+		Czech PSC
+		
+		
+	* DICField
+		Czech DIC		
+		
+		
+	* HtmlField
+		use text field and adds TinyMCE editor
+		
+	* TreeForeignKey
+		constructor: TreeForeignKey(to, parent=None, **kwargs)
+		
+			this field is used for models which have tree structure. Result is select box which contains values with tree stricture.
+			
+			parent - field in string format which point to parent object. If parent is same as variable containing TreeForeignKey need not be set.
+			
+	* OtherCharField
+		constructor: OtherCharField(choices=None, other_label=_(u'Other'), hide_relations=None, **kwargs)
+		
+			choices		- same as CharField
+			other_label - when user select this value, text input is automaticly displayed. User can add another value, which is not in choices.
+			
+
+
+Admin:
+	
+	All this modelAdmins is in utilities.admin package
+	
+	* RelatedToolsAdmin
+	
+		adds change and delete button form ForeignKey field
+		
+	* HiddenModelMixin
+		
+		if you do not want to admin to be seen in index of administration, you can use this mixin. For example:
+		
+			BookAdmin(HiddenModelMixin, model.Admin):
+				pass
+				
+	* HiddenModelAdmin
+		
+		this model inherits from HiddenModelMixin and RelatedToolsAdmin:
+			HiddenModelAdmin(HiddenModelMixin, RelatedToolsAdmin):
+				pass
+				
+	* MarshallingAdmin
+	
+		documentation in the future
+		
+	* 
+	
+		

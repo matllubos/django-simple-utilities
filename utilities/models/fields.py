@@ -53,18 +53,20 @@ class PositiveIntegerField(IntegerField):
  
  
 class FloatField(models.FloatField):
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, **kwargs):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, comma=True, **kwargs):
         self.min_value, self.max_value = min_value, max_value
         self.measure = measure
+        self.comma = comma
         models.FloatField.__init__(self, verbose_name, name, **kwargs)
     
     def formfield(self, **kwargs):
-        defaults = {}
         defaults = {'min_value': self.min_value, 'max_value':self.max_value}
         defaults.update(kwargs)
-        defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure)
-        
-        return super(FloatField, self).formfield(form_class=CommaDecimalField, **defaults)
+        if self.comma:
+            defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure)
+            return super(FloatField, self).formfield(form_class=CommaDecimalField, **defaults)
+        defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure) 
+        return super(FloatField, self).formfield(**defaults)
  
  
 class PhoneField(models.CharField):
@@ -290,7 +292,7 @@ class TreeForeignKey(models.ForeignKey):
         'tree-invalid': _('Can not select an object that causes the cycle.')
     }
     
-    def __init__(self, to, parent, **kwargs):
+    def __init__(self, to, parent=None, **kwargs):
         super(TreeForeignKey, self).__init__(to, **kwargs)
         self.parent = parent
         
@@ -300,7 +302,7 @@ class TreeForeignKey(models.ForeignKey):
             'form_class': TreeModelChoiceField,
             'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to),
             'to_field_name': self.rel.field_name,
-            'parent': self.parent
+            'parent': self.parent or self.name
         }
         defaults.update(kwargs)
         return super(models.ForeignKey, self).formfield(**defaults)
