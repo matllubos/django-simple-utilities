@@ -1,6 +1,6 @@
 This project provides admin and model utilities which can save time during development and some utilities which simplify work with django administration.
 
-Feature:
+Features:
 
 	Administration
 		* Update and delete button for foreignKey in administration
