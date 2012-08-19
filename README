@@ -1,6 +1,23 @@
-This project provides admin and model utilities which can save time during development and same utilities which simplify work with django administration.
+This project provides admin and model utilities which can save time during development and some utilities which simplify work with django administration.
 
+Feature:
 
+	Administration
+		* Update and delete button for foreignKey in administration
+		* Tree list in administration
+		* Simple CSV import
+		* Multiple files upload
+		* Clone button at admin form
+	
+	Model fields
+		* Float field with comma
+		* Integer field with min_value and max_value in model
+		* Integer and float displayed with measure
+		* Czech Phone,PSC and DIC field with validation
+		* Text field with tinymce
+		* Select box with the option to insert additional custom values 
+	
+	
 Instalation:
 
 pip install -U django-simple-utilities
@@ -133,11 +150,11 @@ Admin:
 		for every file in POST. Example:
 		
 		
-		class GalleryAdmin(MultipleFilesImportMixin, admin.ModelAdmin):
-    		inlines = [ImageInLine]
-
-    	def received_file(self, obj, file):
-        	image = Image(image = file, gallery = obj)
-        	image.save()
+			class GalleryAdmin(MultipleFilesImportMixin, admin.ModelAdmin):
+		    	inlines = [ImageInLine]
+		
+		    	def received_file(self, obj, file):
+		        	image = Image(image = file, gallery = obj)
+		        	image.save()
         
 		
