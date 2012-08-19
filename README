@@ -19,15 +19,18 @@ Run manage.py collectstatic
 
 Model fields:
 
-django-simple-utilities adds same model fields which simplify your work. All this fields is in utilities.models.fields file. There is its list:
+django-simple-utilities adds same model fields which simplify your work. All this fields is in 
+utilities.models.fields file. There is its list:
 	
 	* IntegerField
 		constructor: IntegerField(min_value=None, max_value=None, measure=None, auto_format=False, **kwargs)
 		
-			min_value	- adds validation to min value
-			max_value	- adds validation to max value
-			measure		- you can add measure which will be display after input. For example if measure='EUR', genereted input HTML will be <input ... /> EUR
-			auto_format - integer will be automatic formated using spaces for thousands. This use JavaScript.
+			min_value	- 	adds validation to min value
+			max_value	- 	adds validation to max value
+			measure		- 	you can add measure which will be display after input. 
+							For example if measure='EUR', genereted input HTML will be <input ... /> EUR
+			auto_format - 	integer will be automatic formated using spaces for thousands. This use 
+							JavaScript.
 			
 	* PositiveIntegerField
 		constructor: IntegerField(min_value=0, max_value=None, measure=None, auto_format=False, **kwargs)
@@ -44,7 +47,8 @@ django-simple-utilities adds same model fields which simplify your work. All thi
 			
 			format	- has choices : CZ, DE, OPEN
 			
-			in CZ format is number automaticly formatted by JavaScript and user can insert only real cz phone number
+			in CZ format is number automaticly formatted by JavaScript and user can insert only 
+			real cz phone number
 			
 	* PSCField
 		Czech PSC
@@ -60,15 +64,18 @@ django-simple-utilities adds same model fields which simplify your work. All thi
 	* TreeForeignKey
 		constructor: TreeForeignKey(to, parent=None, **kwargs)
 		
-			this field is used for models which have tree structure. Result is select box which contains values with tree stricture.
+			this field is used for models which have tree structure. Result is select box which contains 
+			values with tree stricture.
 			
-			parent - field in string format which point to parent object. If parent is same as variable containing TreeForeignKey need not be set.
+			parent - 	field in string format which point to parent object. If parent is same as 
+						variable containing TreeForeignKey need not be set.
 			
 	* OtherCharField
 		constructor: OtherCharField(choices=None, other_label=_(u'Other'), hide_relations=None, **kwargs)
 		
-			choices		- same as CharField
-			other_label - when user select this value, text input is automaticly displayed. User can add another value, which is not in choices.
+			choices		- 	same as CharField
+			other_label - 	when user select this value, text input is 
+							automaticly displayed. User can add another value, which is not in choices.
 			
 
 
@@ -82,7 +89,8 @@ Admin:
 		
 	* HiddenModelMixin
 		
-		if you do not want to admin to be seen in index of administration, you can use this mixin. For example:
+		if you do not want to admin to be seen in index of administration, you can use this mixin. 
+		For example:
 		
 			BookAdmin(HiddenModelMixin, model.Admin):
 				pass
@@ -97,6 +105,36 @@ Admin:
 	
 		documentation in the future
 		
-	* 
+	* TreeModelMixin
+		
+		This admin mixin chane list view to tree list view. Objects is displayed in tree structure. 
+		You only must set parent varible to model field which point to object parent. For example:
+		
+		PageModelAdmin(TreeModelMixin, admin.ModelAdmin):
+			parent = 'parent_field'
+
+
+	* CSVImportMixin
 	
+	
+	
+	* CloneModelMixin
+		
+		This mixin adds clone button to change form.
+		
+		
+	* MultipleFilesImportMixin
+		
+		If you use inline model admin for files. You can use this mixin for multiple files upload. 
+		It uses html 5 and one POST for all files (not working in IE). Mixin calls function received_file 
+		for every file in POST. Example:
+		
+		
+		class GalleryAdmin(MultipleFilesImportMixin, admin.ModelAdmin):
+    		inlines = [ImageInLine]
+
+    	def received_file(self, obj, file):
+        	image = Image(image = file, gallery = obj)
+        	image.save()
+        
 		
