@@ -396,8 +396,9 @@ class CSVImportForm(forms.Form):
     csv_file = forms.FileField(max_length=50)
        
 
-class CSVImportMixin(object):
+class CSVExportMixin(object):
     change_list_template = 'admin/csv_import_change_list.html'
+    
     csv_delimiter = ';'
     csv_fields = ()
     csv_formatters = {}
@@ -406,6 +407,8 @@ class CSVImportMixin(object):
     csv_DB_values = False
     csv_bom = False
     csv_encoding = 'utf-8'
+    
+    actions = ['export_csv',]
     
     def pre_import_save(self, obj):
         pass
