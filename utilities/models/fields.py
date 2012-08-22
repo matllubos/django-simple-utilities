@@ -5,7 +5,7 @@ from datetime import date
 
 from django.db import models
 from django import forms
-from django.db.models.fields import PositiveIntegerField
+from django.db.models.fields import PositiveIntegerField, BLANK_CHOICE_DASH
 from django.core import validators     , exceptions
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import FieldFile
@@ -19,6 +19,7 @@ from utilities.forms.widgets import CommaWidget, WidgetFactory, FieldsWidget, Ht
     HideSelectWidget, CommaMeasureWidget
 from utilities.forms import CommaDecimalField, StylizedIntegerField, GoogleMapUrlFormField, FullSizeModelMultipleChoiceField, OtherSelectField, TreeModelChoiceField,\
     CzPhoneFormField, AutoFormatIntegerField
+from django.utils.encoding import smart_unicode
 
 
 class FieldError(Exception):
@@ -315,3 +316,22 @@ class TreeForeignKey(models.ForeignKey):
                 if (obj == model_instance):
                     raise exceptions.ValidationError(self.error_messages['tree-invalid'])
                 obj = obj.parent
+                
+                
+class OrderedForeignKey(models.ForeignKey):
+    
+    def __init__(self, to, order_by, **kwargs):
+        super(OrderedForeignKey, self).__init__(to, **kwargs)
+        self.order_by = order_by
+        
+    def get_choices(self, include_blank=True, blank_choice=BLANK_CHOICE_DASH):
+        first_choice = include_blank and blank_choice or []
+        if self.choices:
+            return first_choice + list(self.choices)
+        rel_model = self.rel.to
+        if hasattr(self.rel, 'get_related_field'):
+            lst = [(getattr(x, self.rel.get_related_field().attname), smart_unicode(x)) for x in rel_model._default_manager.complex_filter(self.rel.limit_choices_to)]
+        else:
+            lst = [(x._get_pk_val(), smart_unicode(x)) for x in rel_model._default_manager.complex_filter(self.rel.limit_choices_to).order_by(self.order_by)]
+        return first_choice + lst
+    
