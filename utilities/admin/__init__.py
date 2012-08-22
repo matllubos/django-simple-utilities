@@ -430,7 +430,7 @@ class CSVExportMixin(object):
     export_csv.short_description = _(u"Exportovat do formátu CSV")
     
     def changelist_view(self, request, extra_context={}):
-        sup = super(CSVImportMixin, self)  
+        sup = super(CSVExportMixin, self)  
         import_form = CSVImportForm()
         if ('_csv-import' in request.POST):
             import_form = CSVImportForm(request.POST, request.FILES)

@@ -185,7 +185,14 @@ class InitialModelForm(ModelForm):
             else:
                 self.fields[key].initial = val
             self.fields[key].widget.attrs['title'] = val
-     
+            class_names = self.fields[key].widget.attrs.get('class', None)
+            if class_names:
+                class_names += ' initial'
+            else:
+                class_names = 'initial'
+            self.fields[key].widget.attrs['class']= class_names
+            
+            
     def remove_initial_values(self, data):
         if (data):
             data = data.copy()
