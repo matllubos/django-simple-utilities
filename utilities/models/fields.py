@@ -335,3 +335,9 @@ class OrderedForeignKey(models.ForeignKey):
             lst = [(x._get_pk_val(), smart_unicode(x)) for x in rel_model._default_manager.complex_filter(self.rel.limit_choices_to)]
         return first_choice + lst
     
+    
+    def formfield(self, **kwargs):
+        db = kwargs.pop('using', None)
+        defaults = {'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to).order_by(self.order_by),}
+        defaults.update(kwargs)
+        return super(OrderedForeignKey, self).formfield(**defaults)
