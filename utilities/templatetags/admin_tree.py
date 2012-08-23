@@ -2,8 +2,6 @@ from django import template
 from django.contrib.admin.templatetags.admin_list import result_hidden_fields, result_headers, results
 from django.utils.safestring import mark_safe
 
-from dynamic_pages.models import Page #@UnresolvedImport
-
 register = template.Library()
 
 def tree_result_headers(cl):
