@@ -20,9 +20,10 @@ Features:
 	
 Instalation:
 ============
-You can use one of these commands::
-	pip install django-simple-utilities
-	easy_install django-simple-utilities
+
+	You can use one of these commands::
+		pip install django-simple-utilities
+		easy_install django-simple-utilities
 
 Configuration:
 ==============
