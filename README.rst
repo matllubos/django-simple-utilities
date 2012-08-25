@@ -92,7 +92,12 @@ django-simple-utilities adds some model fields which simplify your work. All thi
 		This field is used for models which have tree structure. Result is select box which contains values with tree structure.
 			
 			* parent - 	field in string format which point to parent object. If parent is same as variable containing TreeForeignKey need not be set.
+	
+	* OrderedForeignKey:
+		constructor:  OrderedForeignKey(to, order_by, **kwargs):	
 			
+			if you want set special different ordering in the final select box, you can use this field.
+
 	* OtherCharField:
 		constructor: OtherCharField(choices=None, other_label=_(u'Other'), hide_relations=None, **kwargs)
 		
@@ -199,11 +204,13 @@ All this modelAdmins is in utilities.admin package
 		        	image = Image(image = file, gallery = obj)
 		        	image.save()
         
-	*AdminPagingMixin:
+	* AdminPagingMixin:
 	
 		It adds buttons for next and previous object at change from. This buttons is in object-tools-items block. You can set only one attribute:
 			
 			* page_ordering - default is 'pk'
+			
+	
 			
 			
 In the future will be add singnals which automaticly send E-mail when model object is firstly stored and email sender which send HTML emails with images.
