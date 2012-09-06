@@ -157,9 +157,6 @@ class CzPhoneFormField(forms.RegexField):
 class AutoFormatIntegerField(forms.IntegerField):
     
     def __init__(self, *args, **kwargs):
-        print kwargs
-        print args
-        print 'fads'
         super(AutoFormatIntegerField, self).__init__(*args, **kwargs)
 
             
