@@ -39,7 +39,7 @@ class IntegerField(models.IntegerField):
         
         if self.auto_format:
             class_names.append('auto-format')
-            defaults = {'form_class': AutoFormatIntegerField}
+            defaults['form_class']= AutoFormatIntegerField
          
         defaults.update(kwargs)
         defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': ' '.join(class_names)}, kwargs.get('widget', None), measure=self.measure)
