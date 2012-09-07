@@ -10,6 +10,7 @@ from django.utils.safestring import mark_safe
 from django.core import validators
 
 from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget
+from django.core.validators import EmailValidator
 
 class CommaDecimalField(forms.FloatField):
 
@@ -163,8 +164,16 @@ class AutoFormatIntegerField(forms.IntegerField):
     def clean(self, value):
         value = smart_str(value).replace(' ', '')
         return super(AutoFormatIntegerField, self).clean(value)   
-    
-    
+ 
+ 
+email_re = re.compile(
+    r"(^[0-9A-Z]+(\.[0-9A-Z]+)*"  # dot-atom
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
+    r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
+validate_email = EmailValidator(email_re, _(u'Enter a valid e-mail address.'), 'invalid')
+   
+class StrictEmailField(forms.EmailField):
+    default_validators = [validate_email]        
     
     
     
@@ -217,4 +226,4 @@ class MultiFieldsValidationModelForm(ModelForm):
                 pass
         return cleaned_data
     
-    
+

@@ -19,6 +19,8 @@ from utilities.forms.widgets import CommaWidget, WidgetFactory, FieldsWidget, Ht
     HideSelectWidget, CommaMeasureWidget
 from utilities.forms import CommaDecimalField, StylizedIntegerField, GoogleMapUrlFormField, FullSizeModelMultipleChoiceField, OtherSelectField, TreeModelChoiceField,\
     CzPhoneFormField, AutoFormatIntegerField
+    
+from utilities import forms as utilities_forms
 from django.utils.encoding import smart_unicode
 
 
@@ -119,8 +121,16 @@ class PSCField(models.CharField):
         return '{0} {1}'.format(m.group(1), m.group(2))
 
 
+class StrictEmailField(models.EmailField):
 
-
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed twice
+        defaults = {
+            'form_class': utilities_forms.StrictEmailField,
+        }
+        defaults.update(kwargs)
+        print defaults
+        return super(StrictEmailField, self).formfield(**defaults)
 
 class NumericIdField(models.CharField):
     
