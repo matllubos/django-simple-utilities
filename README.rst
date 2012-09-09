@@ -200,11 +200,21 @@ All this modelAdmins is in utilities.admin package
 			class GalleryAdmin(MultipleFilesImportMixin, admin.ModelAdmin):
 		    	inlines = [ImageInLine]
 		
+				accept_file_types = ['jpe?g', 'gif', 'png']
+				max_file_size = 5000000	
+    			max_number_of_files = 10
+    
 		    	def received_file(self, obj, file):
 		        	image = Image(image = file, gallery = obj)
 		        	image.save()
 		        	return True
         
+		Variables:
+			* accept_file_types - array of strigns. Strings represent types which jquery plugin accept. You can use regular expression here.
+			* max_file_size - maximum size of file which jquery plugin accept
+			* max_number_of_files - number of files that can be uploaded at one time
+			
+			
 	* AdminPagingMixin:
 	
 		It adds buttons for next and previous object at change from. This buttons is in object-tools-items block. You can set only one attribute:
