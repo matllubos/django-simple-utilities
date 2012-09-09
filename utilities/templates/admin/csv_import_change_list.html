@@ -44,8 +44,8 @@
 	  {% if import%}
 	    <div class="actions right">
 		    <form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
-	   		   <label>{% trans 'CSV Import' %}: {{ import_form.csv_file }} </label> 
-	   		  <input type="submit" value="{% trans 'Importovat' %}" name="_csv-import" class="button" />
+	   		   <label>{% trans 'CSV file' %}: {{ import_form.csv_file }} </label> 
+	   		  <input type="submit" value="{% trans 'Import' %}" name="_csv-import" class="button" />
 	  	    </form>
 	    </div>
      {% endif %}

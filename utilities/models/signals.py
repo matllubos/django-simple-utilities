@@ -50,9 +50,7 @@ class NotificationPostSave(DefaultPostSave):
         
             permission = Permission(name = 'Can receive notification', content_type = content_type, codename = codename)
             permission.save()
-        
-        codename = models.CharField(_('codename'), max_length=100)
-    
+            
     def action(self, sender, instance, created, **kwargs):
         if (created):
             mail_sender = MailSender()
@@ -73,7 +71,7 @@ class NotificationPostSave(DefaultPostSave):
             content_type = ContentType.objects.get_for_model(instance)
             codename = 'can_receive_notification_%s' % content_type.model
             perm = Permission.objects.get(content_type=content_type, codename=codename)
-            mail_sender.send_admin_mail(_(u'Nový záznam v administraci'), 'mail/admin/notification.html', context, perm=perm)
+            mail_sender.send_admin_mail(_(u'It was created a new item'), 'mail/admin/notification.html', context, perm=perm)
 
 class SendCustomerNotificationPostSave(DefaultPostSave):
     

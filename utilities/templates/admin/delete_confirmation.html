@@ -1,6 +1,16 @@
 {% extends "admin_tp/delete_confirmation.html" %}
 {% load i18n %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="../../../../">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../../">{{ app_label|capfirst }}</a> &rsaquo; 
+     <a href="../../">{{ opts.verbose_name_plural|capfirst }}</a> &rsaquo;
+     <a href="../">{{ object|truncatewords:"18" }}</a> &rsaquo;
+     {% trans 'Delete' %}
+</div>
+{% endblock %}
+
 {% block content %}
 {% if perms_lacking or protected %}
     {% if perms_lacking %}

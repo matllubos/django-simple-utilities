@@ -8,9 +8,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.models import ModelChoiceIterator, ModelForm
 from django.utils.safestring import mark_safe
 from django.core import validators
+from django.core.validators import EmailValidator
 
 from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget
-from django.core.validators import EmailValidator
+
 
 class CommaDecimalField(forms.FloatField):
 
@@ -145,7 +146,7 @@ class CzPhoneFormField(forms.RegexField):
         regex = r'^(\+?\d{3})? ?(%s) ?\d{3} ?\d{3}$' % ('|').join(codes)
         
         
-        super(CzPhoneFormField, self).__init__(regex, max_length, min_length, error_message = u'Vložte Vaše telefonní číslo', *args, **kwargs)
+        super(CzPhoneFormField, self).__init__(regex, max_length, min_length, error_message = _(u'Enter a valid phone number'), *args, **kwargs)
         invalid_numbers = []
         for i in range(0, 9):
             invalid_numbers.append('((\+?\d{3})? ?%s{3} ?%s{3} ?%s{3})' % (i,i,i))

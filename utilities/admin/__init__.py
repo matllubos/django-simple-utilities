@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from django.utils.html import escape, escapejs
+from django.utils.html import escape, escapejs, strip_spaces_between_tags
 from django import forms
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_unicode, smart_str
@@ -16,11 +16,15 @@ from django.contrib.admin.util import get_deleted_objects
 from django.contrib.admin.util import unquote
 from django.contrib.admin.options import csrf_protect_m
 from django.template.defaultfilters import slugify
+from django.core.files.uploadedfile import UploadedFile
+from django.utils import simplejson
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
 
 from widgets import UpdateRelatedFieldWidgetWrapper
+
+import re
 
 def get_related_delete(deleted_objects):
     if not isinstance(deleted_objects, list):
@@ -149,7 +153,8 @@ class MarshallingAdmin(RelatedToolsAdmin):
     childs = []
     change_form_template = 'admin/marshalling_change_form.html'
     change_list_template = 'admin/marshalling_change_list.html'
-   
+    delete_confirmation_template = 'admin/marshalling_delete_confirmation.html'
+    
     def get_changelist(self, request, **kwargs):
         return MarshallingChangeList 
     
@@ -168,6 +173,13 @@ class MarshallingAdmin(RelatedToolsAdmin):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
+    
+    def add_view(self, request, form_url='', extra_context={}):
+        from django.contrib.contenttypes.models import ContentType           
+        if self.parent:
+            extra_context['parent'] = self.parent.__name__.lower()
+            
+        return super(MarshallingAdmin, self).add_view(request, form_url, extra_context=extra_context)
     
     def change_view(self, request, object_id, extra_context={}):
         from django.contrib.contenttypes.models import ContentType
@@ -219,6 +231,9 @@ class MarshallingAdmin(RelatedToolsAdmin):
             if not self.has_change_permission(request, None):
                 return HttpResponseRedirect("../../../../")
             return HttpResponseRedirect("../../../%s/" % self.parent.__name__.lower())
+        
+        if self.parent:
+            extra_context['parent'] = self.parent.__name__.lower()
         return super(MarshallingAdmin, self).delete_view(request, object_id, extra_context=extra_context)
      
     def response_change(self, request, obj): 
@@ -245,33 +260,15 @@ class MarshallingAdmin(RelatedToolsAdmin):
             return HttpResponseRedirect(post_url)
         return super(MarshallingAdmin, self).response_add(request, obj, post_url_continue)  
 
-    
+   
 class MultipleFilesImportMixin(object):
     change_form_template = 'admin/multiple_file_upload_change_form.html'
+    multiple_files_inline = None
     
-    def received_file(self, obj, file):
-        pass
-
-    def response_add(self, request, obj, post_url_continue='../%s/'):
-        try:
-            for file in request.FILES.getlist('files[]'):
-                self.received_file(obj, file)
-        except:
-            messages.error(request, _(u'Cannot safe files.'))
-            return HttpResponseRedirect('')
-        
-        return super(MultipleFilesImportMixin, self).response_add(request, obj, post_url_continue) 
-        
-    def response_change(self, request, obj):
-        try:
-            for file in request.FILES.getlist('files[]'):
-                self.received_file(obj, file)
-        except:
-            messages.error(request, _(u'Cannot safe files.'))
-            return HttpResponseRedirect('')
-        
-        return super(MultipleFilesImportMixin, self).response_change(request, obj) 
-
+    max_file_size = 5000000
+    accept_file_types = []
+    max_number_of_files = None
+    
     def add_view(self, request, form_url='', extra_context={}):
         sup = super(MultipleFilesImportMixin, self)
         extra_context['multiplefilesimportmixin_super_template'] = sup.add_form_template or sup.change_form_template or 'admin/change_form.html'
@@ -280,8 +277,59 @@ class MultipleFilesImportMixin(object):
     def change_view(self, request, object_id, extra_context={}):
         sup = super(MultipleFilesImportMixin, self)
         extra_context['multiplefilesimportmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
+        extra_context['max_file_size'] = self.max_file_size
+        extra_context['accept_file_types'] = '|'.join(self.accept_file_types)
+        extra_context['max_number_of_files'] = self.max_number_of_files
+        
         return sup.change_view(request, object_id, extra_context)
     
+    def received_file(self, obj, file):
+        return False
+
+    def get_urls(self):
+        from django.conf.urls.defaults import patterns, url
+        info = self.model._meta.app_label, self.model._meta.module_name
+
+        urlpatterns = patterns('',
+            url(r'^(.+)/fileupload/$',
+                self.fileupload_view,
+                name='%s_%s_fileupload' % info),
+        )
+        
+        urlpatterns += super(MultipleFilesImportMixin, self).get_urls()
+        return urlpatterns
+    
+        
+    def fileupload_view(self, request, object_id):
+        obj = self.get_object(request, unquote(object_id))
+        opts = self.model._meta
+        
+        if obj is None:
+            raise Http404(_('%(name)s object with primary key %(key)r does not exist.') % {'name': force_unicode(opts.verbose_name), 'key': escape(object_id)})
+        
+        result = []
+        
+        if request.FILES.has_key('files[]') and request.FILES['files[]']:
+            file = request.FILES['files[]']
+            wrapped_file = UploadedFile(file)
+            filename = wrapped_file.name
+            file_size = wrapped_file.file.size   
+                    
+            if not self.received_file(obj, file):
+                result.append({"error":'emptyResult',})
+            else:
+                result.append({"name":filename, 
+                                       "size":file_size, 
+                                      })
+            response_data = simplejson.dumps(result)
+        else:
+            result.append({"error":6,})
+        if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
+            mimetype = 'application/json'
+        else:
+            mimetype = 'text/plain'
+        
+        return HttpResponse(response_data, mimetype=mimetype)
     
 class CloneModelMixin(object):
     change_form_template = 'admin/clone_change_form.html'
@@ -391,7 +439,7 @@ class TreeModelMixin(object):
         extra_context['treemodelmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         return sup.changelist_view(request, extra_context)
 
-    
+   
 class CSVImportForm(forms.Form):
     csv_file = forms.FileField(max_length=50)
        
@@ -427,7 +475,7 @@ class CSVExportMixin(object):
         csv_generator.export_csv(response, queryset)
         return response
         
-    export_csv.short_description = _(u"Exportovat do formátu CSV")
+    export_csv.short_description = _(u"Export to CSV")
     
     def changelist_view(self, request, extra_context={}):
         sup = super(CSVExportMixin, self)  

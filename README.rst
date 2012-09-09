@@ -194,7 +194,7 @@ All this modelAdmins is in utilities.admin package
 		
 	* MultipleFilesImportMixin:
 		
-		If you are using inline model admin for files. You can use this mixin for multiple files upload. It uses html 5 and one POST for all files (not working in IE). Mixin calls function received_file for every file in POST. Example::
+		If you are using inline model admin for files. You can use this mixin for multiple files upload. For file uploading is used [http://blueimp.github.com/jQuery-File-Upload/ jQuery File Upload]. Mixin calls function received_file for every uploaded file and this function return ``True`` or ``False`` (True for success upload). Example::
 		
 		
 			class GalleryAdmin(MultipleFilesImportMixin, admin.ModelAdmin):
@@ -203,6 +203,7 @@ All this modelAdmins is in utilities.admin package
 		    	def received_file(self, obj, file):
 		        	image = Image(image = file, gallery = obj)
 		        	image.save()
+		        	return True
         
 	* AdminPagingMixin:
 	

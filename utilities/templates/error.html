@@ -1,0 +1,3342 @@
+<html>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>ValidationError at /admin/gallery/gallery/2/</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th { padding:1px 6px 1px 3px; background:#fefefe; text-align:left; font-weight:normal; font-size:11px; border:1px solid #ddd; }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; }
+    ul.traceback li.frame { padding-bottom:1em; }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#666; cursor:pointer; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:black; background-color:#ccc; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:black; text-decoration:none; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 0 20px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block' : 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.innerHTML = s.innerHTML == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.innerHTML = link.innerHTML == s1 ? s2 : s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>ValidationError at /admin/gallery/gallery/2/</h1>
+  <pre class="exception_value">[u&#39;ManagementForm data is missing or has been tampered with&#39;]</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://localhost:8000/admin/gallery/gallery/2/</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.3</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>ValidationError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>[u&#39;ManagementForm data is missing or has been tampered with&#39;]</pre></td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Location:</th>
+      <td>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py in _management_form, line 68</td>
+    </tr>
+
+    <tr>
+      <th>Python Executable:</th>
+      <td>/usr/bin/python</td>
+    </tr>
+    <tr>
+      <th>Python Version:</th>
+      <td>2.7.1</td>
+    </tr>
+    <tr>
+      <th>Python Path:</th>
+      <td><pre>[&#39;/Users/lubos/Workspace/Django/matlici/matlici&#39;,
+ &#39;/Library/Python/2.7/site-packages/django_easymode-1.0b1-py2.7.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/sorl_thumbnail-11.12-py2.7.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/PIL-1.1.7-py2.7-macosx-10.7-intel.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/pisa-3.0.33-py2.7.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/reportlab-2.5-py2.7-macosx-10.7-intel.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/html5lib-0.95-py2.7.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/polib-0.7.0-py2.7.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/django_watermark-0.1.6_pre1-py2.7.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/MySQL_python-1.2.3-py2.7-macosx-10.7-intel.egg&#39;,
+ &#39;/Library/Python/2.7/site-packages/pip-1.1-py2.7.egg&#39;,
+ &#39;/Users/lubos/Workspace/Django/matlici&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload&#39;,
+ &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC&#39;,
+ &#39;/Library/Python/2.7/site-packages&#39;,
+ &#39;/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;]</pre></td>
+    </tr>
+    <tr>
+      <th>Server time:</th>
+      <td>st, 29 Srp 2012 12:34:47 +0200</td>
+    </tr>
+  </table>
+</div>
+
+
+
+
+<div id="traceback">
+  <h2>Traceback <span class="commands"><a href="#" onclick="return switchPastebinFriendly(this);">Switch to copy-and-paste view</a></span></h2>
+  
+  <div id="browserTraceback">
+    <ul class="traceback">
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/core/handlers/base.py</code> in <code>get_response</code>
+
+          
+            <div class="context" id="c4437189480">
+              
+                <ol start="104" class="pre-context" id="pre4437189480"><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                    for middleware_method in self._view_middleware:</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        response = middleware_method(request, callback, callback_args, callback_kwargs)</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        if response:</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                            break</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre></pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                if response is None:</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                    try:</pre></li></ol>
+              
+              <ol start="111" class="context-line"><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        response = callback(request, *callback_args, **callback_kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='112' class="post-context" id="post4437189480"><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                    except Exception, e:</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        # If the view raised an exception, run it through exception</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        # middleware, and if the exception middleware returns a</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        # response, use that. Otherwise, reraise the exception.</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                        for middleware_method in self._exception_middleware:</pre></li><li onclick="toggle('pre4437189480', 'post4437189480')"><pre>                            response = middleware_method(request, e)</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189480')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189480">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>exceptions</td>
+                    <td class="code"><pre>&lt;module &#39;django.core.exceptions&#39; from &#39;/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/core/exceptions.pyc&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>e</td>
+                    <td class="code"><pre>ValidationError([u&#39;ManagementForm data is missing or has been tampered with&#39;])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_args</td>
+                    <td class="code"><pre>(u&#39;2&#39;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>receivers</td>
+                    <td class="code"><pre>[(&lt;function _rollback_on_exception at 0x10825b488&gt;, None)]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method CsrfViewMiddleware.process_view of &lt;django.middleware.csrf.CsrfViewMiddleware object at 0x1085be4d0&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x10849d710&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>settings</td>
+                    <td class="code"><pre>&lt;django.conf.LazySettings object at 0x107f0b0d0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback</td>
+                    <td class="code"><pre>&lt;function change_view at 0x108706578&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver</td>
+                    <td class="code"><pre>&lt;RegexURLResolver urls (None:None) ^/&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>urlresolvers</td>
+                    <td class="code"><pre>&lt;module &#39;django.core.urlresolvers&#39; from &#39;/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/core/urlresolvers.pyc&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>response</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>urlconf</td>
+                    <td class="code"><pre>&#39;urls&#39;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/contrib/admin/options.py</code> in <code>wrapper</code>
+
+          
+            <div class="context" id="c4437189408">
+              
+                <ol start="300" class="pre-context" id="pre4437189408"><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>        super(ModelAdmin, self).__init__()</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre></pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>    def get_urls(self):</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>        from django.conf.urls.defaults import patterns, url</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre></pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>        def wrap(view):</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>            def wrapper(*args, **kwargs):</pre></li></ol>
+              
+              <ol start="307" class="context-line"><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>                return self.admin_site.admin_view(view)(*args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='308' class="post-context" id="post4437189408"><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>            return update_wrapper(wrapper, view)</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre></pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>        info = self.model._meta.app_label, self.model._meta.module_name</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre></pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>        urlpatterns = patterns(&#39;&#39;,</pre></li><li onclick="toggle('pre4437189408', 'post4437189408')"><pre>            url(r&#39;^$&#39;,</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189408')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189408">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;,
+ u&#39;2&#39;)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>view</td>
+                    <td class="code"><pre>&lt;bound method GalleryAdmin.change_view of &lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py</code> in <code>_wrapped_view</code>
+
+          
+            <div class="context" id="c4437189336">
+              
+                <ol start="86" class="pre-context" id="pre4437189336"><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                    if result is not None:</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                        return result</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                if hasattr(middleware, &#39;process_view&#39;):</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                    result = middleware.process_view(request, view_func, args, kwargs)</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                    if result is not None:</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                        return result</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                try:</pre></li></ol>
+              
+              <ol start="93" class="context-line"><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                    response = view_func(request, *args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='94' class="post-context" id="post4437189336"><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                except Exception, e:</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                    if hasattr(middleware, &#39;process_exception&#39;):</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                        result = middleware.process_exception(request, e)</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                        if result is not None:</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                            return result</pre></li><li onclick="toggle('pre4437189336', 'post4437189336')"><pre>                    raise</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189336')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189336">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>e</td>
+                    <td class="code"><pre>ValidationError([u&#39;ManagementForm data is missing or has been tampered with&#39;])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware</td>
+                    <td class="code"><pre>&lt;django.middleware.csrf.CsrfViewMiddleware object at 0x108403910&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(u&#39;2&#39;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>result</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>view_func</td>
+                    <td class="code"><pre>&lt;function inner at 0x10879a7d0&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/views/decorators/cache.py</code> in <code>_wrapped_view_func</code>
+
+          
+            <div class="context" id="c4437189264">
+              
+                <ol start="72" class="pre-context" id="pre4437189264"><li onclick="toggle('pre4437189264', 'post4437189264')"><pre></pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>def never_cache(view_func):</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>    &quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>    Decorator that adds headers to a response so that it will</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>    never be cached.</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>    &quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>    def _wrapped_view_func(request, *args, **kwargs):</pre></li></ol>
+              
+              <ol start="79" class="context-line"><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>        response = view_func(request, *args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='80' class="post-context" id="post4437189264"><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>        add_never_cache_headers(response)</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>        return response</pre></li><li onclick="toggle('pre4437189264', 'post4437189264')"><pre>    return wraps(view_func, assigned=available_attrs(view_func))(_wrapped_view_func)</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189264')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189264">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(u&#39;2&#39;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>view_func</td>
+                    <td class="code"><pre>&lt;function inner at 0x108704a28&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/contrib/admin/sites.py</code> in <code>inner</code>
+
+          
+            <div class="context" id="c4437189192">
+              
+                <ol start="190" class="pre-context" id="pre4437189192"><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        By default, admin_views are marked non-cacheable using the</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        ``never_cache`` decorator. If the view can be safely cached, set</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        cacheable=True.</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        &quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        def inner(request, *args, **kwargs):</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>            if not self.has_permission(request):</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>                return self.login(request)</pre></li></ol>
+              
+              <ol start="197" class="context-line"><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>            return view(request, *args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='198' class="post-context" id="post4437189192"><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        if not cacheable:</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>            inner = never_cache(inner)</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        # We add csrf_protect here so this function can be used as a utility</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        # function for any view, without having to repeat &#39;csrf_protect&#39;.</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>        if not getattr(view, &#39;csrf_exempt&#39;, False):</pre></li><li onclick="toggle('pre4437189192', 'post4437189192')"><pre>            inner = csrf_protect(inner)</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189192')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189192">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>view</td>
+                    <td class="code"><pre>&lt;bound method GalleryAdmin.change_view of &lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.contrib.admin.sites.AdminSite object at 0x10848bd10&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(u&#39;2&#39;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/utilities/admin/__init__.py</code> in <code>change_view</code>
+
+          
+            <div class="context" id="c4437189120">
+              
+                <ol start="261" class="pre-context" id="pre4437189120"><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        sup = super(MultipleFilesImportMixin2, self)</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        extra_context[&#39;multiplefilesimportmixin_super_template&#39;] = sup.add_form_template or sup.change_form_template or &#39;admin/change_form.html&#39;</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        return sup.add_view(request, form_url, extra_context)</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        </pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>    def change_view(self, request, object_id, extra_context={}):</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        sup = super(MultipleFilesImportMixin2, self)</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        extra_context[&#39;multiplefilesimportmixin_super_template&#39;] = sup.change_form_template or &#39;admin/change_form.html&#39;</pre></li></ol>
+              
+              <ol start="268" class="context-line"><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        return sup.change_view(request, object_id, extra_context)</pre> <span>...</span></li></ol>
+              
+                <ol start='269' class="post-context" id="post4437189120"><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>    </pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>    def received_file(self, obj, file):</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        return None</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre></pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>    def response_add(self, request, obj, post_url_continue=&#39;../%s/&#39;):</pre></li><li onclick="toggle('pre4437189120', 'post4437189120')"><pre>        try:</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189120')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189120">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>extra_context</td>
+                    <td class="code"><pre>{&#39;multiplefilesimportmixin_super_template&#39;: &#39;admin/change_form.html&#39;}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>object_id</td>
+                    <td class="code"><pre>u&#39;2&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>sup</td>
+                    <td class="code"><pre>&lt;super: &lt;class &#39;MultipleFilesImportMixin2&#39;&gt;, &lt;GalleryAdmin object&gt;&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py</code> in <code>_wrapper</code>
+
+          
+            <div class="context" id="c4437189048">
+              
+                <ol start="21" class="pre-context" id="pre4437189048"><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>        def _wrapper(self, *args, **kwargs):</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            @decorator</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            def bound_func(*args2, **kwargs2):</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>                return func(self, *args2, **kwargs2)</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            # bound_func has the signature that &#39;decorator&#39; expects i.e.  no</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            # &#39;self&#39; argument, but it is a closure over self so it can call</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            # &#39;func&#39; correctly.</pre></li></ol>
+              
+              <ol start="28" class="context-line"><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            return bound_func(*args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='29' class="post-context" id="post4437189048"><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>        # In case &#39;decorator&#39; adds attributes to the function it decorates, we</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>        # want to copy those. We don&#39;t have access to bound_func in this scope,</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>        # but we can cheat by using it on a dummy function.</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>        @decorator</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>        def dummy(*args, **kwargs):</pre></li><li onclick="toggle('pre4437189048', 'post4437189048')"><pre>            pass</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437189048')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437189048">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;,
+ u&#39;2&#39;,
+ {&#39;multiplefilesimportmixin_super_template&#39;: &#39;admin/change_form.html&#39;})</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>bound_func</td>
+                    <td class="code"><pre>&lt;function bound_func at 0x10879e230&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>func</td>
+                    <td class="code"><pre>&lt;function change_view at 0x108426140&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>decorator</td>
+                    <td class="code"><pre>&lt;function csrf_protect at 0x108405938&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py</code> in <code>_wrapped_view</code>
+
+          
+            <div class="context" id="c4437188976">
+              
+                <ol start="86" class="pre-context" id="pre4437188976"><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                    if result is not None:</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                        return result</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                if hasattr(middleware, &#39;process_view&#39;):</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                    result = middleware.process_view(request, view_func, args, kwargs)</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                    if result is not None:</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                        return result</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                try:</pre></li></ol>
+              
+              <ol start="93" class="context-line"><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                    response = view_func(request, *args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='94' class="post-context" id="post4437188976"><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                except Exception, e:</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                    if hasattr(middleware, &#39;process_exception&#39;):</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                        result = middleware.process_exception(request, e)</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                        if result is not None:</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                            return result</pre></li><li onclick="toggle('pre4437188976', 'post4437188976')"><pre>                    raise</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437188976')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437188976">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>e</td>
+                    <td class="code"><pre>ValidationError([u&#39;ManagementForm data is missing or has been tampered with&#39;])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware</td>
+                    <td class="code"><pre>&lt;django.middleware.csrf.CsrfViewMiddleware object at 0x108403910&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(u&#39;2&#39;, {&#39;multiplefilesimportmixin_super_template&#39;: &#39;admin/change_form.html&#39;})</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>result</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>view_func</td>
+                    <td class="code"><pre>&lt;function bound_func at 0x10879e1b8&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py</code> in <code>bound_func</code>
+
+          
+            <div class="context" id="c4437188904">
+              
+                <ol start="17" class="pre-context" id="pre4437188904"><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>    &quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>    # &#39;func&#39; is a function at the time it is passed to _dec, but will eventually</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>    # be a method of the class it is defined it.</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>    def _dec(func):</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>        def _wrapper(self, *args, **kwargs):</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>            @decorator</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>            def bound_func(*args2, **kwargs2):</pre></li></ol>
+              
+              <ol start="24" class="context-line"><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>                return func(self, *args2, **kwargs2)</pre> <span>...</span></li></ol>
+              
+                <ol start='25' class="post-context" id="post4437188904"><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>            # bound_func has the signature that &#39;decorator&#39; expects i.e.  no</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>            # &#39;self&#39; argument, but it is a closure over self so it can call</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>            # &#39;func&#39; correctly.</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>            return bound_func(*args, **kwargs)</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>        # In case &#39;decorator&#39; adds attributes to the function it decorates, we</pre></li><li onclick="toggle('pre4437188904', 'post4437188904')"><pre>        # want to copy those. We don&#39;t have access to bound_func in this scope,</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437188904')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437188904">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args2</td>
+                    <td class="code"><pre>(&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;,
+ u&#39;2&#39;,
+ {&#39;multiplefilesimportmixin_super_template&#39;: &#39;admin/change_form.html&#39;})</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>func</td>
+                    <td class="code"><pre>&lt;function change_view at 0x108426140&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs2</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/db/transaction.py</code> in <code>inner</code>
+
+          
+            <div class="context" id="c4437188832">
+              
+                <ol start="210" class="pre-context" id="pre4437188832"><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>        @wraps(func)</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>        def inner(*args, **kwargs):</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            # Once we drop support for Python 2.4 this block should become:</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            # with self:</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            #     func(*args, **kwargs)</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            self.__enter__()</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            try:</pre></li></ol>
+              
+              <ol start="217" class="context-line"><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>                res = func(*args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='218' class="post-context" id="post4437188832"><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            except:</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>                self.__exit__(*sys.exc_info())</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>                raise</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>            else:</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>                self.__exit__(None, None, None)</pre></li><li onclick="toggle('pre4437188832', 'post4437188832')"><pre>                return res</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437188832')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437188832">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.db.transaction.Transaction object at 0x108417fd0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(&lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;,
+ &lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;,
+ u&#39;2&#39;,
+ {&#39;multiplefilesimportmixin_super_template&#39;: &#39;admin/change_form.html&#39;})</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>func</td>
+                    <td class="code"><pre>&lt;function change_view at 0x108424f50&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/contrib/admin/options.py</code> in <code>change_view</code>
+
+          
+            <div class="context" id="c4437188760">
+              
+                <ol start="970" class="pre-context" id="pre4437188760"><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                                       self.inline_instances):</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                prefix = FormSet.get_default_prefix()</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                prefixes[prefix] = prefixes.get(prefix, 0) + 1</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                if prefixes[prefix] != 1:</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                    prefix = &quot;%s-%s&quot; % (prefix, prefixes[prefix])</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                formset = FormSet(request.POST, request.FILES,</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                                  instance=new_object, prefix=prefix,</pre></li></ol>
+              
+              <ol start="977" class="context-line"><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                                  queryset=inline.queryset(request))</pre> <span>...</span></li></ol>
+              
+                <ol start='978' class="post-context" id="post4437188760"><li onclick="toggle('pre4437188760', 'post4437188760')"><pre></pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                formsets.append(formset)</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre></pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>            if all_valid(formsets) and form_validated:</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                self.save_model(request, new_object, form, change=True)</pre></li><li onclick="toggle('pre4437188760', 'post4437188760')"><pre>                form.save_m2m()</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437188760')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437188760">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>new_object</td>
+                    <td class="code"><pre>&lt;Gallery: fadsafds&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>obj</td>
+                    <td class="code"><pre>&lt;Gallery: fadsafds&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>form</td>
+                    <td class="code"><pre>&lt;django.forms.models.GalleryForm object at 0x1087238d0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;gallery.admin.GalleryAdmin object at 0x1086fccd0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest
+GET:&lt;QueryDict: {}&gt;,
+POST:&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+COOKIES:{&#39;__atuvc&#39;: &#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;,
+ &#39;campaign&#39;: &quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;,
+ &#39;cart&#39;: &#39;3&#39;,
+ &#39;csrftoken&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;sessionid&#39;: &#39;7d5f98dd3294022005524fcaf49a9c08&#39;},
+META:{&#39;APP_ICON_1014&#39;: &#39;../Resources/Eclipse.icns&#39;,
+ &#39;Apple_PubSub_Socket_Render&#39;: &#39;/tmp/launch-ayP7KW/Render&#39;,
+ &#39;Apple_Ubiquity_Message&#39;: &#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;,
+ &#39;COMMAND_MODE&#39;: &#39;unix2003&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;897645&#39;,
+ &#39;CONTENT_TYPE&#39;: &#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;,
+ &#39;CSRF_COOKIE&#39;: &#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;DISPLAY&#39;: &#39;/tmp/launch-4gm5VS/org.x:0&#39;,
+ &#39;DJANGO_SETTINGS_MODULE&#39;: &#39;matlici.settings&#39;,
+ &#39;DYLD_INSERT_LIBRARIES&#39;: &#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;,
+ &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
+ &#39;HOME&#39;: &#39;/Users/lubos&#39;,
+ &#39;HTTP_ACCEPT&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;,
+ &#39;HTTP_ACCEPT_CHARSET&#39;: &#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;,
+ &#39;HTTP_ACCEPT_ENCODING&#39;: &#39;gzip,deflate,sdch&#39;,
+ &#39;HTTP_ACCEPT_LANGUAGE&#39;: &#39;cs-CZ,cs;q=0.8&#39;,
+ &#39;HTTP_CONNECTION&#39;: &#39;keep-alive&#39;,
+ &#39;HTTP_COOKIE&#39;: &#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;,
+ &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
+ &#39;HTTP_ORIGIN&#39;: &#39;http://localhost:8000&#39;,
+ &#39;HTTP_REFERER&#39;: &#39;http://localhost:8000/admin/gallery/gallery/2/&#39;,
+ &#39;HTTP_USER_AGENT&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;,
+ &#39;HTTP_X_REQUESTED_WITH&#39;: &#39;XMLHttpRequest&#39;,
+ &#39;JAVA_STARTED_ON_FIRST_THREAD_1014&#39;: &#39;1&#39;,
+ &#39;LOGNAME&#39;: &#39;lubos&#39;,
+ &#39;PATH&#39;: &#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;,
+ &#39;PATH_INFO&#39;: u&#39;/admin/gallery/gallery/2/&#39;,
+ &#39;PYDEV_COMPLETER_PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;,
+ &#39;PYDEV_CONSOLE_ENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONIOENCODING&#39;: &#39;UTF-8&#39;,
+ &#39;PYTHONPATH&#39;: &#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;,
+ &#39;QUERY_STRING&#39;: &#39;&#39;,
+ &#39;REMOTE_ADDR&#39;: &#39;127.0.0.1&#39;,
+ &#39;REMOTE_HOST&#39;: &#39;&#39;,
+ &#39;REQUEST_METHOD&#39;: &#39;POST&#39;,
+ &#39;SCRIPT_NAME&#39;: u&#39;&#39;,
+ &#39;SERVER_NAME&#39;: &#39;1.0.0.127.in-addr.arpa&#39;,
+ &#39;SERVER_PORT&#39;: &#39;8000&#39;,
+ &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
+ &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.1&#39;,
+ &#39;SHELL&#39;: &#39;/bin/bash&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/launch-3AoT19/Listeners&#39;,
+ &#39;TMPDIR&#39;: &#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;,
+ &#39;TZ&#39;: &#39;Europe/Prague&#39;,
+ &#39;USER&#39;: &#39;lubos&#39;,
+ &#39;VERSIONER_PYTHON_PREFER_32_BIT&#39;: &#39;no&#39;,
+ &#39;VERSIONER_PYTHON_VERSION&#39;: &#39;2.7&#39;,
+ &#39;__CF_USER_TEXT_ENCODING&#39;: &#39;0x1F5:29:56&#39;,
+ &#39;com.apple.java.jvmMode&#39;: &#39;client&#39;,
+ &#39;com.apple.java.jvmTask&#39;: &#39;JNI&#39;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;,
+ &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x108789450&gt;,
+ &#39;wsgi.multiprocess&#39;: False,
+ &#39;wsgi.multithread&#39;: True,
+ &#39;wsgi.run_once&#39;: False,
+ &#39;wsgi.url_scheme&#39;: &#39;http&#39;,
+ &#39;wsgi.version&#39;: (1, 0)}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>object_id</td>
+                    <td class="code"><pre>u&#39;2&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>form_validated</td>
+                    <td class="code"><pre>False</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>prefixes</td>
+                    <td class="code"><pre>{&#39;image_set&#39;: 1}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>prefix</td>
+                    <td class="code"><pre>&#39;image_set&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>formsets</td>
+                    <td class="code"><pre>[]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>inline</td>
+                    <td class="code"><pre>&lt;gallery.admin.ImageInLine object at 0x1086fcd10&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>model</td>
+                    <td class="code"><pre>&lt;class &#39;gallery.models.Gallery&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>extra_context</td>
+                    <td class="code"><pre>{&#39;multiplefilesimportmixin_super_template&#39;: &#39;admin/change_form.html&#39;}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>ModelForm</td>
+                    <td class="code"><pre>&lt;class &#39;django.forms.models.GalleryForm&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>FormSet</td>
+                    <td class="code"><pre>&lt;class &#39;django.forms.formsets.ImageFormFormSet&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>opts</td>
+                    <td class="code"><pre>&lt;Options for Gallery&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/models.py</code> in <code>__init__</code>
+
+          
+            <div class="context" id="c4437188688">
+              
+                <ol start="675" class="pre-context" id="pre4437188688"><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        self.save_as_new = save_as_new</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        # is there a better way to get the object descriptor?</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        self.rel_name = RelatedObject(self.fk.rel.to, self.model, self.fk).get_accessor_name()</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        if queryset is None:</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>            queryset = self.model._default_manager</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        qs = queryset.filter(**{self.fk.name: self.instance})</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        super(BaseInlineFormSet, self).__init__(data, files, prefix=prefix,</pre></li></ol>
+              
+              <ol start="682" class="context-line"><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>                                                queryset=qs)</pre> <span>...</span></li></ol>
+              
+                <ol start='683' class="post-context" id="post4437188688"><li onclick="toggle('pre4437188688', 'post4437188688')"><pre></pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>    def initial_form_count(self):</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        if self.save_as_new:</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>            return 0</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre>        return super(BaseInlineFormSet, self).initial_form_count()</pre></li><li onclick="toggle('pre4437188688', 'post4437188688')"><pre></pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437188688')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437188688">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>files</td>
+                    <td class="code"><pre>&lt;MultiValueDict: {u&#39;files[]&#39;: [&lt;InMemoryUploadedFile: IMG_0003.jpg (image/jpeg)&gt;]}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>qs</td>
+                    <td class="code"><pre>[]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>save_as_new</td>
+                    <td class="code"><pre>False</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ImageFormFormSet object at 0x108723950&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>queryset</td>
+                    <td class="code"><pre>[&lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &lt;Image: Image object&gt;, &#39;...(remaining elements truncated)...&#39;]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>RelatedObject</td>
+                    <td class="code"><pre>&lt;class &#39;django.db.models.related.RelatedObject&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>instance</td>
+                    <td class="code"><pre>&lt;Gallery: fadsafds&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>prefix</td>
+                    <td class="code"><pre>&#39;image_set&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>data</td>
+                    <td class="code"><pre>&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/models.py</code> in <code>__init__</code>
+
+          
+            <div class="context" id="c4437163832">
+              
+                <ol start="408" class="pre-context" id="pre4437163832"><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>    model = None</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre></pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>    def __init__(self, data=None, files=None, auto_id=&#39;id_%s&#39;, prefix=None,</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>                 queryset=None, **kwargs):</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        self.queryset = queryset</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        defaults = {&#39;data&#39;: data, &#39;files&#39;: files, &#39;auto_id&#39;: auto_id, &#39;prefix&#39;: prefix}</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        defaults.update(kwargs)</pre></li></ol>
+              
+              <ol start="415" class="context-line"><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        super(BaseModelFormSet, self).__init__(**defaults)</pre> <span>...</span></li></ol>
+              
+                <ol start='416' class="post-context" id="post4437163832"><li onclick="toggle('pre4437163832', 'post4437163832')"><pre></pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>    def initial_form_count(self):</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        &quot;&quot;&quot;Returns the number of forms that are required in this FormSet.&quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        if not (self.data or self.files):</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>            return len(self.get_queryset())</pre></li><li onclick="toggle('pre4437163832', 'post4437163832')"><pre>        return super(BaseModelFormSet, self).initial_form_count()</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437163832')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437163832">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>auto_id</td>
+                    <td class="code"><pre>&#39;id_%s&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>files</td>
+                    <td class="code"><pre>&lt;MultiValueDict: {u&#39;files[]&#39;: [&lt;InMemoryUploadedFile: IMG_0003.jpg (image/jpeg)&gt;]}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ImageFormFormSet object at 0x108723950&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>queryset</td>
+                    <td class="code"><pre>[]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>prefix</td>
+                    <td class="code"><pre>&#39;image_set&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>defaults</td>
+                    <td class="code"><pre>{&#39;auto_id&#39;: &#39;id_%s&#39;,
+ &#39;data&#39;: &lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;,
+ &#39;files&#39;: &lt;MultiValueDict: {u&#39;files[]&#39;: [&lt;InMemoryUploadedFile: IMG_0003.jpg (image/jpeg)&gt;]}&gt;,
+ &#39;prefix&#39;: &#39;image_set&#39;}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>data</td>
+                    <td class="code"><pre>&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py</code> in <code>__init__</code>
+
+          
+            <div class="context" id="c4437163400">
+              
+                <ol start="40" class="pre-context" id="pre4437163400"><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self.data = data or {}</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self.files = files or {}</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self.initial = initial</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self.error_class = error_class</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self._errors = None</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self._non_form_errors = None</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        # construct the forms in the formset</pre></li></ol>
+              
+              <ol start="47" class="context-line"><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        self._construct_forms()</pre> <span>...</span></li></ol>
+              
+                <ol start='48' class="post-context" id="post4437163400"><li onclick="toggle('pre4437163400', 'post4437163400')"><pre></pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>    def __unicode__(self):</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        return self.as_table()</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre></pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>    def __iter__(self):</pre></li><li onclick="toggle('pre4437163400', 'post4437163400')"><pre>        &quot;&quot;&quot;Yields the forms in the order they should be rendered&quot;&quot;&quot;</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437163400')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437163400">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>auto_id</td>
+                    <td class="code"><pre>&#39;id_%s&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>files</td>
+                    <td class="code"><pre>&lt;MultiValueDict: {u&#39;files[]&#39;: [&lt;InMemoryUploadedFile: IMG_0003.jpg (image/jpeg)&gt;]}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>error_class</td>
+                    <td class="code"><pre>&lt;class &#39;django.forms.util.ErrorList&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ImageFormFormSet object at 0x108723950&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>initial</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>prefix</td>
+                    <td class="code"><pre>&#39;image_set&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>data</td>
+                    <td class="code"><pre>&lt;QueryDict: {u&#39;csrfmiddlewaretoken&#39;: [u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;]}&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py</code> in <code>_construct_forms</code>
+
+          
+            <div class="context" id="c4437162320">
+              
+                <ol start="100" class="pre-context" id="pre4437162320"><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>            if initial_forms &gt; self.max_num &gt;= 0:</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>                initial_forms = self.max_num</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        return initial_forms</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre></pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>    def _construct_forms(self):</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        # instantiate all the forms and put them in self.forms</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        self.forms = []</pre></li></ol>
+              
+              <ol start="107" class="context-line"><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        for i in xrange(self.total_form_count()):</pre> <span>...</span></li></ol>
+              
+                <ol start='108' class="post-context" id="post4437162320"><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>            self.forms.append(self._construct_form(i))</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre></pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>    def _construct_form(self, i, **kwargs):</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        &quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        Instantiates and returns the i-th form instance in a formset.</pre></li><li onclick="toggle('pre4437162320', 'post4437162320')"><pre>        &quot;&quot;&quot;</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437162320')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437162320">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ImageFormFormSet object at 0x108723950&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py</code> in <code>total_form_count</code>
+
+          
+            <div class="context" id="c4437163904">
+              
+                <ol start="74" class="pre-context" id="pre4437163904"><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            })</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>        return form</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>    management_form = property(_management_form)</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre></pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>    def total_form_count(self):</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>        &quot;&quot;&quot;Returns the total number of forms in this FormSet.&quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>        if self.is_bound:</pre></li></ol>
+              
+              <ol start="81" class="context-line"><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            return self.management_form.cleaned_data[TOTAL_FORM_COUNT]</pre> <span>...</span></li></ol>
+              
+                <ol start='82' class="post-context" id="post4437163904"><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>        else:</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            initial_forms = self.initial_form_count()</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            total_forms = initial_forms + self.extra</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            # Allow all existing related objects/inlines to be displayed,</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            # but don&#39;t allow extra beyond max_num.</pre></li><li onclick="toggle('pre4437163904', 'post4437163904')"><pre>            if initial_forms &gt; self.max_num &gt;= 0:</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437163904')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437163904">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ImageFormFormSet object at 0x108723950&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        <li class="frame">
+          <code>/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py</code> in <code>_management_form</code>
+
+          
+            <div class="context" id="c4437163976">
+              
+                <ol start="61" class="pre-context" id="pre4437163976"><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>        return len(self.forms)</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre></pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>    def _management_form(self):</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>        &quot;&quot;&quot;Returns the ManagementForm instance for this FormSet.&quot;&quot;&quot;</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>        if self.is_bound:</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>            form = ManagementForm(self.data, auto_id=self.auto_id, prefix=self.prefix)</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>            if not form.is_valid():</pre></li></ol>
+              
+              <ol start="68" class="context-line"><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>                raise ValidationError(&#39;ManagementForm data is missing or has been tampered with&#39;)</pre> <span>...</span></li></ol>
+              
+                <ol start='69' class="post-context" id="post4437163976"><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>        else:</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>            form = ManagementForm(auto_id=self.auto_id, prefix=self.prefix, initial={</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>                TOTAL_FORM_COUNT: self.total_form_count(),</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>                INITIAL_FORM_COUNT: self.initial_form_count(),</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>                MAX_NUM_FORM_COUNT: self.max_num</pre></li><li onclick="toggle('pre4437163976', 'post4437163976')"><pre>            })</pre></li></ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4437163976')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4437163976">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ImageFormFormSet object at 0x108723950&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>form</td>
+                    <td class="code"><pre>&lt;django.forms.formsets.ManagementForm object at 0x108739450&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+    </ul>
+  </div>
+  
+  <form action="http://dpaste.com/" name="pasteform" id="pasteform" method="post">
+
+  <div id="pastebinTraceback" class="pastebin">
+    <input type="hidden" name="language" value="PythonConsole">
+    <input type="hidden" name="title" value="ValidationError at /admin/gallery/gallery/2/">
+    <input type="hidden" name="source" value="Django Dpaste Agent">
+    <input type="hidden" name="poster" value="Django">
+    <textarea name="content" id="traceback_area" cols="140" rows="25">
+Environment:
+
+
+Request Method: POST
+Request URL: http://localhost:8000/admin/gallery/gallery/2/
+
+Django Version: 1.3
+Python Version: 2.7.1
+Installed Applications:
+[&#39;django.contrib.auth&#39;,
+ &#39;django.contrib.contenttypes&#39;,
+ &#39;django.contrib.sessions&#39;,
+ &#39;django.contrib.sites&#39;,
+ &#39;django.contrib.messages&#39;,
+ &#39;sorl.thumbnail&#39;,
+ &#39;django.contrib.staticfiles&#39;,
+ &#39;utilities&#39;,
+ &#39;django.contrib.admin&#39;,
+ &#39;sorl.thumbnail&#39;,
+ &#39;gallery&#39;]
+Installed Middleware:
+(&#39;django.middleware.common.CommonMiddleware&#39;,
+ &#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
+ &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
+ &#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;,
+ &#39;django.contrib.messages.middleware.MessageMiddleware&#39;,
+ &#39;django.middleware.locale.LocaleMiddleware&#39;)
+
+
+Traceback:
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/core/handlers/base.py" in get_response
+  111.                         response = callback(request, *callback_args, **callback_kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/contrib/admin/options.py" in wrapper
+  307.                 return self.admin_site.admin_view(view)(*args, **kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py" in _wrapped_view
+  93.                     response = view_func(request, *args, **kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/views/decorators/cache.py" in _wrapped_view_func
+  79.         response = view_func(request, *args, **kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/contrib/admin/sites.py" in inner
+  197.             return view(request, *args, **kwargs)
+File "/Library/Python/2.7/site-packages/utilities/admin/__init__.py" in change_view
+  268.         return sup.change_view(request, object_id, extra_context)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py" in _wrapper
+  28.             return bound_func(*args, **kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py" in _wrapped_view
+  93.                     response = view_func(request, *args, **kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/utils/decorators.py" in bound_func
+  24.                 return func(self, *args2, **kwargs2)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/db/transaction.py" in inner
+  217.                 res = func(*args, **kwargs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/contrib/admin/options.py" in change_view
+  977.                                   queryset=inline.queryset(request))
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/models.py" in __init__
+  682.                                                 queryset=qs)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/models.py" in __init__
+  415.         super(BaseModelFormSet, self).__init__(**defaults)
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py" in __init__
+  47.         self._construct_forms()
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py" in _construct_forms
+  107.         for i in xrange(self.total_form_count()):
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py" in total_form_count
+  81.             return self.management_form.cleaned_data[TOTAL_FORM_COUNT]
+File "/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/forms/formsets.py" in _management_form
+  68.                 raise ValidationError(&#39;ManagementForm data is missing or has been tampered with&#39;)
+
+Exception Type: ValidationError at /admin/gallery/gallery/2/
+Exception Value: [u&#39;ManagementForm data is missing or has been tampered with&#39;]
+</textarea>
+  <br><br>
+  <input type="submit" value="Share this traceback on a public Web site">
+  </div>
+</form>
+</div>
+
+
+
+<div id="requestinfo">
+  <h2>Request information</h2>
+
+
+  <h3 id="get-info">GET</h3>
+  
+    <p>No GET data</p>
+  
+
+  <h3 id="post-info">POST</h3>
+  
+    <table class="req">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>csrfmiddlewaretoken</td>
+            <td class="code"><pre>u&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;</pre></td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+  <h3 id="files-info">FILES</h3>
+  
+    <table class="req">
+        <thead>
+            <tr>
+                <th>Variable</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                <tr>
+                    <td>files[]</td>
+                    <td class="code"><pre>&lt;InMemoryUploadedFile: IMG_0003.jpg (image/jpeg)&gt;</pre></td>
+                </tr>
+            
+        </tbody>
+    </table>
+  
+
+
+  <h3 id="cookie-info">COOKIES</h3>
+  
+    <table class="req">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>__atuvc</td>
+            <td class="code"><pre>&#39;0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34&#39;</pre></td>
+          </tr>
+        
+          <tr>
+            <td>csrftoken</td>
+            <td class="code"><pre>&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;</pre></td>
+          </tr>
+        
+          <tr>
+            <td>sessionid</td>
+            <td class="code"><pre>&#39;7d5f98dd3294022005524fcaf49a9c08&#39;</pre></td>
+          </tr>
+        
+          <tr>
+            <td>campaign</td>
+            <td class="code"><pre>&quot;(dp0\nS&#39;utm_campaign&#39;\np1\nNsS&#39;set&#39;\np2\nI01\nsS&#39;campaign_datetime&#39;\np3\ncdatetime\ndatetime\np4\n(S&#39;\\x07\\xdc\\x08\\x02\\n\\x167\\n\\n?&#39;\np5\ntp6\nRp7\ns.&quot;</pre></td>
+          </tr>
+        
+          <tr>
+            <td>cart</td>
+            <td class="code"><pre>&#39;3&#39;</pre></td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  <h3 id="meta-info">META</h3>
+  <table class="req">
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>PYTHONIOENCODING</td>
+          <td class="code"><pre>&#39;UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.multiprocess</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_REFERER</td>
+          <td class="code"><pre>&#39;http://localhost:8000/admin/gallery/gallery/2/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT_LANGUAGE</td>
+          <td class="code"><pre>&#39;cs-CZ,cs;q=0.8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>VERSIONER_PYTHON_PREFER_32_BIT</td>
+          <td class="code"><pre>&#39;no&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_SOFTWARE</td>
+          <td class="code"><pre>&#39;WSGIServer/0.1 Python/2.7.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SCRIPT_NAME</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHELL</td>
+          <td class="code"><pre>&#39;/bin/bash&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DYLD_INSERT_LIBRARIES</td>
+          <td class="code"><pre>&#39;/System/Library/Extensions/Asepsis.kext/Contents/Resources/libAsepsis.dylib&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REQUEST_METHOD</td>
+          <td class="code"><pre>&#39;POST&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGNAME</td>
+          <td class="code"><pre>&#39;lubos&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USER</td>
+          <td class="code"><pre>&#39;lubos&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ORIGIN</td>
+          <td class="code"><pre>&#39;http://localhost:8000&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HOME</td>
+          <td class="code"><pre>&#39;/Users/lubos&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>QUERY_STRING</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH</td>
+          <td class="code"><pre>&#39;/usr/bin:/bin:/usr/sbin:/sbin&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DISPLAY</td>
+          <td class="code"><pre>&#39;/tmp/launch-4gm5VS/org.x:0&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONTENT_LENGTH</td>
+          <td class="code"><pre>&#39;897645&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>com.apple.java.jvmMode</td>
+          <td class="code"><pre>&#39;client&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>APP_ICON_1014</td>
+          <td class="code"><pre>&#39;../Resources/Eclipse.icns&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TZ</td>
+          <td class="code"><pre>&#39;Europe/Prague&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_COOKIE</td>
+          <td class="code"><pre>&#39;campaign=&quot;(dp0\\012S\&#39;utm_campaign\&#39;\\012p1\\012NsS\&#39;set\&#39;\\012p2\\012I01\\012sS\&#39;campaign_datetime\&#39;\\012p3\\012cdatetime\\012datetime\\012p4\\012(S\&#39;\\\\x07\\\\xdc\\\\x08\\\\x02\\\\n\\\\x167\\\\n\\\\n?\&#39;\\012p5\\012tp6\\012Rp7\\012s.&quot;; __atuvc=0%7C30%2C5%7C31%2C2%7C32%2C14%7C33%2C5%7C34; cart=3; sessionid=7d5f98dd3294022005524fcaf49a9c08; csrftoken=1fbaaf3f24b2dd27a96be324ce52f7f5&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_NAME</td>
+          <td class="code"><pre>&#39;1.0.0.127.in-addr.arpa&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>VERSIONER_PYTHON_VERSION</td>
+          <td class="code"><pre>&#39;2.7&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_PROTOCOL</td>
+          <td class="code"><pre>&#39;HTTP/1.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.url_scheme</td>
+          <td class="code"><pre>&#39;http&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PYDEV_CONSOLE_ENCODING</td>
+          <td class="code"><pre>&#39;UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_PORT</td>
+          <td class="code"><pre>&#39;8000&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>com.apple.java.jvmTask</td>
+          <td class="code"><pre>&#39;JNI&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH_INFO</td>
+          <td class="code"><pre>u&#39;/admin/gallery/gallery/2/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_X_REQUESTED_WITH</td>
+          <td class="code"><pre>&#39;XMLHttpRequest&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT_CHARSET</td>
+          <td class="code"><pre>&#39;windows-1250,utf-8;q=0.7,*;q=0.3&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PYTHONPATH</td>
+          <td class="code"><pre>&#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc/pydev_sitecustomize:/Users/lubos/Workspace/Django/matlici:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old:/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload:/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC:/Library/Python/2.7/site-packages:/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SSH_AUTH_SOCK</td>
+          <td class="code"><pre>&#39;/tmp/launch-3AoT19/Listeners&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.input</td>
+          <td class="code"><pre>&lt;socket._fileobject object at 0x108789450&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>Apple_PubSub_Socket_Render</td>
+          <td class="code"><pre>&#39;/tmp/launch-ayP7KW/Render&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_HOST</td>
+          <td class="code"><pre>&#39;localhost:8000&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.multithread</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_CONNECTION</td>
+          <td class="code"><pre>&#39;keep-alive&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TMPDIR</td>
+          <td class="code"><pre>&#39;/var/folders/5q/3nxt995s6hvc41vl5wqn3tp00000gn/T/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT</td>
+          <td class="code"><pre>&#39;application/json, text/javascript, */*; q=0.01&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.version</td>
+          <td class="code"><pre>(1, 0)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_USER_AGENT</td>
+          <td class="code"><pre>&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.82 Safari/537.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>GATEWAY_INTERFACE</td>
+          <td class="code"><pre>&#39;CGI/1.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.run_once</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE</td>
+          <td class="code"><pre>&#39;1fbaaf3f24b2dd27a96be324ce52f7f5&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.errors</td>
+          <td class="code"><pre>&lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x107b21270&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REMOTE_ADDR</td>
+          <td class="code"><pre>&#39;127.0.0.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PYDEV_COMPLETER_PYTHONPATH</td>
+          <td class="code"><pre>&#39;/Applications/eclipse/plugins/org.python.pydev_2.2.3.2011100616/PySrc&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>__CF_USER_TEXT_ENCODING</td>
+          <td class="code"><pre>&#39;0x1F5:29:56&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>Apple_Ubiquity_Message</td>
+          <td class="code"><pre>&#39;/tmp/launch-CHDzrF/Apple_Ubiquity_Message&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>JAVA_STARTED_ON_FIRST_THREAD_1014</td>
+          <td class="code"><pre>&#39;1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DJANGO_SETTINGS_MODULE</td>
+          <td class="code"><pre>&#39;matlici.settings&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONTENT_TYPE</td>
+          <td class="code"><pre>&#39;multipart/form-data; boundary=----WebKitFormBoundarygODQkALAuUCbYsXH&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.file_wrapper</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REMOTE_HOST</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT_ENCODING</td>
+          <td class="code"><pre>&#39;gzip,deflate,sdch&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMAND_MODE</td>
+          <td class="code"><pre>&#39;unix2003&#39;</pre></td>
+        </tr>
+      
+    </tbody>
+  </table>
+
+
+  <h3 id="settings-info">Settings</h3>
+  <h4>Using settings module <code>matlici.settings</code></h4>
+  <table class="req">
+    <thead>
+      <tr>
+        <th>Setting</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>USE_L10N</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_URL</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_CODE</td>
+          <td class="code"><pre>&#39;cs&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ROOT_URLCONF</td>
+          <td class="code"><pre>&#39;urls&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MANAGERS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_CHARSET</td>
+          <td class="code"><pre>&#39;utf-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATIC_ROOT</td>
+          <td class="code"><pre>&#39;/Users/lubos/Workspace/Django/matlici/matlici/static&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_DATABASE_CHARSET</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAX_WIDTH</td>
+          <td class="code"><pre>800</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MESSAGE_STORAGE</td>
+          <td class="code"><pre>&#39;django.contrib.messages.storage.user_messages.LegacyFallbackStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_HOST</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>IGNORABLE_404_STARTS</td>
+          <td class="code"><pre>(&#39;/cgi-bin/&#39;, &#39;/_vti_bin&#39;, &#39;/_vti_inf&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEND_BROKEN_LINK_EMAILS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>URL_VALIDATOR_USER_AGENT</td>
+          <td class="code"><pre>&#39;Django/1.3 (http://www.djangoproject.com)&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_FINDERS</td>
+          <td class="code"><pre>(&#39;django.contrib.staticfiles.finders.FileSystemFinder&#39;,
+ &#39;django.contrib.staticfiles.finders.AppDirectoriesFinder&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_NAME</td>
+          <td class="code"><pre>&#39;sessionid&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_MODERATORS_GROUP</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_INPUT_FORMATS</td>
+          <td class="code"><pre>(&#39;%H:%M:%S&#39;, &#39;%H:%M&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASES</td>
+          <td class="code"><pre>{&#39;default&#39;: {&#39;ENGINE&#39;: &#39;django.db.backends.sqlite3&#39;,
+             &#39;HOST&#39;: &#39;&#39;,
+             &#39;NAME&#39;: &#39;/Users/lubos/Workspace/Django/matlici/matlici.db&#39;,
+             &#39;OPTIONS&#39;: {},
+             &#39;PASSWORD&#39;: &#39;********************&#39;,
+             &#39;PORT&#39;: &#39;&#39;,
+             &#39;TEST_CHARSET&#39;: None,
+             &#39;TEST_COLLATION&#39;: None,
+             &#39;TEST_MIRROR&#39;: None,
+             &#39;TEST_NAME&#39;: None,
+             &#39;TIME_ZONE&#39;: &#39;Europe/Prague&#39;,
+             &#39;USER&#39;: &#39;&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_DATABASE_NAME</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_PERMISSIONS</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_HANDLERS</td>
+          <td class="code"><pre>(&#39;django.core.files.uploadhandler.MemoryFileUploadHandler&#39;,
+ &#39;django.core.files.uploadhandler.TemporaryFileUploadHandler&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_CONTENT_TYPE</td>
+          <td class="code"><pre>&#39;text/html&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAX_HEIGHT</td>
+          <td class="code"><pre>600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>APPEND_SLASH</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FIRST_DAY_OF_WEEK</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_ROUTERS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>YEAR_MONTH_FORMAT</td>
+          <td class="code"><pre>&#39;F Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_STORAGE</td>
+          <td class="code"><pre>&#39;django.contrib.staticfiles.storage.StaticFilesStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHES</td>
+          <td class="code"><pre>{&#39;default&#39;: {&#39;BACKEND&#39;: &#39;django.core.cache.backends.locmem.LocMemCache&#39;,
+             &#39;LOCATION&#39;: &#39;&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_EMAIL</td>
+          <td class="code"><pre>&#39;root@localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_PATH</td>
+          <td class="code"><pre>&#39;/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>IGNORABLE_404_ENDS</td>
+          <td class="code"><pre>(&#39;mail.pl&#39;, &#39;mailform.pl&#39;, &#39;mail.cgi&#39;, &#39;mailform.cgi&#39;, &#39;favicon.ico&#39;, &#39;.php&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MIDDLEWARE_CLASSES</td>
+          <td class="code"><pre>(&#39;django.middleware.common.CommonMiddleware&#39;,
+ &#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
+ &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
+ &#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;,
+ &#39;django.contrib.messages.middleware.MessageMiddleware&#39;,
+ &#39;django.middleware.locale.LocaleMiddleware&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_I18N</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THOUSAND_SEPARATOR</td>
+          <td class="code"><pre>&#39;,&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECRET_KEY</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_COOKIE_NAME</td>
+          <td class="code"><pre>&#39;django_language&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_TEMP_DIR</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TRANSACTIONS_MANAGED</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGGING_CONFIG</td>
+          <td class="code"><pre>&#39;django.utils.log.dictConfig&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_LOADERS</td>
+          <td class="code"><pre>(&#39;django.template.loaders.filesystem.Loader&#39;,
+ &#39;django.template.loaders.app_directories.Loader&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_DEBUG</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTHENTICATION_BACKENDS</td>
+          <td class="code"><pre>(&#39;django.contrib.auth.backends.ModelBackend&#39;,)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_DATABASE_COLLATION</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORCE_SCRIPT_NAME</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_BACKEND</td>
+          <td class="code"><pre>&#39;locmem://&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_SECURE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_CHARSET</td>
+          <td class="code"><pre>&#39;utf-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEBUG</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_FILE_PATH</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_FILE_STORAGE</td>
+          <td class="code"><pre>&#39;django.core.files.storage.FileSystemStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INSTALLED_APPS</td>
+          <td class="code"><pre>[&#39;django.contrib.auth&#39;,
+ &#39;django.contrib.contenttypes&#39;,
+ &#39;django.contrib.sessions&#39;,
+ &#39;django.contrib.sites&#39;,
+ &#39;django.contrib.messages&#39;,
+ &#39;sorl.thumbnail&#39;,
+ &#39;django.contrib.staticfiles&#39;,
+ &#39;utilities&#39;,
+ &#39;django.contrib.admin&#39;,
+ &#39;sorl.thumbnail&#39;,
+ &#39;gallery&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGES</td>
+          <td class="code"><pre>((&#39;ar&#39;, &#39;Arabic&#39;),
+ (&#39;az&#39;, &#39;Azerbaijani&#39;),
+ (&#39;bg&#39;, &#39;Bulgarian&#39;),
+ (&#39;bn&#39;, &#39;Bengali&#39;),
+ (&#39;bs&#39;, &#39;Bosnian&#39;),
+ (&#39;ca&#39;, &#39;Catalan&#39;),
+ (&#39;cs&#39;, &#39;Czech&#39;),
+ (&#39;cy&#39;, &#39;Welsh&#39;),
+ (&#39;da&#39;, &#39;Danish&#39;),
+ (&#39;de&#39;, &#39;German&#39;),
+ (&#39;el&#39;, &#39;Greek&#39;),
+ (&#39;en&#39;, &#39;English&#39;),
+ (&#39;en-gb&#39;, &#39;British English&#39;),
+ (&#39;es&#39;, &#39;Spanish&#39;),
+ (&#39;es-ar&#39;, &#39;Argentinian Spanish&#39;),
+ (&#39;es-mx&#39;, &#39;Mexican Spanish&#39;),
+ (&#39;es-ni&#39;, &#39;Nicaraguan Spanish&#39;),
+ (&#39;et&#39;, &#39;Estonian&#39;),
+ (&#39;eu&#39;, &#39;Basque&#39;),
+ (&#39;fa&#39;, &#39;Persian&#39;),
+ (&#39;fi&#39;, &#39;Finnish&#39;),
+ (&#39;fr&#39;, &#39;French&#39;),
+ (&#39;fy-nl&#39;, &#39;Frisian&#39;),
+ (&#39;ga&#39;, &#39;Irish&#39;),
+ (&#39;gl&#39;, &#39;Galician&#39;),
+ (&#39;he&#39;, &#39;Hebrew&#39;),
+ (&#39;hi&#39;, &#39;Hindi&#39;),
+ (&#39;hr&#39;, &#39;Croatian&#39;),
+ (&#39;hu&#39;, &#39;Hungarian&#39;),
+ (&#39;id&#39;, &#39;Indonesian&#39;),
+ (&#39;is&#39;, &#39;Icelandic&#39;),
+ (&#39;it&#39;, &#39;Italian&#39;),
+ (&#39;ja&#39;, &#39;Japanese&#39;),
+ (&#39;ka&#39;, &#39;Georgian&#39;),
+ (&#39;km&#39;, &#39;Khmer&#39;),
+ (&#39;kn&#39;, &#39;Kannada&#39;),
+ (&#39;ko&#39;, &#39;Korean&#39;),
+ (&#39;lt&#39;, &#39;Lithuanian&#39;),
+ (&#39;lv&#39;, &#39;Latvian&#39;),
+ (&#39;mk&#39;, &#39;Macedonian&#39;),
+ (&#39;ml&#39;, &#39;Malayalam&#39;),
+ (&#39;mn&#39;, &#39;Mongolian&#39;),
+ (&#39;nl&#39;, &#39;Dutch&#39;),
+ (&#39;no&#39;, &#39;Norwegian&#39;),
+ (&#39;nb&#39;, &#39;Norwegian Bokmal&#39;),
+ (&#39;nn&#39;, &#39;Norwegian Nynorsk&#39;),
+ (&#39;pa&#39;, &#39;Punjabi&#39;),
+ (&#39;pl&#39;, &#39;Polish&#39;),
+ (&#39;pt&#39;, &#39;Portuguese&#39;),
+ (&#39;pt-br&#39;, &#39;Brazilian Portuguese&#39;),
+ (&#39;ro&#39;, &#39;Romanian&#39;),
+ (&#39;ru&#39;, &#39;Russian&#39;),
+ (&#39;sk&#39;, &#39;Slovak&#39;),
+ (&#39;sl&#39;, &#39;Slovenian&#39;),
+ (&#39;sq&#39;, &#39;Albanian&#39;),
+ (&#39;sr&#39;, &#39;Serbian&#39;),
+ (&#39;sr-latn&#39;, &#39;Serbian Latin&#39;),
+ (&#39;sv&#39;, &#39;Swedish&#39;),
+ (&#39;ta&#39;, &#39;Tamil&#39;),
+ (&#39;te&#39;, &#39;Telugu&#39;),
+ (&#39;th&#39;, &#39;Thai&#39;),
+ (&#39;tr&#39;, &#39;Turkish&#39;),
+ (&#39;uk&#39;, &#39;Ukrainian&#39;),
+ (&#39;ur&#39;, &#39;Urdu&#39;),
+ (&#39;vi&#39;, &#39;Vietnamese&#39;),
+ (&#39;zh-cn&#39;, &#39;Simplified Chinese&#39;),
+ (&#39;zh-tw&#39;, &#39;Traditional Chinese&#39;))</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_ENGINE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_NAME</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_FIRST_FEW</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PREPEND_WWW</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_HTTPONLY</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_PORT</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEBUG_PROPAGATE_EXCEPTIONS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MONTH_DAY_FORMAT</td>
+          <td class="code"><pre>&#39;F j&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_URL</td>
+          <td class="code"><pre>&#39;/accounts/login/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_EXPIRE_AT_BROWSER_CLOSE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_FORMAT</td>
+          <td class="code"><pre>&#39;P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATE_INPUT_FORMATS</td>
+          <td class="code"><pre>(&#39;%Y-%m-%d&#39;,
+ &#39;%m/%d/%Y&#39;,
+ &#39;%m/%d/%y&#39;,
+ &#39;%b %d %Y&#39;,
+ &#39;%b %d, %Y&#39;,
+ &#39;%d %b %Y&#39;,
+ &#39;%d %b, %Y&#39;,
+ &#39;%B %d %Y&#39;,
+ &#39;%B %d, %Y&#39;,
+ &#39;%d %B %Y&#39;,
+ &#39;%d %B, %Y&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_NAME</td>
+          <td class="code"><pre>&#39;csrftoken&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST_PASSWORD</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PASSWORD_RESET_TIMEOUT_DAYS</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_ALIAS</td>
+          <td class="code"><pre>&#39;default&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_SAVE_EVERY_REQUEST</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMIN_MEDIA_PREFIX</td>
+          <td class="code"><pre>&#39;/static/admin/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>NUMBER_GROUPING</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_ENGINE</td>
+          <td class="code"><pre>&#39;django.contrib.sessions.backends.db&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_FAILURE_VIEW</td>
+          <td class="code"><pre>&#39;django.views.csrf.csrf_failure&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_SKETCHY_USERS_GROUP</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_REDIRECT_URL</td>
+          <td class="code"><pre>&#39;/accounts/profile/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGGING</td>
+          <td class="code"><pre>{&#39;disable_existing_loggers&#39;: False,
+ &#39;handlers&#39;: {&#39;mail_admins&#39;: {&#39;class&#39;: &#39;django.utils.log.AdminEmailHandler&#39;,
+                              &#39;level&#39;: &#39;ERROR&#39;}},
+ &#39;loggers&#39;: {&#39;django.request&#39;: {&#39;handlers&#39;: [&#39;mail_admins&#39;],
+                                &#39;level&#39;: &#39;ERROR&#39;,
+                                &#39;propagate&#39;: True}},
+ &#39;version&#39;: 1}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_KEY_PREFIX</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOCALE_PATHS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_STRING_IF_INVALID</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_ALLOW_PROFANITIES</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGOUT_URL</td>
+          <td class="code"><pre>&#39;/accounts/logout/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_USE_TLS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_DIRS</td>
+          <td class="code"><pre>(&#39;/Users/lubos/Workspace/Django/matlici/matlici/templates&#39;,)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FIXTURE_DIRS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST</td>
+          <td class="code"><pre>&#39;localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATE_FORMAT</td>
+          <td class="code"><pre>&#39;N j, Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MEDIA_ROOT</td>
+          <td class="code"><pre>&#39;/Users/lubos/Workspace/Django/matlici/matlici/media&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_SETTINGS</td>
+          <td class="code"><pre>&lt;module &#39;django.conf.global_settings&#39; from &#39;/Library/Python/2.7/site-packages/Django-1.3-py2.7.egg/django/conf/global_settings.pyc&#39;&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMINS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORMAT_MODULE_PATH</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_FROM_EMAIL</td>
+          <td class="code"><pre>&#39;webmaster@localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_DIRS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MEDIA_URL</td>
+          <td class="code"><pre>&#39;/media/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATETIME_FORMAT</td>
+          <td class="code"><pre>&#39;N j, Y, P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_SUBJECT_PREFIX</td>
+          <td class="code"><pre>&#39;[Django] &#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_ID</td>
+          <td class="code"><pre>1</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DISALLOWED_USER_AGENTS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ALLOWED_INCLUDE_ROOTS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_THOUSAND_SEPARATOR</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DECIMAL_SEPARATOR</td>
+          <td class="code"><pre>&#39;.&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PROJECT_DIR</td>
+          <td class="code"><pre>&#39;/Users/lubos/Workspace/Django/matlici/matlici&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_USER</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DPH</td>
+          <td class="code"><pre>19</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_RUNNER</td>
+          <td class="code"><pre>&#39;django.test.simple.DjangoTestSuiteRunner&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHORT_DATE_FORMAT</td>
+          <td class="code"><pre>&#39;m/d/Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_ZONE</td>
+          <td class="code"><pre>&#39;Europe/Prague&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_MAX_MEMORY_SIZE</td>
+          <td class="code"><pre>2621440</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_BACKEND</td>
+          <td class="code"><pre>&#39;django.core.mail.backends.smtp.EmailBackend&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_TABLESPACE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATE_CONTEXT_PROCESSORS</td>
+          <td class="code"><pre>(&#39;django.contrib.auth.context_processors.auth&#39;,
+ &#39;django.core.context_processors.debug&#39;,
+ &#39;django.core.context_processors.i18n&#39;,
+ &#39;django.core.context_processors.media&#39;,
+ &#39;django.core.context_processors.static&#39;,
+ &#39;django.contrib.messages.context_processors.messages&#39;,
+ &#39;django.core.context_processors.request&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PROJECT_PATH</td>
+          <td class="code"><pre>&#39;/Users/lubos/Workspace/Django/matlici/matlici&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_AGE</td>
+          <td class="code"><pre>1209600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SETTINGS_MODULE</td>
+          <td class="code"><pre>&#39;matlici.settings&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_ETAGS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGES_BIDI</td>
+          <td class="code"><pre>(&#39;he&#39;, &#39;ar&#39;, &#39;fa&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_INDEX_TABLESPACE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INTERNAL_IPS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATIC_URL</td>
+          <td class="code"><pre>&#39;/static/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_PORT</td>
+          <td class="code"><pre>25</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHORT_DATETIME_FORMAT</td>
+          <td class="code"><pre>&#39;m/d/Y P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ABSOLUTE_URL_OVERRIDES</td>
+          <td class="code"><pre>{}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_OPTIONS</td>
+          <td class="code"><pre>{}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_SECONDS</td>
+          <td class="code"><pre>600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>BANNED_IPS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATETIME_INPUT_FORMATS</td>
+          <td class="code"><pre>(&#39;%Y-%m-%d %H:%M:%S&#39;,
+ &#39;%Y-%m-%d %H:%M&#39;,
+ &#39;%Y-%m-%d&#39;,
+ &#39;%m/%d/%Y %H:%M:%S&#39;,
+ &#39;%m/%d/%Y %H:%M&#39;,
+ &#39;%m/%d/%Y&#39;,
+ &#39;%m/%d/%y %H:%M:%S&#39;,
+ &#39;%m/%d/%y %H:%M&#39;,
+ &#39;%m/%d/%y&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_PASSWORD</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMIN_FOR</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PROFANITIES_LIST</td>
+          <td class="code"><pre>&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST_USER</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMMENTS_BANNED_USERS_GROUP</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+    </tbody>
+  </table>
+
+</div>
+
+  <div id="explanation">
+    <p>
+      You're seeing this error because you have <code>DEBUG = True</code> in your
+      Django settings file. Change that to <code>False</code>, and Django will
+      display a standard 500 page.
+    </p>
+  </div>
+
+</body>
+</html>
+

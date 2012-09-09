@@ -1,0 +1,553 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-09 14:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lubos Matl <EMAIL@ADDRESS>\n"
+"Language-Team: CZ <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/__init__.py:53 admin/__init__.py:208 admin/__init__.py:297
+#, python-format
+msgid "%(name)s object with primary key %(key)r does not exist."
+msgstr ""
+
+#: admin/__init__.py:221
+#, python-format
+msgid "The %(name)s \"%(obj)s\" was deleted successfully."
+msgstr ""
+
+#: admin/__init__.py:232
+#, python-format
+msgid "The %(name)s \"%(obj)s\" was changed successfully."
+msgstr ""
+
+#: admin/__init__.py:243 admin/__init__.py:334
+#, python-format
+msgid "The %(name)s \"%(obj)s\" was added successfully."
+msgstr ""
+
+#: admin/__init__.py:337
+msgid "Please update another values"
+msgstr "Prosím upravte některé hodnoty"
+
+#: admin/__init__.py:469
+msgid "Export to CSV"
+msgstr "Exportovat do CSV"
+
+#: admin/__init__.py:484
+msgid "File must be in CSV format."
+msgstr "Soubor musí být ve formatu CSV"
+
+#: admin/widgets.py:47
+msgid "Add Another"
+msgstr ""
+
+#: admin/widgets.py:52 templates/admin/index.html:29
+#: templates/admin_tp/index.html:35
+msgid "Change"
+msgstr "Upravit"
+
+#: admin/widgets.py:56
+#: templates/admin/multiple_file_upload_change_form.html:105
+#: templates/admin_tp/delete_confirmation.html:10
+#: templates/admin_tp/submit_line.html:4
+msgid "Delete"
+msgstr "Smazat"
+
+#: dashboard/__init__.py:97 forms/__init__.py:46 models/fields.py:263
+msgid "Other"
+msgstr "Jiné"
+
+#: dashboard/__init__.py:132
+msgid "Yes"
+msgstr ""
+
+#: dashboard/__init__.py:133
+msgid "No"
+msgstr ""
+
+#: forms/__init__.py:38
+msgid "This is not Google maps URL."
+msgstr "Toto není URL Google map"
+
+#: forms/__init__.py:149
+msgid "Enter a valid phone number"
+msgstr "Prosím vložte vaše telefonní číslo"
+
+#: forms/__init__.py:174
+#, fuzzy
+msgid "Enter a valid e-mail address."
+msgstr "Prosím vložte vaše telefonní číslo"
+
+#: forms/validators.py:8
+msgid "Value is not valid."
+msgstr ""
+
+#: models/fields.py:302
+#, python-format
+msgid "Model %(model)s with pk %(pk)r does not exist."
+msgstr ""
+
+#: models/fields.py:303
+msgid "Can not select an object that causes the cycle."
+msgstr "Nelze vybrat objekt, který zapřičiní cyklus"
+
+#: models/signals.py:74
+msgid "It was created a new item"
+msgstr "Byl vytvořen nový záznam v administraci"
+
+#: templates/admin/clone_change_form.html:16
+msgid "Clone"
+msgstr "Klonovat"
+
+#: templates/admin/csv_import_change_list.html:18
+#: templates/admin/marshalling_change_list.html:10
+#: templates/admin_tp/change_list.html:64
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: templates/admin/csv_import_change_list.html:27
+#: templates/admin_tp/change_form.html:43
+#: templates/admin_tp/change_list.html:73 templates/admin_tp/login.html:17
+#: templates/admin_tp/auth/user/change_password.html:25
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin/csv_import_change_list.html:38
+#: templates/admin_tp/change_list.html:84
+msgid "Filter"
+msgstr ""
+
+#: templates/admin/csv_import_change_list.html:47
+msgid "CSV file"
+msgstr "CSV soubor"
+
+#: templates/admin/csv_import_change_list.html:48
+#, fuzzy
+msgid "Import"
+msgstr "Importovat"
+
+#: templates/admin/dashboard_change_list.html:22
+msgid "Statistic"
+msgstr "Statistiky"
+
+#: templates/admin/delete_confirmation.html:7
+#: templates/admin_tp/delete_confirmation.html:17
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:15
+#: templates/admin_tp/delete_confirmation.html:25
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:23
+#: templates/admin_tp/delete_confirmation.html:33
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"All of the following related items will be deleted:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:29
+#: templates/admin_tp/delete_confirmation.html:38
+#: templates/admin_tp/delete_selected_confirmation.html:43
+msgid "Yes, I'm sure"
+msgstr ""
+
+#: templates/admin/index.html:11 templates/admin_tp/index.html:18
+#, python-format
+msgid "Models available in the %(name)s application."
+msgstr ""
+
+#: templates/admin/index.html:12 templates/admin_tp/app_index.html:10
+#: templates/admin_tp/index.html:19
+#, python-format
+msgid "%(name)s"
+msgstr ""
+
+#: templates/admin/index.html:23
+#: templates/admin/marshalling_change_form.html:11
+#: templates/admin_tp/change_form.html:22 templates/admin_tp/index.html:29
+msgid "Add"
+msgstr ""
+
+#: templates/admin/index.html:41 templates/admin_tp/index.html:45
+msgid "You don't have permission to edit anything."
+msgstr ""
+
+#: templates/admin/marshalling_change_form.html:8
+#: templates/admin_tp/500.html:4 templates/admin_tp/app_index.html:8
+#: templates/admin_tp/base.html:55 templates/admin_tp/change_form.html:19
+#: templates/admin_tp/change_list.html:42
+#: templates/admin_tp/delete_confirmation.html:6
+#: templates/admin_tp/delete_selected_confirmation.html:6
+#: templates/admin_tp/invalid_setup.html:4
+#: templates/admin_tp/object_history.html:6
+#: templates/admin_tp/auth/user/change_password.html:12
+msgid "Home"
+msgstr ""
+
+#: templates/admin/multiple_file_upload_change_form.html:45
+msgid "Add files..."
+msgstr "Přidat soubory..."
+
+#: templates/admin/multiple_file_upload_change_form.html:48
+msgid "Start upload"
+msgstr "Start"
+
+#: templates/admin/multiple_file_upload_change_form.html:49
+msgid "Cancel upload"
+msgstr "Cancel"
+
+#: templates/admin/multiple_file_upload_change_form.html:50
+msgid "Delete files"
+msgstr "Smazat soubory"
+
+#: templates/admin/multiple_file_upload_change_form.html:63
+#: templates/admin/multiple_file_upload_change_form.html:83
+msgid "Error:"
+msgstr "Chyba:"
+
+#: templates/admin/multiple_file_upload_change_form.html:64
+#: templates/admin/multiple_file_upload_change_form.html:91
+msgid "File is too big"
+msgstr "Soubor je příliš velký"
+
+#: templates/admin/multiple_file_upload_change_form.html:65
+#: templates/admin/multiple_file_upload_change_form.html:92
+msgid "File is too small"
+msgstr "Soubor je příliš malý"
+
+#: templates/admin/multiple_file_upload_change_form.html:66
+#: templates/admin/multiple_file_upload_change_form.html:93
+msgid "Filetype not allowed"
+msgstr "Typ souboru není podporován"
+
+#: templates/admin/multiple_file_upload_change_form.html:67
+#: templates/admin/multiple_file_upload_change_form.html:94
+msgid "Max number of files exceeded"
+msgstr "Maximální počet souborů byl přesažen"
+
+#: templates/admin/multiple_file_upload_change_form.html:73
+msgid "Start"
+msgstr ""
+
+#: templates/admin/multiple_file_upload_change_form.html:75
+msgid "Cancel"
+msgstr ""
+
+#: templates/admin/multiple_file_upload_change_form.html:84
+msgid "File exceeds upload_max_filesize (php.ini directive)"
+msgstr "Soubor překračuje upload_max_filesize (php.ini)"
+
+#: templates/admin/multiple_file_upload_change_form.html:85
+msgid "File exceeds MAX_FILE_SIZE (HTML form directive)"
+msgstr "Soubor překračuje MAX_FILE_SIZE"
+
+#: templates/admin/multiple_file_upload_change_form.html:86
+msgid "File was only partially uploaded"
+msgstr "Soubor byl pouze částečně uploadován"
+
+#: templates/admin/multiple_file_upload_change_form.html:87
+msgid "No File was uploaded"
+msgstr "Žádný soubor nebyl uploadován"
+
+#: templates/admin/multiple_file_upload_change_form.html:88
+msgid "Missing a temporary folder"
+msgstr "Nemohu nalézt temp"
+
+#: templates/admin/multiple_file_upload_change_form.html:89
+msgid "Failed to write file to disk"
+msgstr "Uložení souboru na disk selhalo"
+
+#: templates/admin/multiple_file_upload_change_form.html:90
+msgid "File upload stopped by extension"
+msgstr "Upload souboru zastavilo rozšíření"
+
+#: templates/admin/multiple_file_upload_change_form.html:95
+msgid "Uploaded bytes exceed file size"
+msgstr "Množství uploadovaných bytu přesáhlo velikost souboru"
+
+#: templates/admin/multiple_file_upload_change_form.html:96
+msgid "Empty file upload result"
+msgstr "Odpověď od serveru je prázdná"
+
+#: templates/admin/multiple_file_upload_change_form.html:149
+msgid "Upload files"
+msgstr "Uploadovat soubory"
+
+#: templates/admin/paging_change_form.html:13
+msgid "Previous"
+msgstr ""
+
+#: templates/admin/paging_change_form.html:14
+msgid "Next"
+msgstr ""
+
+#: templates/admin_tp/404.html:4 templates/admin_tp/404.html.py:8
+msgid "Page not found"
+msgstr ""
+
+#: templates/admin_tp/404.html:10
+msgid "We're sorry, but the requested page could not be found."
+msgstr ""
+
+#: templates/admin_tp/500.html:4
+msgid "Server error"
+msgstr ""
+
+#: templates/admin_tp/500.html:6
+msgid "Server error (500)"
+msgstr ""
+
+#: templates/admin_tp/500.html:9
+msgid "Server Error <em>(500)</em>"
+msgstr ""
+
+#: templates/admin_tp/500.html:10
+msgid ""
+"There's been an error. It's been reported to the site administrators via e-"
+"mail and should be fixed shortly. Thanks for your patience."
+msgstr ""
+
+#: templates/admin_tp/actions.html:4
+msgid "Run the selected action"
+msgstr ""
+
+#: templates/admin_tp/actions.html:4
+msgid "Go"
+msgstr ""
+
+#: templates/admin_tp/actions.html:11
+msgid "Click here to select the objects across all pages"
+msgstr ""
+
+#: templates/admin_tp/actions.html:11
+#, python-format
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr ""
+
+#: templates/admin_tp/actions.html:13
+msgid "Clear selection"
+msgstr ""
+
+#: templates/admin_tp/base.html:28
+msgid "Welcome,"
+msgstr ""
+
+#: templates/admin_tp/base.html:33
+msgid "Documentation"
+msgstr ""
+
+#: templates/admin_tp/base.html:41
+#: templates/admin_tp/auth/user/change_password.html:16
+#: templates/admin_tp/auth/user/change_password.html:49
+msgid "Change password"
+msgstr ""
+
+#: templates/admin_tp/base.html:48
+msgid "Log out"
+msgstr ""
+
+#: templates/admin_tp/base_site.html:4
+msgid "Django site admin"
+msgstr ""
+
+#: templates/admin_tp/base_site.html:7
+msgid "Django administration"
+msgstr ""
+
+#: templates/admin_tp/change_form.html:31
+#: templates/admin_tp/object_history.html:10
+msgid "History"
+msgstr ""
+
+#: templates/admin_tp/change_form.html:32
+#: templates/admin_tp/edit_inline/stacked.html:9
+#: templates/admin_tp/edit_inline/tabular.html:28
+msgid "View on site"
+msgstr ""
+
+#: templates/admin_tp/delete_selected_confirmation.html:9
+msgid "Delete multiple objects"
+msgstr ""
+
+#: templates/admin_tp/delete_selected_confirmation.html:16
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+
+#: templates/admin_tp/delete_selected_confirmation.html:24
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+
+#: templates/admin_tp/delete_selected_confirmation.html:32
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? All of the "
+"following objects and their related items will be deleted:"
+msgstr ""
+
+#: templates/admin_tp/filter.html:2
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: templates/admin_tp/index.html:53
+msgid "Recent Actions"
+msgstr ""
+
+#: templates/admin_tp/index.html:54
+msgid "My Actions"
+msgstr ""
+
+#: templates/admin_tp/index.html:58
+msgid "None available"
+msgstr ""
+
+#: templates/admin_tp/index.html:72
+msgid "Unknown content"
+msgstr ""
+
+#: templates/admin_tp/invalid_setup.html:7
+msgid ""
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+
+#: templates/admin_tp/login.html:33
+msgid "Username:"
+msgstr ""
+
+#: templates/admin_tp/login.html:37
+msgid "Password:"
+msgstr ""
+
+#: templates/admin_tp/login.html:42
+msgid "Log in"
+msgstr ""
+
+#: templates/admin_tp/object_history.html:22
+msgid "Date/time"
+msgstr ""
+
+#: templates/admin_tp/object_history.html:23
+msgid "User"
+msgstr ""
+
+#: templates/admin_tp/object_history.html:24
+msgid "Action"
+msgstr ""
+
+#: templates/admin_tp/object_history.html:38
+msgid ""
+"This object doesn't have a change history. It probably wasn't added via this "
+"admin site."
+msgstr ""
+
+#: templates/admin_tp/pagination.html:10
+msgid "Show all"
+msgstr ""
+
+#: templates/admin_tp/pagination.html:11 templates/admin_tp/submit_line.html:3
+msgid "Save"
+msgstr ""
+
+#: templates/admin_tp/search_form.html:8
+msgid "Search"
+msgstr ""
+
+#: templates/admin_tp/search_form.html:10
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin_tp/search_form.html:10
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr ""
+
+#: templates/admin_tp/submit_line.html:5
+msgid "Save as new"
+msgstr ""
+
+#: templates/admin_tp/submit_line.html:6
+msgid "Save and add another"
+msgstr ""
+
+#: templates/admin_tp/submit_line.html:7
+msgid "Save and continue editing"
+msgstr ""
+
+#: templates/admin_tp/auth/user/add_form.html:6
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
+msgstr ""
+
+#: templates/admin_tp/auth/user/add_form.html:8
+msgid "Enter a username and password."
+msgstr ""
+
+#: templates/admin_tp/auth/user/change_password.html:29
+#, python-format
+msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgstr ""
+
+#: templates/admin_tp/auth/user/change_password.html:36
+msgid "Password"
+msgstr ""
+
+#: templates/admin_tp/auth/user/change_password.html:42
+msgid "Password (again)"
+msgstr ""
+
+#: templates/admin_tp/auth/user/change_password.html:43
+msgid "Enter the same password as above, for verification."
+msgstr ""
+
+#: templates/admin_tp/edit_inline/stacked.html:67
+#: templates/admin_tp/edit_inline/tabular.html:113
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+#: templates/admin_tp/edit_inline/stacked.html:70
+#: templates/admin_tp/edit_inline/tabular.html:116
+msgid "Remove"
+msgstr ""
+
+#: templates/admin_tp/edit_inline/tabular.html:15
+msgid "Delete?"
+msgstr ""
