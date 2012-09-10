@@ -129,7 +129,6 @@ class StrictEmailField(models.EmailField):
             'form_class': utilities_forms.StrictEmailField,
         }
         defaults.update(kwargs)
-        print defaults
         return super(StrictEmailField, self).formfield(**defaults)
 
 class NumericIdField(models.CharField):
