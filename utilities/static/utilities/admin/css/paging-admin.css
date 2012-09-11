@@ -4,7 +4,7 @@ a.nextlink span.ico
 	float: right;
 	width: 9px;
 	height: 8px;
-	background-image: url("/static/utils/admin/image/arrow-white-right.gif");
+	background-image: url("../image/arrow-white-right.gif");
 	margin: 3px 0 3px 3px;
 }
 
@@ -14,7 +14,7 @@ a.prevlink span.ico
 	float: left;
 	width: 9px;
 	height: 8px;
-	background-image: url("/static/utils/admin/image/arrow-white-left.gif");
+	background-image: url("../image/arrow-white-left.gif");
 	margin: 3px 3px 3px 0;
 }
 
