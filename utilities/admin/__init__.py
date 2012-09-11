@@ -269,6 +269,20 @@ class MultipleFilesImportMixin(object):
     accept_file_types = []
     max_number_of_files = None
     
+    def response_add(self, request, obj, post_url_continue='../%s/'):
+        opts = obj._meta
+        pk_value = obj._get_pk_val()
+
+        msg = _('The %(name)s "%(obj)s" was added successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj)}
+        
+        if "_continue_before_upload" in request.POST:
+            self.message_user(request, msg + ' ' + force_unicode(_("You may edit it again below.")))
+            post_url_continue += '?_upload=1'
+            if "_popup" in request.POST:
+                post_url_continue += "&_popup=1"
+            return HttpResponseRedirect(post_url_continue % pk_value)
+        return super(MultipleFilesImportMixin, self).response_add(request, request, obj, post_url_continue)
+        
     def add_view(self, request, form_url='', extra_context={}):
         sup = super(MultipleFilesImportMixin, self)
         extra_context['multiplefilesimportmixin_super_template'] = sup.add_form_template or sup.change_form_template or 'admin/change_form.html'
@@ -280,7 +294,7 @@ class MultipleFilesImportMixin(object):
         extra_context['max_file_size'] = self.max_file_size
         extra_context['accept_file_types'] = '|'.join(self.accept_file_types)
         extra_context['max_number_of_files'] = self.max_number_of_files
-        
+        extra_context['upload'] = request.GET.get('_upload', None)
         return sup.change_view(request, object_id, extra_context)
     
     def received_file(self, obj, file):

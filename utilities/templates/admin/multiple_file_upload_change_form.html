@@ -22,13 +22,31 @@
 	<script type="text/javascript">
 		filesChanged = false;
 		$(document).ready(function() {
-	    	$(".fileupload-link").colorbox({inline:true, href:"#fileupload-box",opacity: 0.7, scrolling: true, height: 500, width:600, 
+			{% if change %}
+		    	$(".fileupload-link").colorbox({inline:true, href:"#fileupload-box",opacity: 0.7, scrolling: true, height: 500, width:600, 
+		    		
+		    		onClosed: function () {
+		    			if (filesChanged) window.location.replace(window.location.href);
+		    			$('button.cancel').click();
+		        	}
+		    	});	
+		    {% else %}
+			    $(".save-fileupload-link").click(function () {		    	
+			    	$('#content form .submit-row').append('<input type="text" value="{% trans 'Safe before upload files' %}" name="_continue_before_upload"  />');
+			    	$('#content form .submit-row').parents('form').submit();
+			    	return false;
+		    	});	
+	    	{% endif %}
+
+	    	{% if upload %}
+				$.colorbox({inline:true, href:"#fileupload-box",opacity: 0.7, scrolling: true, height: 500, width:600, 
 	    		
 	    		onClosed: function () {
 	    			if (filesChanged) window.location.replace(window.location.href);
 	    			$('button.cancel').click();
 	        	}
 	    	});
+	    	{% endif %}
 	    });  
 	</script>
 {% endblock extrahead %}
@@ -144,6 +162,19 @@
 		</div>
 	{% endif %}{% endif %}
 {% endblock %}
+
+
+{% block object-tools %}
+	{{block.super}}
+	{% if not change %}{% if not is_popup %}
+		<ul class="object-tools">
+	    {% block object-tools-add-items %}
+	    	<li><a href="" class="save-fileupload-link">{% trans 'Save and upload files' %}</a></li>
+	    {% endblock %}
+	  </ul>
+	{% endif %}{% endif %}
+{% endblock %}
+
 
 {% block object-tools-items %}
     <li><a href="" class="fileupload-link">{% trans 'Upload files' %}</a></li>
