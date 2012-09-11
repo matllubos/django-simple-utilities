@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-11 11:28+0200\n"
+"POT-Creation-Date: 2012-09-11 11:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Lubos Matl <EMAIL@ADDRESS>\n"
 "Language-Team: CZ <LL@li.org>\n"
@@ -567,3 +567,11 @@ msgstr ""
 #: templates/admin_tp/edit_inline/tabular.html:15
 msgid "Delete?"
 msgstr ""
+
+#: templates/mail/admin/notification.html:56
+msgid "New item"
+msgstr "Byla vytvořena nová položka"
+
+#: templates/mail/admin/notification.html:62
+msgid "Show in the administration"
+msgstr "Zobrazit v administraci"

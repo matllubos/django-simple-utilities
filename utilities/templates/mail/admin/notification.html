@@ -1,3 +1,4 @@
+{% load i18n %}
 <html>
     <head>
     	<style type="text/css">
@@ -52,13 +53,13 @@
 	</head>
     <body>
    		<div>
-			<h1>Byla vytvořena nová položka: {{ obj_verbose_name }}</h1>
+			<h1>{% trans 'New item' %}: {{ obj_verbose_name }}</h1>
 			<table>
 				{% for k, v in data.items %}
 					<tr><th>{{ k }}:</th><td>{{ v }}</td></tr>
 				{% endfor%}
 			</table>
-			<a href="http://{{ SITE_URL }}/admin/{{ obj_app_label }}/{{ obj_name|lower  }}/{{ obj.id }}/">Zobrazit v administraci</a>
+			<a href="http://{{ SITE_URL }}/admin/{{ obj_app_label }}/{{ obj_name|lower  }}/{{ obj.id }}/">{% trans 'Show in the administration' %}</a>
 		</div>
     </body>
 </html>
