@@ -307,7 +307,6 @@ msgid "Empty file upload result"
 msgstr "Odpověď od serveru je prázdná"
 
 #: templates/admin/multiple_file_upload_change_form.html:172
-#, fuzzy
 msgid "Save and upload files"
 msgstr "Uložit a uploadovat soubory"
 
