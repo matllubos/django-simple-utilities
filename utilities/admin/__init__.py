@@ -527,4 +527,26 @@ class DashboardMixin(object):
         extra_context['dashboard_table'] = dashboard_table
         extra_context['dashboardmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         return sup.changelist_view(request, extra_context=extra_context)
+ 
+ 
+
+
+class HighlightedTabularInLine(admin.TabularInline):
+    template = 'admin/edit_inline/highlighted_tabular.html'
+    
+    def _media(self):
+        from django.conf import settings
+        js = ['js/jquery.min.js', 'js/jquery.init.js', 'js/inlines.min.js']
+        if self.prepopulated_fields:
+            js.append('js/urlify.js')
+            js.append('js/prepopulate.min.js')
+        if self.filter_vertical or self.filter_horizontal:
+            js.extend(['js/SelectBox.js' , 'js/SelectFilter2.js'])
+        
+        js=['%s%s' % (settings.ADMIN_MEDIA_PREFIX, url) for url in js]    
+        js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
+        js.append('%sutilities/admin/js/highlighted-tabular.js' % settings.STATIC_URL)
+        return forms.Media(js=js)
+    media = property(_media)
+    
     
