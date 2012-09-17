@@ -17,6 +17,7 @@ from django.conf import settings
 from django.utils import translation
 
 from utilities.models import  Recipient, Image, UserLanguageProfile, SiteEmail, HtmlMail
+from django.utils.encoding import force_unicode
 
 class MailSender:
     day_abbr = ((u'pondělí', u'úterý', u'středa', u'čtvrtek', u'pátek', u'sobota', u'neděle'))
@@ -73,7 +74,7 @@ class MailSender:
                     except ObjectDoesNotExist:
                         translation.activate(settings.LANGUAGE_CODE)
                         
-                    self.htmlmail(sbj, user.email, render_to_string(template, context), images, site_email.mail)
+                    self.htmlmail(force_unicode(sbj), user.email, render_to_string(template, context), images, site_email.mail)
             translation.activate(lang)
         except ObjectDoesNotExist:
             return False
