@@ -2,6 +2,7 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import HttpResponseRedirect
 from django.contrib import messages
+from django.utils.encoding import force_unicode
 
 class FormsMixin(object):
     success_url = None
@@ -25,7 +26,7 @@ class FormsMixin(object):
         if message_text:
             messages.error(
                 self.request,
-                message_text,
+                force_unicode(message_text),
                 extra_tags=form_key
             )
         return self.get(self.request)
@@ -35,7 +36,7 @@ class FormsMixin(object):
         if message_text:
             messages.success(
                 self.request,
-                message_text,
+                force_unicode(message_text),
                 extra_tags=form_key
             )
         return HttpResponseRedirect('')
