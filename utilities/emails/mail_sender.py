@@ -51,7 +51,7 @@ class MailSender:
             if (not sender):
                 sender = SiteEmail.objects.get(pk = 1).mail
             html = render_to_string(template, context)
-            self.htmlmail(sbj, recip, html, images, sender)
+            self.htmlmail(force_unicode(sbj), recip, html, images, sender)
             return True
         except ObjectDoesNotExist:
             return False
