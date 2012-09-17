@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 from django.contrib import admin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -21,10 +23,25 @@ from django.utils import simplejson
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
+from utilities.models import HtmlMail, Recipient, Image, SiteEmail
 
 from widgets import UpdateRelatedFieldWidgetWrapper
 
-import re
+class RecipientInLine(admin.TabularInline):
+    model = Recipient
+
+class ImageInLine(admin.TabularInline):
+    model = Image
+        
+class HtmlMailAdmin(admin.ModelAdmin):
+    inlines = [RecipientInLine, ImageInLine]
+
+admin.site.register(HtmlMail, HtmlMailAdmin)
+admin.site.register(SiteEmail)
+
+
+
+
 
 def get_related_delete(deleted_objects):
     if not isinstance(deleted_objects, list):
