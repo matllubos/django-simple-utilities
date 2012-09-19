@@ -2,7 +2,7 @@
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.
 */
-#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9998; overflow:hidden;}
 #cboxOverlay{position:fixed; width:100%; height:100%;}
 #cboxMiddleLeft, #cboxBottomLeft{clear:left;}
 #cboxContent{position:relative;}
@@ -29,17 +29,22 @@
     #cboxBottomRight{width:25px; height:25px; background:url(../images/border1.png) no-repeat -25px -25px;}
     #cboxMiddleLeft{width:25px; background:url(../images/border2.png) repeat-y 0 0;}
     #cboxMiddleRight{width:25px; background:url(../images/border2.png) repeat-y -25px 0;}
-    #cboxContent{background:#fff; overflow:hidden;}
+    #cboxContent{background:#fff; }
         .cboxIframe{background:#fff;}
         #cboxError{padding:50px; border:1px solid #ccc;}
-        #cboxLoadedContent{margin-bottom:20px;}
+        #cboxLoadedContent{margin-bottom:24px;}
         #cboxTitle{position:absolute; bottom:0px; left:0; text-align:center; width:100%; color:#999;}
-        #cboxCurrent{position:absolute; bottom:0px; left:100px; color:#999;}
+        #cboxCurrent{position:absolute; bottom:0px; left:58px; color:#999;}
         #cboxSlideshow{position:absolute; bottom:0px; right:42px; color:#444;}
-        #cboxPrevious{position:absolute; bottom:0px; left:0; color:#444;}
-        #cboxNext{position:absolute; bottom:0px; left:63px; color:#444;}
         #cboxLoadingOverlay{background:#fff url(../images/loading.gif) no-repeat 5px 5px;}
-        #cboxClose{position:absolute; bottom:0; right:0; display:block; color:#444;}
+        
+        
+        #cboxPrevious{position:absolute; bottom:-5px; left:0; background:url(../images/controls.png) no-repeat -75px 0; width:25px; height:25px; text-indent:-9999px;}
+        #cboxPrevious:hover{background-position:-75px -25px;}
+        #cboxNext{position:absolute; bottom:-5px; left:27px; background:url(../images/controls.png) no-repeat -50px 0; width:25px; height:25px; text-indent:-9999px;}
+        #cboxNext:hover{background-position:-50px -25px;}
+        #cboxClose{position:absolute;z-index: 9999; bottom:-5px; right: 0; background:url(../images/controls.png) no-repeat -25px 0; width:25px; height:25px; text-indent:-9999px;}
+        #cboxClose:hover{background-position:-25px -25px;}
 
 /*
   The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill

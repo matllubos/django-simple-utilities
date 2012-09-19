@@ -565,5 +565,11 @@ class HighlightedTabularInLine(admin.TabularInline):
         js.append('%sutilities/admin/js/highlighted-tabular.js' % settings.STATIC_URL)
         return forms.Media(js=js)
     media = property(_media)
-    
-    
+
+
+try:
+    from sorl.thumbnail.shortcuts import get_thumbnail
+except ImportError:
+    pass
+else:
+    from .sorl_thumbnail import AdminImageMixin
