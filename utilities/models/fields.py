@@ -230,7 +230,6 @@ class GoogleMapUrlField(models.URLField):
 class GoogleSpreadsheet(object):
     
     def __init__(self, value):
-        print "tady ano"
         self.value = value
     
     @property
@@ -269,7 +268,6 @@ class GoogleSpreadsheetField(models.CharField):
 
     #Not working in SQKLite3
     def to_python(self, value):
-        print value
         if isinstance(value, GoogleSpreadsheet):
             return value
         return GoogleSpreadsheet(value)
