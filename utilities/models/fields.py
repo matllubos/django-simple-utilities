@@ -5,7 +5,8 @@ from datetime import date
 
 from django.db import models
 from django import forms
-from django.db.models.fields import PositiveIntegerField, BLANK_CHOICE_DASH
+from django.db.models.fields import PositiveIntegerField, BLANK_CHOICE_DASH,\
+    CharField
 from django.core import validators     , exceptions
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import FieldFile
@@ -15,13 +16,12 @@ from django.utils.functional import curry
 from sorl.thumbnail import ImageField
 
 from utilities.utils import fit
-from utilities.forms.widgets import CommaWidget, WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
+from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
     HideSelectWidget, CommaMeasureWidget
-from utilities.forms import CommaDecimalField, StylizedIntegerField, GoogleMapUrlFormField, FullSizeModelMultipleChoiceField, OtherSelectField, TreeModelChoiceField,\
-    CzPhoneFormField, AutoFormatIntegerField
-    
+   
 from utilities import forms as utilities_forms
 from django.utils.encoding import smart_unicode
+from django.db.models.fields.subclassing import SubfieldBase
 
 
 class FieldError(Exception):
@@ -41,7 +41,7 @@ class IntegerField(models.IntegerField):
         
         if self.auto_format:
             class_names.append('auto-format')
-            defaults['form_class']= AutoFormatIntegerField
+            defaults['form_class']= utilities_forms.AutoFormatIntegerField
          
         defaults.update(kwargs)
         defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': ' '.join(class_names)}, kwargs.get('widget', None), measure=self.measure)
@@ -67,7 +67,7 @@ class FloatField(models.FloatField):
         defaults.update(kwargs)
         if self.comma:
             defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure)
-            return super(FloatField, self).formfield(form_class=CommaDecimalField, **defaults)
+            return super(FloatField, self).formfield(form_class=utilities_forms.CommaDecimalField, **defaults)
         defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure) 
         return super(FloatField, self).formfield(**defaults)
  
@@ -87,7 +87,7 @@ class PhoneField(models.CharField):
         form_class = forms.RegexField
         if (self.format == 'CZ'):
             defaults = {}
-            form_class=CzPhoneFormField
+            form_class= utilities_forms.CzPhoneFormField
         elif (self.format == 'DE'):
             defaults = {'regex':r'^(((((((00|\+)49[ \-/]?)|0)[1-9][0-9]{1,4})[ \-/]?)|((((00|\+)49\()|\(0)[1-9][0-9]{1,4}\)[ \-/]?))[0-9]{1,7}([ \-/]?[0-9]{1,5})?)$',} 
         elif (self.format == 'OPEN'):
@@ -223,7 +223,59 @@ class GoogleMapUrlField(models.URLField):
         self.validators.append(validators.URLValidator(verify_exists=verify_exists))
         
     def formfield(self, **kwargs):
-        return super(GoogleMapUrlField, self).formfield(form_class=GoogleMapUrlFormField, **kwargs)
+        return super(GoogleMapUrlField, self).formfield(form_class=utilities_forms.GoogleMapUrlField, **kwargs)
+
+
+
+class GoogleSpreadsheet(object):
+    
+    def __init__(self, value):
+        print "tady ano"
+        self.value = value
+    
+    @property
+    def graph_hyperlink(self):
+        return u'https://docs.google.com/spreadsheet/gform?key=%s&gridId=0#chart' % self.value
+        
+    @property
+    def spreadsheet_hyperlink(self):
+        return u'https://docs.google.com/spreadsheet/ccc?key=%s#gid=0' % self.value
+    
+    @property
+    def form_hyperlink(self):
+        return u'https://docs.google.com/spreadsheet/gform?key=%s&gridId=0#edit' % self.value
+
+    def __unicode__(self):
+        return "%s" % (self.value,)
+    
+    def __str__(self):
+        return "%s" % (self.value,)
+    
+    def __len__(self):
+        return len(self.value)
+
+class GoogleSpreadsheetField(models.CharField):
+
+    description = _(u"Google spreadsheet url")
+    __metaclass__ = models.SubfieldBase
+    
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 100
+        super(GoogleSpreadsheetField, self).__init__(*args, **kwargs)
+
+     
+    def formfield(self, **kwargs):
+        return super(GoogleSpreadsheetField, self).formfield(form_class=utilities_forms.GoogleSpreadsheetField, **kwargs)
+
+    #Not working in SQKLite3
+    def to_python(self, value):
+        print value
+        if isinstance(value, GoogleSpreadsheet):
+            return value
+        return GoogleSpreadsheet(value)
+
+
+
 
 class ResizableFieldFile(FieldFile):
     
@@ -252,7 +304,7 @@ class OrderField(models.PositiveIntegerField):
 class FullSizeManyToManyField(models.ManyToManyField):
     def formfield(self, **kwargs):
         defaults = {
-            'form_class': FullSizeModelMultipleChoiceField,
+            'form_class': utilities_forms.FullSizeModelMultipleChoiceField,
         }
         defaults.update(kwargs)
         return super(FullSizeManyToManyField, self).formfield(**defaults)
@@ -272,7 +324,7 @@ class OtherCharField(models.CharField):
             'hide_relations': self.hide_relations
         }
         defaults.update(kwargs)
-        t =  super(OtherCharField, self).formfield(form_class=OtherSelectField, **defaults)
+        t =  super(OtherCharField, self).formfield(form_class=utilities_forms.OtherSelectField, **defaults)
         return t
     
     '''
@@ -309,7 +361,7 @@ class TreeForeignKey(models.ForeignKey):
     def formfield(self, **kwargs):
         db = kwargs.pop('using', None)
         defaults = {
-            'form_class': TreeModelChoiceField,
+            'form_class': utilities_forms.TreeModelChoiceField,
             'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to),
             'to_field_name': self.rel.field_name,
             'parent': self.parent or self.name
@@ -350,3 +402,6 @@ class OrderedForeignKey(models.ForeignKey):
         defaults = {'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to).order_by(self.order_by),}
         defaults.update(kwargs)
         return super(OrderedForeignKey, self).formfield(**defaults)
+    
+    
+

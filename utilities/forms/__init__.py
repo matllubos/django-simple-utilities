@@ -26,7 +26,7 @@ class StylizedIntegerField(forms.IntegerField):
         return super(StylizedIntegerField, self).clean(value)
     
     
-class GoogleMapUrlFormField(forms.URLField):
+class GoogleMapUrlField(forms.URLField):
     def clean(self, value):
         m = re.match(r"^.*src=\"([^\"]+)\".*$", value)
         if (m):
@@ -36,8 +36,15 @@ class GoogleMapUrlFormField(forms.URLField):
 
         if (not re.search(r"^https?://maps\.google\.cz/maps", value)):
             raise ValidationError(_(u'This is not Google maps URL.'))
-        return super(GoogleMapUrlFormField, self).clean(value) 
-   
+        return super(GoogleMapUrlField, self).clean(value) 
+
+
+class GoogleSpreadsheetField(forms.CharField):
+    def clean(self, value):
+        value = re.sub(r'^.*\?key=([^&#"]*).*$',r'\g<1>', value)
+        return super(GoogleSpreadsheetField, self).clean(value) 
+
+
 class FullSizeModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     widget = FullSizeMultipleSelectWidget
     

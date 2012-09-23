@@ -298,7 +298,7 @@ class MultipleFilesImportMixin(object):
             if "_popup" in request.POST:
                 post_url_continue += "&_popup=1"
             return HttpResponseRedirect(post_url_continue % pk_value)
-        return super(MultipleFilesImportMixin, self).response_add(request, request, obj, post_url_continue)
+        return super(MultipleFilesImportMixin, self).response_add(request, obj, post_url_continue)
         
     def add_view(self, request, form_url='', extra_context={}):
         sup = super(MultipleFilesImportMixin, self)
