@@ -161,7 +161,11 @@ class CzPhoneFormField(forms.RegexField):
         invalid_numbers.append('((\+?\d{3})? ?123 ?456 ?789)')
         invalid_numbers.append('((\+?\d{3})? ?987 ?654 ?321)')
         self.validators.append(NotRegexValidator(regex='%s' % '|'.join(invalid_numbers)))  
-        
+
+    def clean(self, value):
+        if value == '+420':
+            value = ''
+        return super(CzPhoneFormField, self).clean(value)
 
 class AutoFormatIntegerField(forms.IntegerField):
     
