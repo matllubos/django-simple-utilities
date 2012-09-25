@@ -79,8 +79,8 @@ class CommaMeasureWidget(MeasureWidget):
     
     def render(self, name, value, attrs=None):
         if value:
-            return super(CommaMeasureWidget, self).render(name, smart_str(value).replace('.', ','))
-        return super(CommaMeasureWidget, self).render(name, value)
+            return super(CommaMeasureWidget, self).render(name, smart_str(value).replace('.', ','), attrs)
+        return super(CommaMeasureWidget, self).render(name, value, attrs)
     
 class HtmlWidget(forms.Textarea):
     class Media:
