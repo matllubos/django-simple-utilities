@@ -3,7 +3,7 @@ from django.template import defaultfilters
 from django.utils.datastructures import SortedDict
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
 
@@ -91,3 +91,17 @@ class SendCustomerNotificationPostSave(DefaultPostSave):
 
 send_notification = NotificationPostSave()
 send_customer_notification = SendCustomerNotificationPostSave()
+
+
+class DefaultPreSave(object):
+    
+    def pre_register(self, model, **kwargs):
+        pass
+        
+    def register(self, model, **kwargs):
+        self.pre_register(model, **kwargs)
+        pre_save.connect(self.action, sender=model)  
+
+    def action(self, sender, instance, created, **kwargs):
+        pass
+    

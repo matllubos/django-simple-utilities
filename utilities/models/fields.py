@@ -7,7 +7,7 @@ from django.db import models
 from django import forms
 from django.db.models.fields import PositiveIntegerField, BLANK_CHOICE_DASH,\
     CharField
-from django.core import validators     , exceptions
+from django.core import validators, exceptions
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import FieldFile
 from django.conf import settings
@@ -15,6 +15,7 @@ from django.utils.functional import curry
 
 from sorl.thumbnail import ImageField
 
+from django.forms import Form
 from utilities.utils import fit
 from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
     HideSelectWidget, CommaMeasureWidget
