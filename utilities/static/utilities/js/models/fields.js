@@ -174,6 +174,7 @@ function hideFields(){
 		var hideF = function(){
 			var hide_relations = el.attr('class').split(" ");
 			for (var i = 1; i<hide_relations.length;i++) {
+								
 				hide_relation = hide_relations[i].split('-');
 				if((hide_relation[0] == 'unchecked' && el.is(':checked')) || (hide_relation[0] == 'checked' && !el.is(':checked')) ){
 		            $('.'+hide_relation[1]).css('display','none');
@@ -194,10 +195,14 @@ function hideFields(){
 		var hideSelectF = function(){
 			var hide_relations = el.attr('class').split(" ")
 			for (var i = 1; i<hide_relations.length;i++) {
-				hide_relation = hide_relations[i].split('-');
-				if(el.val() == hide_relation[0] && hide_relation[1] == 'set'){
+				hide_relation = hide_relations[i].split('--');
+				
+				val = hide_relation[0].split('__').join(' ')
+				
+				if(el.val() == val && hide_relation[1] == 'set'){
 			        $('.'+hide_relation[2]).css('display','block');
-				} else if(el.val() != hide_relation[0] && hide_relation[1] == 'notset'){
+			        break;
+				} else if(el.val() != val && hide_relation[1] == 'notset'){
 					$('.'+hide_relation[2]).css('display','block');
 				} else {
 					$('.'+hide_relation[2]).css('display','none');

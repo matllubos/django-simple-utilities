@@ -59,7 +59,7 @@
 					<tr><th>{{ k }}:</th><td>{{ v }}</td></tr>
 				{% endfor%}
 			</table>
-			<a href="http://{{ SITE_URL }}/admin/{{ obj_app_label }}/{{ obj_name|lower  }}/{{ obj.id }}/">{% trans 'Show in the administration' %}</a>
+			<p><a href="http://{{ SITE_URL }}/admin/{{ obj_app_label }}/{{ obj_name|lower  }}/{{ obj.id }}/">{% trans 'Show in the administration' %}</a></p>
 		</div>
     </body>
 </html>

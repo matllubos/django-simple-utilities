@@ -201,7 +201,7 @@ class HideSelectWidget(forms.Select):
                     class_name = 'set'
                     if (hide.hide_if_set):
                         class_name = 'notset'
-                    class_names.append('%s-%s-%s' % (key, class_name, hide.field))
+                    class_names.append('%s--%s--%s' % (key.replace(' ', '__'), class_name, hide.field))
             if (class_names):
                 if (attrs.has_key('class')):
                     attrs['class'] = '%s %s' % (attrs['class'], 'select-hide %s' % ' '.join(class_names))
