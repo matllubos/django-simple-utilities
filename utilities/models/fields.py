@@ -92,7 +92,7 @@ class PhoneField(models.CharField):
         elif (self.format == 'DE'):
             defaults = {'regex':r'^(((((((00|\+)49[ \-/]?)|0)[1-9][0-9]{1,4})[ \-/]?)|((((00|\+)49\()|\(0)[1-9][0-9]{1,4}\)[ \-/]?))[0-9]{1,7}([ \-/]?[0-9]{1,5})?)$',} 
         elif (self.format == 'OPEN'):
-            defaults = {'regex':r'^[\+\d\-\(\) ]+$',} 
+            defaults = {'regex':r'^[\+\d\-\(\)/]+$',} 
         
         defaults.update(kwargs)
         defaults['widget'] = WidgetFactory().create(FieldsWidget, {'class': '%s-phone' % self.format}, kwargs.get('widget', None))
