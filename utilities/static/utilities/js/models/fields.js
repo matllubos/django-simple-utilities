@@ -194,29 +194,44 @@ function hideFields(){
 		
 		var hideSelectF = function(){
 			var hide_relations = el.attr('class').split(" ")
+			
+			var show_relations = [];
+			
 			for (var i = 1; i<hide_relations.length;i++) {
 				hide_relation = hide_relations[i].split('--');
 				
-				val = hide_relation[0].split('__').join(' ')
+				var val = hide_relation[0].split('__').join(' ')
+				var className = hide_relation[2];
 				
 				if(el.val() == val && hide_relation[1] == 'set'){
-			        $('.'+hide_relation[2]).css('display','block');
-				} else if(el.val() != val && hide_relation[1] == 'notset'){
-					$('.'+hide_relation[2]).css('display','block');
-				} else {
-					$('.'+hide_relation[2]).css('display','none');
-					if ($('.'+hide_relation[2]+' select').length != 0) {
-						$('.'+hide_relation[2]+" option:selected").removeAttr("selected");
-						$('.'+hide_relation[2]+" select").each(function() { 
+					show_relations[className] = true;
+				} else if(el.val() == val && hide_relation[1] == 'notset'){
+					show_relations[className] = false;
+				} else if (show_relations[className] == undefined){
+					show_relations[className] = hide_relation[1] != 'set';
+				}
+				
+			}
+
+			for(var className in show_relations) {
+			    if (show_relations[className]) {
+			    	$('.'+className).css('display','block');
+			    } else {
+			    	$('.'+className).css('display','none');
+					if ($('.'+className+' select').length != 0) {
+						$('.'+className+" option:selected").removeAttr("selected");
+						$('.'+className+" select").each(function() { 
 							$(this).find("option:first").attr("selected", "selected");
   						
 						});
 	
 					}					
-					$('.'+hide_relation[2]+ ' input').val('');
-				}
-				
+					$('.'+className+ ' input').val('');
+			    }
 			}
+			
+			
+			
 		};
 		el.change(hideSelectF);
 		hideSelectF();
