@@ -201,7 +201,6 @@ function hideFields(){
 				
 				if(el.val() == val && hide_relation[1] == 'set'){
 			        $('.'+hide_relation[2]).css('display','block');
-			        break;
 				} else if(el.val() != val && hide_relation[1] == 'notset'){
 					$('.'+hide_relation[2]).css('display','block');
 				} else {
