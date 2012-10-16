@@ -178,7 +178,7 @@ class AutoFormatIntegerField(forms.IntegerField):
         return super(AutoFormatIntegerField, self).clean(value)   
  
 email_re = re.compile(
-    r"(^[0-9A-Z]+([-\.][0-9A-Z]+)*"  # dot-atom
+    r"(^[0-9A-Z]+([-\._][0-9A-Z]+)*"  # dot-atom
     r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
     r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
 validate_email = EmailValidator(email_re, _(u'Enter a valid e-mail address.'), 'invalid')
