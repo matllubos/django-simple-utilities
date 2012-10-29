@@ -121,7 +121,7 @@
                 reinitDateTimeShortCuts();
                 updateSelectFilter();
                 alternatingRows(row);
-                highlight(row);
+                prepareHighlighted($(row).attr('id'));
             })
         });
     });

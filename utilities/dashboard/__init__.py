@@ -57,24 +57,24 @@ class DashboardFormatter(object):
 class SumDashboardFormatter(DashboardFormatter):
      
     def get_field_values(self, qs):
-        return qs.aggregate(Sum(self.field_name))["%s__sum" % self.field_name]
+        return round(qs.aggregate(Sum(self.field_name))["%s__sum" % self.field_name]  or 0, 2)
     
     def get_method_values(self, qs):
         values = 0
         for obj in qs:
             values += getattr(obj, self.field_name)()
-        return values
+        return round(values, 2)
       
     def get_admin_method_values(self, qs, admin):
         values = 0
         for obj in qs:
             values += getattr(admin, self.field_name)(obj)
-        return values 
+        return round(values, 2)
     
 class AvgDashboardFormatter(DashboardFormatter):
      
     def get_field_values(self, qs):
-        return qs.aggregate(Avg(self.field_name))["%s__avg" % self.field_name]
+        return round(qs.aggregate(Avg(self.field_name))["%s__avg" % self.field_name] or 0, 2)
     
     def get_method_values(self, qs):
         values = 0
@@ -82,7 +82,7 @@ class AvgDashboardFormatter(DashboardFormatter):
             for obj in qs:
                 values += getattr(obj, self.field_name)()
             values /= qs.count()
-        return values 
+        return round(values, 2) 
     
     def get_admin_method_values(self, qs, admin):
         values = 0
@@ -90,7 +90,7 @@ class AvgDashboardFormatter(DashboardFormatter):
             for obj in qs:
                 values += getattr(admin, self.field_name)(obj)
             values /= qs.count()
-        return values 
+        return round(values, 2)
 
 class TableDashboardFormatter(DashboardFormatter):
      

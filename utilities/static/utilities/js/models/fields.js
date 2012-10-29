@@ -193,6 +193,8 @@ function hideFields(){
 		var el = $(this);
 		
 		var hideSelectF = function(){
+			if (el.val() == null) return;
+			
 			var hide_relations = el.attr('class').split(" ")
 			
 			var show_relations = [];
