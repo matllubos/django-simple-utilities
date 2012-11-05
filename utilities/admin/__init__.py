@@ -85,7 +85,9 @@ class RelatedToolsAdmin(admin.ModelAdmin):
                 url = unquote(url)
                 import re
                 m = re.match('.*href="/admin/([^/]*)/([^/]*)/([^/]*)/".*', unicode(url))
-                del_objects.append({'app': smart_str(m.group(1)), 'model': smart_str(m.group(2)), 'id':smart_str(m.group(3))})
+                #pro objekty, které nejsou zaregistrované v administraci url neexistuje. Co s tím?
+                if m:
+                    del_objects.append({'app': smart_str(m.group(1)), 'model': smart_str(m.group(2)), 'id':smart_str(m.group(3))})
 
             return HttpResponse(u'<script type="text/javascript">opener.dismissDeletePopup(window, %s);</script>' % \
                                 del_objects)
@@ -361,7 +363,53 @@ class MultipleFilesImportMixin(object):
             mimetype = 'text/plain'
         
         return HttpResponse(response_data, mimetype=mimetype)
+
+class DynamicListDisplayModelMixin(object):
     
+    def __init__(self, model, admin_site):
+        super(DynamicListDisplayModelMixin, self).__init__(model, admin_site)
+        self.default_list_display = self.list_display       
+        
+    def _change_list_display(self, list_display):
+        list_display_copy = list(self.list_display)
+        for field in self.list_display[1:]:
+            list_display_copy.remove(field)
+        
+        self.list_display = list_display_copy
+        
+        for field in list_display:
+            if (not field in self.list_display):
+                self.list_display.append(field)
+     
+     
+    def get_list_display(self, request):
+        return self.default_list_display
+                
+    def changelist_view(self, request, extra_context=None): 
+        self._change_list_display(self.get_list_display(request)) 
+        return super(DynamicListDisplayModelMixin, self).changelist_view(request, extra_context=extra_context)  
+    
+
+class DynamicFieldsetsModelMixin(object):
+    def __init__(self, model, admin_site):
+        super(DynamicFieldsetsModelMixin, self).__init__(model, admin_site)
+        self.default_fieldsets = self.fieldsets
+ 
+    
+    def change_view(self, request, object_id, extra_context=None):
+        self.fieldsets = self.get_fieldsets(request) 
+        return super(DynamicFieldsetsModelMixin, self).change_view(request, object_id, extra_context=extra_context)  
+    
+    def add_view(self, request, form_url='', extra_context=None):
+        self.fieldsets = self.get_fieldsets(request)
+        return super(DynamicFieldsetsModelMixin, self).add_view(request, form_url=form_url, extra_context=extra_context)  
+   
+    def get_fieldsets(self, request, obj=None):
+        if self.default_fieldsets:
+            return self.default_fieldsets
+        return super(DynamicFieldsetsModelMixin, self).get_fieldsets(request, obj=obj)
+
+
 class CloneModelMixin(object):
     change_form_template = 'admin/clone_change_form.html'
         
@@ -502,12 +550,15 @@ class CSVExportMixin(object):
         response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(queryset.model.__name__)
         if self.csv_bom:
             response.write("\xEF\xBB\xBF\n")
-        csv_generator = CsvGenerator(self.model,self.csv_fields, header=self.csv_header, delimiter=self.csv_delimiter, quotechar = self.csv_quotechar, DB_values = self.csv_DB_values, csv_formatters=self.csv_formatters, encoding=self.csv_encoding)
+        csv_generator = CsvGenerator(self.model,self.get_csv_fields(request), header=self.csv_header, delimiter=self.csv_delimiter, quotechar = self.csv_quotechar, DB_values = self.csv_DB_values, csv_formatters=self.csv_formatters, encoding=self.csv_encoding)
         csv_generator.export_csv(response, queryset)
         return response
         
     export_csv.short_description = _(u"Export to CSV")
     
+    def get_csv_fields(self, request):
+        return self.csv_fields        
+        
     def changelist_view(self, request, extra_context={}):
         sup = super(CSVExportMixin, self)  
         import_form = CSVImportForm()
@@ -535,7 +586,7 @@ class DashboardMixin(object):
         sup = super(DashboardMixin, self)    
         dashboard_table = []       
         qs = self.queryset(request) 
-        for row in self.dashboard_table:
+        for row in self.get_dashboard_table(request):
             dashboard_table_row = []
             for col in row:
                 dashboard_table_row.append(col.render(qs, self))
@@ -545,7 +596,8 @@ class DashboardMixin(object):
         extra_context['dashboardmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         return sup.changelist_view(request, extra_context=extra_context)
  
- 
+    def get_dashboard_table(self, request):
+        return self.dashboard_table
 
 
 class HighlightedTabularInLine(admin.TabularInline):

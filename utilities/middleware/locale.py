@@ -16,6 +16,7 @@ class AdminLocaleMiddleware(LocaleMiddleware):
             else:
                 super(AdminLocaleMiddleware, self).process_request(request)
             user = request.user
+            translation.activate('cs')
             if user.is_authenticated():
                 try:
                     language_profile = UserLanguageProfile.objects.get(user=user)
