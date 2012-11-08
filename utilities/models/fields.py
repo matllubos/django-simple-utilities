@@ -13,7 +13,7 @@ from django.db.models.fields.files import FieldFile
 from django.conf import settings
 from django.utils.functional import curry
 
-from sorl.thumbnail import ImageField
+from sorl.thumbnail import ImageField as SorlImageField
 
 from django.forms import Form
 from utilities.utils import fit
@@ -21,6 +21,8 @@ from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, Mea
     HideSelectWidget, CommaMeasureWidget
    
 from utilities import forms as utilities_forms
+from utilities.utils import strip_accents
+
 from django.utils.encoding import smart_unicode
 from django.db.models.fields.subclassing import SubfieldBase
 
@@ -274,15 +276,18 @@ class GoogleSpreadsheetField(models.CharField):
         return GoogleSpreadsheet(value)
 
 
+class ImageField(SorlImageField):
 
-
+    def clean(self, value, model_instance):
+        value.name = strip_accents(value.name)
+        return super(ResizableImageField, self).clean(value, model_instance)
+    
 class ResizableFieldFile(FieldFile):
     
     def save(self, name, content, save=True):
         super(ResizableFieldFile, self).save(name, content, save)
         fit(self.path, settings.MAX_WIDTH, settings.MAX_HEIGHT)
 
-        
 class ResizableImageField(ImageField):
     attr_class = ResizableFieldFile
     

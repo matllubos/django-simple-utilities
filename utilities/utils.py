@@ -42,3 +42,6 @@ def remove_nonspacing_marks(s):
 def quote(url):
     url = django_quote(remove_nonspacing_marks(url))
     return re.sub(r' ', '-', url)
+
+def strip_accents(s):
+    return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
