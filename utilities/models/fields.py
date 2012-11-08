@@ -280,7 +280,7 @@ class ImageField(SorlImageField):
 
     def clean(self, value, model_instance):
         value.name = strip_accents(value.name)
-        return super(ResizableImageField, self).clean(value, model_instance)
+        return super(ImageField, self).clean(value, model_instance)
     
 class ResizableFieldFile(FieldFile):
     
