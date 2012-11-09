@@ -18,7 +18,7 @@ from sorl.thumbnail import ImageField as SorlImageField
 from django.forms import Form
 from utilities.utils import fit
 from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
-    HideSelectWidget, CommaMeasureWidget
+    HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget
    
 from utilities import forms as utilities_forms
 from utilities.utils import strip_accents
@@ -215,7 +215,7 @@ class HideBooelanField(models.BooleanField):
             class_name = 'hide checked'
         
         if (self.hide):
-            kwargs['widget'] = WidgetFactory().create(forms.CheckboxInput, {'class': '%s-%s' % (class_name, self.hide)}, kwargs.get('widget', None))
+            kwargs['widget'] = WidgetFactory().create(HideCheckboxWidget, {'class': '%s-%s' % (class_name, self.hide)}, kwargs.get('widget', None))
         return super(HideBooelanField, self).formfield(**kwargs)
    
 class GoogleMapUrlField(models.URLField):

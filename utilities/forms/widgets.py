@@ -217,6 +217,15 @@ class HideSelectWidget(forms.Select):
               '%sutilities/js/models/fields.js' % settings.STATIC_URL,
               )
         
+        
+class HideCheckboxWidget(forms.CheckboxInput):
+    class Media:
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/models/fields.js' % settings.STATIC_URL,
+              )
+    
+        
 class OtherSelectWidget(forms.widgets.MultiWidget):
     class Media:
         js = (
