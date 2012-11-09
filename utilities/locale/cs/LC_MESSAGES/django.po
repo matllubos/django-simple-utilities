@@ -88,7 +88,7 @@ msgstr "Toto není URL Google map"
 
 #: forms/__init__.py:149
 msgid "Enter a valid phone number"
-msgstr "Prosím vložte vaše telefonní číslo"
+msgstr "Uveďte Vaše telefonní číslo ve formátu +420 xxx yyy zzz"
 
 #: forms/__init__.py:174
 #, fuzzy
