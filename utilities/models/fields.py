@@ -409,15 +409,16 @@ class OrderedForeignKey(models.ForeignKey):
     
     
 class GroupsForeignKey(models.ForeignKey):
-    def __init__(self, to, group_by, **kwargs):
+    def __init__(self, to, group_by, order_by, **kwargs):
         super(GroupsForeignKey, self).__init__(to, **kwargs)
-        self.group_by = group_by    
+        self.group_by = group_by  
+        self.order_by = order_by  
     
     def formfield(self, **kwargs):
         db = kwargs.pop('using', None)
         defaults = {
             'form_class': utilities_forms.GroupsModelChoiceField,
-            'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to),
+            'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to).order_by(*self.order_by),
             'to_field_name': self.rel.field_name,
             'group_by': self.group_by
         }
