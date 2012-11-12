@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.core import validators
 from django.core.validators import EmailValidator
 
-from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget
+from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect
 
 
 class CommaDecimalField(forms.FloatField):
@@ -130,7 +130,71 @@ class TreeModelChoiceField(forms.ModelChoiceField):
             return self._choices
         return TreeModelChoiceIterator(self.parent, self)
     choices = property(_get_choices, forms.ChoiceField._set_choices)  
+  
+  
+class GroupsModelChoiceIterator(ModelChoiceIterator):
+    def __init__(self, group_by, *args, **kwargs):
+        super(GroupsModelChoiceIterator, self).__init__(*args, **kwargs)
+        self.group_by = group_by
+
+    def __iter__(self):
+        if self.field.empty_label is not None:
+            yield (u"", self.field.empty_label)
+        if self.field.cache_choices:
+            if self.field.choice_cache is None:
+                self.field.choice_cache = [
+                    self.choice(obj) for obj in self.queryset.all()
+                ]
+            for choice in self.field.choice_cache:
+                yield choice
+        else:
+            group = []
+                      
+            for obj in self.queryset.all().order_by(*self.group_by):
+                current_group = group
+                prev_group = None
+                i = 0 
+                for group_name in self.group_by:
+                    if current_group and group_name == self.group_by[0] and getattr(obj, group_name) != current_group[0]:
+                        yield group
+                        current_group = group = []
+
+                    if not current_group or getattr(obj, group_name) != current_group[0]:
+                        current_group = (mark_safe(u'%s|- %s' % ('&nbsp;' * i ,getattr(obj, group_name))), [])
+                        if prev_group:
+                            
+                            prev_group[1].append(current_group)
+                        else:
+                            group = current_group
+                            
+                        prev_group = current_group
+                        current_group = ()
+                    else:
+                        prev_group = current_group
+                        current_group = current_group[1][-1]
+                    i+= 1
+                prev_group[1].append(self.choice(obj, i))
+ 
+            yield group
         
+    def choice(self, obj, depth=0):
+        depth = depth - 4
+        if depth < 0:
+            depth = 0
+        return (self.field.prepare_value(obj), mark_safe(u'%s|- %s' % ('&nbsp;' * depth ,self.field.label_from_instance(obj))))
+      
+class GroupsModelChoiceField(forms.ModelChoiceField):
+    def __init__(self, queryset, group_by, *args, **kwargs):
+        self.group_by = group_by
+        kwargs['widget'] = MultipleOptgroupSelect
+        super(GroupsModelChoiceField, self).__init__(queryset, *args, **kwargs)
+
+    def _get_choices(self):
+        if hasattr(self, '_choices'):
+            return self._choices
+        return GroupsModelChoiceIterator(self.group_by, self)
+    choices = property(_get_choices, forms.ChoiceField._set_choices)  
+
 
 class NotRegexValidator(validators.RegexValidator):
     def __call__(self, value):

@@ -1,7 +1,10 @@
+# coding: utf-8
 import datetime
 import re
 import time
 import inspect
+
+from itertools import chain
 
 from django import forms
 from django.conf import settings
@@ -12,6 +15,7 @@ from django.utils.formats import get_format
 from django.utils import datetime_safe
 from django.utils.dates import MONTHS
 from django.forms import extras
+from django.utils.html import escape, conditional_escape
 
 class WidgetFactory:
     def create(self, widget , attrs,  old_widget, **kwargs):
@@ -257,3 +261,24 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
     
     def render(self, name, value, attrs=None):
         return super(OtherSelectWidget, self).render(name, value, attrs=attrs)
+    
+    
+class MultipleOptgroupSelect(forms.Select):
+        
+    def render_group(self, selected_choices, option_value, option_label):
+        return u'<optgroup label="%s">%s</optgroup>' %(conditional_escape(force_unicode(option_value)),''.join(self.process_list(selected_choices, option_label)))
+    
+    def process_list(self, selected_choices,  l):
+        output = []
+        for option_value, option_label in l:
+            if isinstance(option_label, (list, tuple)):
+                output.append(self.render_group(selected_choices, option_value, option_label))
+            else:
+                output.append(self.render_option(selected_choices, option_value, option_label))
+        return output
+
+    def render_options(self, choices, selected_choices):
+        # Normalize to strings.
+        selected_choices = set([force_unicode(v) for v in selected_choices])
+        output = self.process_list(selected_choices, chain(self.choices, choices))
+        return u'\n'.join(output)
