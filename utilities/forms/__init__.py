@@ -133,9 +133,10 @@ class TreeModelChoiceField(forms.ModelChoiceField):
   
   
 class GroupsModelChoiceIterator(ModelChoiceIterator):
-    def __init__(self, group_by, *args, **kwargs):
+    def __init__(self, group_by, order_by, *args, **kwargs):
         super(GroupsModelChoiceIterator, self).__init__(*args, **kwargs)
         self.group_by = group_by
+        self.order_by = order_by
 
     def __iter__(self):
         if self.field.empty_label is not None:
@@ -149,8 +150,9 @@ class GroupsModelChoiceIterator(ModelChoiceIterator):
                 yield choice
         else:
             group = []
-                      
-            for obj in self.queryset.all().order_by(*self.group_by):
+            
+            order_by = list(self.group_by) + list(self.order_by)      
+            for obj in self.queryset.all().order_by(*order_by):
                 current_group = group
                 prev_group = None
                 i = 0 
@@ -179,15 +181,16 @@ class GroupsModelChoiceIterator(ModelChoiceIterator):
         
       
 class GroupsModelChoiceField(forms.ModelChoiceField):
-    def __init__(self, queryset, group_by, *args, **kwargs):
+    def __init__(self, queryset, group_by,  order_by, *args, **kwargs):
         self.group_by = group_by
+        self.order_by = order_by
         kwargs['widget'] = MultipleOptgroupSelect
         super(GroupsModelChoiceField, self).__init__(queryset, *args, **kwargs)
 
     def _get_choices(self):
         if hasattr(self, '_choices'):
             return self._choices
-        return GroupsModelChoiceIterator(self.group_by, self)
+        return GroupsModelChoiceIterator(self.group_by, self.order_by, self)
     choices = property(_get_choices, forms.ChoiceField._set_choices)  
 
 

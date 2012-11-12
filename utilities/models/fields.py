@@ -418,9 +418,10 @@ class GroupsForeignKey(models.ForeignKey):
         db = kwargs.pop('using', None)
         defaults = {
             'form_class': utilities_forms.GroupsModelChoiceField,
-            'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to).order_by(*self.order_by),
+            'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to),
             'to_field_name': self.rel.field_name,
-            'group_by': self.group_by
+            'group_by': self.group_by,
+            'order_by': self.order_by
         }
         defaults.update(kwargs)
         return super(models.ForeignKey, self).formfield(**defaults)
