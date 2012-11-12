@@ -265,16 +265,27 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
     
 class MultipleOptgroupSelect(forms.Select):
         
-    def render_group(self, selected_choices, option_value, option_label):
-        return u'<optgroup label="%s">%s</optgroup>' %(conditional_escape(force_unicode(option_value)),''.join(self.process_list(selected_choices, option_label)))
+    def render_group(self, selected_choices, option_value, option_label, depth):
+        return u'<optgroup label="%s|- %s">%s</optgroup>' %('&nbsp;' * depth ,conditional_escape(force_unicode(option_value)),''.join(self.process_list(selected_choices, option_label, depth + 1)))
     
-    def process_list(self, selected_choices,  l):
+    def render_option(self, selected_choices, option_value, option_label, depth):
+        depth -= 4
+        if depth < 0:
+            depth = 0
+        
+        option_value = force_unicode(option_value)
+        selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
+        return u'<option value="%s"%s>%s|- %s</option>' % (
+            escape(option_value), selected_html, '&nbsp;' * depth,
+            conditional_escape(force_unicode(option_label)))
+        
+    def process_list(self, selected_choices,  l, depth=0):
         output = []
         for option_value, option_label in l:
             if isinstance(option_label, (list, tuple)):
-                output.append(self.render_group(selected_choices, option_value, option_label))
+                output.append(self.render_group(selected_choices, option_value, option_label, depth))
             else:
-                output.append(self.render_option(selected_choices, option_value, option_label))
+                output.append(self.render_option(selected_choices, option_value, option_label, depth))
         return output
 
     def render_options(self, choices, selected_choices):

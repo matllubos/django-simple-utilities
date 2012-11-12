@@ -160,7 +160,7 @@ class GroupsModelChoiceIterator(ModelChoiceIterator):
                         current_group = group = []
 
                     if not current_group or getattr(obj, group_name) != current_group[0]:
-                        current_group = (mark_safe(u'%s|- %s' % ('&nbsp;' * i ,getattr(obj, group_name))), [])
+                        current_group = (getattr(obj, group_name), [])
                         if prev_group:
                             
                             prev_group[1].append(current_group)
@@ -173,15 +173,10 @@ class GroupsModelChoiceIterator(ModelChoiceIterator):
                         prev_group = current_group
                         current_group = current_group[1][-1]
                     i+= 1
-                prev_group[1].append(self.choice(obj, i))
+                prev_group[1].append(self.choice(obj))
  
             yield group
         
-    def choice(self, obj, depth=0):
-        depth = depth - 4
-        if depth < 0:
-            depth = 0
-        return (self.field.prepare_value(obj), mark_safe(u'%s|- %s' % ('&nbsp;' * depth ,self.field.label_from_instance(obj))))
       
 class GroupsModelChoiceField(forms.ModelChoiceField):
     def __init__(self, queryset, group_by, *args, **kwargs):
