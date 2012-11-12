@@ -269,15 +269,17 @@ class MultipleOptgroupSelect(forms.Select):
         return u'<optgroup label="%s|- %s">%s</optgroup>' %('&nbsp;' * depth*2 ,conditional_escape(force_unicode(option_value)),''.join(self.process_list(selected_choices, option_label, depth + 1)))
     
     def render_option(self, selected_choices, option_value, option_label, depth):
-        depth -= 2
-        if depth < 0:
-            depth = 0
-        
-        option_value = force_unicode(option_value)
-        selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
-        return u'<option value="%s"%s>%s|- %s</option>' % (
-            escape(option_value), selected_html, '&nbsp;' * depth *2,
-            conditional_escape(force_unicode(option_label)))
+        if option_value:
+            depth -= 2
+            if depth < 0:
+                depth = 0
+            
+            option_value = force_unicode(option_value)
+            selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
+            return u'<option value="%s"%s>%s|- %s</option>' % (
+                escape(option_value), selected_html, '&nbsp;' * depth *2,
+                conditional_escape(force_unicode(option_label)))
+        return super(MultipleOptgroupSelect, self).render_option(selected_choices, option_value, option_label)
         
     def process_list(self, selected_choices,  l, depth=0):
         output = []
