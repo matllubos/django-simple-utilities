@@ -195,7 +195,7 @@ class NotRegexValidator(validators.RegexValidator):
     def __call__(self, value):
         if self.regex.search(smart_unicode(value)):
             raise validators.ValidationError(self.message, code=self.code)
-        
+     
 class CzPhoneFormField(forms.RegexField):
     def __init__(self, max_length=None, min_length=None, error_message=None, *args, **kwargs):
         codes = ['601', '602', '606', '607', '702', '720', '721', '722', '723', '724', '725', '726', '727', '728', '729',
