@@ -11,17 +11,22 @@
 	{{ block.super }}
 	<script src="{{ STATIC_URL }}utilities/js/jquery-1.6.4-min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}utilities/admin/js/jquery.colorbox-min.js" type="text/javascript"></script>
-	{% if dashboard_table %}
+	{% if show_dashboard %}
 		<script type="text/javascript">
 			$(document).ready(function() {
-		    	$(".dashboard-link").colorbox({inline:true, href:"#dashboard",opacity: 0.7, scrolling: false});
+				{% if dashboard_table %}
+					$.colorbox({inline:true, href:"#dashboard",opacity: 0.7, scrolling: false});
+		    		$(".dashboard-link").colorbox({inline:true, href:"#dashboard",opacity: 0.7, scrolling: false});
+		    	{% else %}
+		    		$(".dashboard-link").attr('href', '?_show_dashboard=1&{{ request.META.QUERY_STRING  }}')
+		    	{% endif %}
 		    });  
 		</script>
 	{% endif %}
 {% endblock extrahead %}
 
 {% block object-tools-items %}
-	{% if dashboard_table %}	
+	{% if show_dashboard %}	
     	<li><a href="" class="dashboard-link">{% trans 'Statistic' %}</a></li>
     {% endif %}
     {{block.super}}
