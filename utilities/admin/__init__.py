@@ -584,15 +584,13 @@ class DashboardMixin(object):
     
     def changelist_view(self, request, extra_context={}):   
         sup = super(DashboardMixin, self)  
-        
         extra_context['dashboardmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         if self.get_dashboard_table(request):
             extra_context['show_dashboard'] = True
           
         if '_show_dashboard' in request.GET:
-            print 'tady'
             dashboard_table = []       
-            qs = self.queryset(request) 
+            qs =  extra_context.get('dashboard_queryset', self.queryset(request))
             for row in self.get_dashboard_table(request):
                 dashboard_table_row = []
                 for col in row:
