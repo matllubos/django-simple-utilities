@@ -8,10 +8,31 @@ from django.utils.translation import ugettext_lazy as _
 
 class DashboardFormatter(object):
     
-    def __init__(self, field_name, title = None, measure = None):
-        self.field_name = field_name
+    def __init__(self, title, measure = None):
         self.title = title
         self.measure = measure
+
+    def get_title(self, model, admin):
+        return self.title
+    
+    def get_measure(self, model):
+        if self.measure:
+            return self.measure
+        return ''
+    
+    def render(self, qs, admin):
+        values = self.get_values(qs, admin)
+        model = qs.model  
+        return mark_safe(u'<table><th>%s:</th><td>%s %s</td></table>' % (force_unicode(self.get_title(model, admin)), force_unicode(values), force_unicode(self.get_measure(model))))
+    
+    def get_values(self, qs, admin):
+        return None
+    
+class FieldDashboardFormatter(DashboardFormatter):
+    
+    def __init__(self, field_name, title = None, measure = None):
+        super(FieldDashboardFormatter, self).__init__(title , measure)
+        self.field_name = field_name
     
     def get_title(self, model, admin):
         if self.title:
@@ -24,17 +45,7 @@ class DashboardFormatter(object):
                     return getattr(admin, self.field_name).short_description
                 except AttributeError:
                     return getattr(model, self.field_name).short_description
-                
-    def get_measure(self, model):
-        if self.measure:
-            return self.measure
-        return ''
-          
-    def render(self, qs, admin):
-        values = self.get_values(qs, admin)
-        model = qs.model  
-        return mark_safe(u'<th>%s:</th><td>%s %s</td>' % (force_unicode(self.get_title(model, admin)), force_unicode(values), force_unicode(self.get_measure(model))))
-        
+                        
     def get_field_values(self, qs):
         return None
     
@@ -54,7 +65,15 @@ class DashboardFormatter(object):
             except AttributeError:
                 return self.get_method_values(qs)
 
-class SumDashboardFormatter(DashboardFormatter):
+class CountDashboardFormatter(DashboardFormatter):
+    
+    def __init__(self, title):
+        super(CountDashboardFormatter, self).__init__(title)
+        
+    def get_values(self, qs, admin):
+        return qs.count()
+     
+class SumDashboardFormatter(FieldDashboardFormatter):
      
     def get_field_values(self, qs):
         return round(qs.aggregate(Sum(self.field_name))["%s__sum" % self.field_name]  or 0, 2)
@@ -71,7 +90,7 @@ class SumDashboardFormatter(DashboardFormatter):
             values += getattr(admin, self.field_name)(obj)
         return round(values, 2)
     
-class AvgDashboardFormatter(DashboardFormatter):
+class AvgDashboardFormatter(FieldDashboardFormatter):
      
     def get_field_values(self, qs):
         return round(qs.aggregate(Avg(self.field_name))["%s__avg" % self.field_name] or 0, 2)
@@ -92,7 +111,7 @@ class AvgDashboardFormatter(DashboardFormatter):
             values /= qs.count()
         return round(values, 2)
 
-class TableDashboardFormatter(DashboardFormatter):
+class TableDashboardFormatter(FieldDashboardFormatter):
      
     def __init__(self, field_name, other_title = _(u'Other'), *args, **kwargs):
         super(TableDashboardFormatter, self).__init__(field_name, *args, **kwargs)
@@ -102,16 +121,19 @@ class TableDashboardFormatter(DashboardFormatter):
         values = self.get_values(qs, admin)
         model = qs.model  
         rows = []      
-        rows.append(u'<tr><th>%s</th><th></th></tr>' % self.get_title(model, admin))
+        rows.append(self.render_title(self.get_title(model, admin)))
         
         for key, value in values.items():
             rows.append(u'<tr><td>%s</td><td>%s %s</td></tr>' % (force_unicode(key), force_unicode(value), force_unicode(self.get_measure(model)))) 
         return mark_safe(u'<table>%s</table>' % u'\n'.join(rows))
 
+    def render_title(self, title):
+        return u'<tr><th colspan="2">%s</th></tr>' % title
  
     def get_field_values(self, qs):
         values = SortedDict()
         field = qs.model._meta.get_field(self.field_name) 
+        print field.get_internal_type()
         if (field.choices):
             count = 0
             for choice in field.choices:
@@ -132,7 +154,7 @@ class TableDashboardFormatter(DashboardFormatter):
             values[_('Yes')] = qs.filter(**{field.name: True}).count()
             values[_('No')] = qs.filter(**{field.name: False}).count()
             
-        elif (field.get_internal_type() == "ForeignKey" or field.get_internal_type() == "CharField"):
+        elif (field.get_internal_type() == "OrderedForeignKey" or field.get_internal_type() == "ForeignKey" or field.get_internal_type() == "CharField"):
             for obj in qs:
                 val = getattr(obj, field.name)
                 if (not val): val = self.other_title
