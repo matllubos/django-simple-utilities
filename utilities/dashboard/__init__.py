@@ -72,7 +72,7 @@ class FieldDashboardFormatter(DashboardFormatter):
 class CountDashboardFormatter(DashboardFormatter):
     
     def __init__(self, title, colspan = 1):
-        super(CountDashboardFormatter, self).__init__(title, colspan)
+        super(CountDashboardFormatter, self).__init__(title, colspan=colspan)
         
     def get_values(self, qs, admin):
         return qs.count()
