@@ -20,12 +20,14 @@ from django.contrib.admin.options import csrf_protect_m
 from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import UploadedFile
 from django.utils import simplejson
+from django.utils.functional import update_wrapper
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
 from utilities.models import HtmlMail, Recipient, Image, SiteEmail
 
 from widgets import UpdateRelatedFieldWidgetWrapper
+from django.shortcuts import render_to_response
 
 class RecipientInLine(admin.TabularInline):
     model = Recipient
@@ -585,30 +587,32 @@ class DashboardMixin(object):
     def changelist_view(self, request, extra_context={}):   
         sup = super(DashboardMixin, self)  
         extra_context['dashboardmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
-        if self.get_dashboard_table(request):
-            extra_context['show_dashboard'] = True
-          
-        if '_show_dashboard' in request.GET:
-            dashboard_table = []       
-            qs =  extra_context.get('dashboard_queryset', self.queryset(request))
-            for row in self.get_dashboard_table(request):
-                dashboard_table_row = []
-                for col in row:
-                    dashboard_table_row.append(col.render(qs, self))
-                dashboard_table.append(dashboard_table_row)    
-                
-            extra_context['dashboard_table'] = dashboard_table
-            
-            get = request.GET.copy()
-            del get['_show_dashboard']
-            request.GET = get
-            
+        extra_context['show_dashboard'] = self.get_dashboard_table(request)
         return sup.changelist_view(request, extra_context=extra_context)
  
+    def dashboard_view(self, request, extra_context={}):
+        dashboard_table = []    
+        cl = self.get_changelist(request)(request, self.model, self.list_display, self.list_display_links, self.list_filter, self.date_hierarchy, self.search_fields, self.list_select_related, self.list_per_page, self.list_editable, self)   
+        qs =  cl.get_query_set()
+        for row in self.get_dashboard_table(request):
+            dashboard_table_row = []
+            for col in row:
+                dashboard_table_row.append(col.render(qs, self))
+            dashboard_table.append(dashboard_table_row)    
+                
+        extra_context['dashboard_table'] = dashboard_table
+        return render_to_response('admin/dashboard.html', extra_context)
+        
     def get_dashboard_table(self, request):
         return self.dashboard_table
 
 
+    def get_urls(self):
+        from django.conf.urls.defaults import patterns, url
+        info = self.model._meta.app_label, self.model._meta.module_name
+        urlpatterns = patterns('', url(r'^dashboard/$',self.dashboard_view, name='%s_%s_dashboard' % info),) + super(DashboardMixin, self).get_urls()
+        return urlpatterns
+    
 class HighlightedTabularInLine(admin.TabularInline):
     template = 'admin/edit_inline/highlighted_tabular.html'
     

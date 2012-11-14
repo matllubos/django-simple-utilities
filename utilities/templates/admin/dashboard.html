@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+	</head>
+	<base>
+		<table style="margin: 20px auto;">
+			{% for row in dashboard_table %}
+				<tr>
+					{% for col in row %}
+						<td style="border: none; padding: 15px 30px;">{{ col }}</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</table>
+	</base>
+</html>

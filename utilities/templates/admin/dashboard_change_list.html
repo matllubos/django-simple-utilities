@@ -14,12 +14,7 @@
 	{% if show_dashboard %}
 		<script type="text/javascript">
 			$(document).ready(function() {
-				{% if dashboard_table %}
-					$.colorbox({inline:true, href:"#dashboard",opacity: 0.7, scrolling: false});
-		    		$(".dashboard-link").colorbox({inline:true, href:"#dashboard",opacity: 0.7, scrolling: false});
-		    	{% else %}
-		    		$(".dashboard-link").attr('href', '?_show_dashboard=1&{{ request.META.QUERY_STRING|safe }}')
-		    	{% endif %}
+		    	$(".dashboard-link").colorbox({iframe:true, width:"900px", height:"90%", opacity: 0.7});
 		    });  
 		</script>
 	{% endif %}
@@ -27,7 +22,7 @@
 
 {% block object-tools-items %}
 	{% if show_dashboard %}	
-    	<li><a href="" class="dashboard-link">{% trans 'Statistic' %}</a></li>
+    	<li><a href="./dashboard/{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING|safe }}{% endif %}" class="dashboard-link">{% trans 'Statistic' %}</a></li>
     {% endif %}
     {{block.super}}
 {% endblock %}

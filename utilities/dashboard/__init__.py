@@ -133,7 +133,6 @@ class TableDashboardFormatter(FieldDashboardFormatter):
     def get_field_values(self, qs):
         values = SortedDict()
         field = qs.model._meta.get_field(self.field_name) 
-        print field.get_internal_type()
         if (field.choices):
             count = 0
             for choice in field.choices:
