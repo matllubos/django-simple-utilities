@@ -8,12 +8,16 @@ from django.utils.translation import ugettext_lazy as _
 
 class DashboardFormatter(object):
     
-    def __init__(self, title, measure = None):
+    def __init__(self, title, measure = None, colspan=1):
         self.title = title
         self.measure = measure
+        self.colspan = colspan
 
     def get_title(self, model, admin):
         return self.title
+    
+    def get_colspan(self):
+        return self.colspan
     
     def get_measure(self, model):
         if self.measure:
@@ -30,8 +34,8 @@ class DashboardFormatter(object):
     
 class FieldDashboardFormatter(DashboardFormatter):
     
-    def __init__(self, field_name, title = None, measure = None):
-        super(FieldDashboardFormatter, self).__init__(title , measure)
+    def __init__(self, field_name, title = None, measure = None, colspan = 1):
+        super(FieldDashboardFormatter, self).__init__(title , measure, colspan)
         self.field_name = field_name
     
     def get_title(self, model, admin):
@@ -67,8 +71,8 @@ class FieldDashboardFormatter(DashboardFormatter):
 
 class CountDashboardFormatter(DashboardFormatter):
     
-    def __init__(self, title):
-        super(CountDashboardFormatter, self).__init__(title)
+    def __init__(self, title, colspan = 1):
+        super(CountDashboardFormatter, self).__init__(title, colspan)
         
     def get_values(self, qs, admin):
         return qs.count()

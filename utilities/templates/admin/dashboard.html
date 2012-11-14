@@ -7,7 +7,7 @@
 			{% for row in dashboard_table %}
 				<tr>
 					{% for col in row %}
-						<td style="border: none; padding: 15px 30px;">{{ col }}</td>
+						<td style="border: none; padding: 15px 30px;" colspan="{{ col.colspan }}">{{ col.html }}</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}

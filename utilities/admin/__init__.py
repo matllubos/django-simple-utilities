@@ -597,7 +597,7 @@ class DashboardMixin(object):
         for row in self.get_dashboard_table(request):
             dashboard_table_row = []
             for col in row:
-                dashboard_table_row.append(col.render(qs, self))
+                dashboard_table_row.append({'colspan': col.get_colspan(),'html':col.render(qs, self)})
             dashboard_table.append(dashboard_table_row)    
                 
         extra_context['dashboard_table'] = dashboard_table
