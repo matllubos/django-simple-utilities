@@ -121,6 +121,38 @@ def _parse_date_fmt():
             #if not self.first_select: self.first_select = 'day'
     return output
 
+class ImmutableTextInput(forms.TextInput):
+    
+    def render(self, name, value, attrs={}):
+        if value:
+            attrs['readonly'] = 'readonly'
+            attrs['class'] = 'readonly'
+        return super(ImmutableTextInput, self).render(name, value, attrs)
+    
+    class Media:
+        css = {
+               'screen': ('%sutilities/css/models/fields.css' % settings.STATIC_URL,)
+              }
+class ImmutableSelect(forms.Select):
+    
+    def render_option(self, selected_choices, option_value, option_label):
+        disabled_html = (not u'' in selected_choices and not option_value in selected_choices) and ' disabled="disabled"' or ''
+        option_value = force_unicode(option_value)
+        selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
+        return u'<option value="%s"%s%s>%s</option>' % (
+            escape(option_value), selected_html, disabled_html,
+            conditional_escape(force_unicode(option_label)))
+    
+    def render(self, name, value, attrs={}):
+        if value:
+            attrs['class'] = 'readonly'
+        return super(ImmutableSelect, self).render(name, value, attrs)
+    
+    class Media:
+        css = {
+               'screen': ('%sutilities/css/models/fields.css' % settings.STATIC_URL,)
+              }
+               
 class SelectMonthYearWidget(extras.SelectDateWidget):
     def render(self, name, value, attrs=None):
         try:

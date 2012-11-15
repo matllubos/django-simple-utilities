@@ -18,7 +18,7 @@ from sorl.thumbnail import ImageField as SorlImageField
 from django.forms import Form
 from utilities.utils import fit
 from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
-    HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget
+    HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget, ImmutableTextInput, ImmutableSelect
    
 from utilities import forms as utilities_forms
 from utilities.utils import strip_accents
@@ -144,7 +144,8 @@ class NumericIdField(models.CharField):
         defaults = {'regex':r'^\d{%s}$' % self.places,}
         defaults.update(kwargs)
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
-
+   
+    
 class CharIdField(models.CharField):
     
     def __init__(self, verbose_name=None, name=None, places=4, **kwargs):
@@ -425,3 +426,18 @@ class GroupsForeignKey(models.ForeignKey):
         }
         defaults.update(kwargs)
         return super(models.ForeignKey, self).formfield(**defaults)
+    
+#možná by v budoucnu bylo lepší přepsat celé fieldy a dát immutable=True/false   
+class ImmutableCharField(models.CharField):
+    def formfield(self, **kwargs):
+        defaults = {}
+        defaults.update(kwargs)
+        defaults['widget'] = WidgetFactory().create(ImmutableTextInput, {}, kwargs.get('widget', None))
+        return super(ImmutableCharField, self).formfield(**defaults)
+    
+class ImmutableForeignKey(models.ForeignKey):
+    def formfield(self, **kwargs):
+        defaults = {}
+        defaults.update(kwargs)
+        defaults['widget'] = WidgetFactory().create(ImmutableSelect, {}, kwargs.get('widget', None))
+        return super(ImmutableForeignKey, self).formfield(**defaults)

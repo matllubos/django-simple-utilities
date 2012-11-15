@@ -1,6 +1,24 @@
 # coding: utf-8
 from copy import copy as copy_object
 
+def change_id(obj, id):
+    def change_related(obj, old):
+        for link in [rel.get_accessor_name() for rel in old._meta.get_all_related_objects()]:
+            objects = getattr(old, link).all()
+            for rel_obj in objects:
+                for field in rel_obj._meta.fields:
+                    if field.get_internal_type() == "ForeignKey" and isinstance(obj, field.rel.to):
+                        setattr(rel_obj, field.name, obj)
+                rel_obj.save()
+
+    old = obj.__class__.objects.get(id = obj.id)
+    obj.id = id
+    super(obj.__class__, obj).save()
+    change_related(obj, old)
+    old.delete()  
+    
+    
+    
 def rename_unique(obj):
     for field in obj._meta.fields:
         if (field.get_internal_type() ==  "CharField" and field.unique):
