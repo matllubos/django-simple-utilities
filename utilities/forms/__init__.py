@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.models import ModelChoiceIterator, ModelForm
 from django.utils.safestring import mark_safe
 from django.core import validators
-from django.core.validators import EmailValidator
+from django.core.validators import EmailValidator, BaseValidator
 
 from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect
 
@@ -301,3 +301,9 @@ class MultiFieldsValidationModelForm(ModelForm):
         return cleaned_data
     
 
+class AntispamField(forms.IntegerField):
+    def __init__(self, *args, **kwargs):
+        kwargs['label'] = '1+1=?'
+        super(AntispamField, self).__init__(*args,**kwargs)
+        self.validators.append(BaseValidator(2))
+        self.widget.attrs['class'] = 'antispam'
