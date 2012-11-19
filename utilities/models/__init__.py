@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.db.models.signals import post_delete
 
 class UserLanguageProfile(models.Model):
     user = models.OneToOneField(User)
@@ -68,4 +69,19 @@ class GeneratedFile(models.Model):
     content_type = models.ForeignKey(ContentType)
     file = models.FileField(_(u'Exported file'), upload_to="uploads/export/", null=True, blank=True)
     count_objects = models.PositiveIntegerField(_(u'Count objects'))
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            for obj in GeneratedFile.objects.filter(content_type = self.content_type).order_by('-datetime')[20:]:
+                obj.delete()
+        super(GeneratedFile, self).save(*args, **kwargs)
+        
+  
+def remove_files(sender, instance, using, **kwargs):
+    if instance.file:
+        storage, path = instance.file.storage, instance.file.path
+        storage.delete(path)
+    
+post_delete.connect(remove_files, sender=GeneratedFile)
+    
     
