@@ -16,7 +16,7 @@
 							el.find(".image img").attr('src', data.file_image);
 							el.find(".file-name").html(data.file_name);
 							el.find(".file-size").html(data.file_size);
-							el.find(".download").append('<a href="'+data.file_url+'" target="_blank"><img src="{{ STATIC_URL }}utilities/images/icons/download.gif" alt="download" /></a>');
+							el.find(".download").append('<a href="'+data.file_url+'" target="_blank"><img src="{{ STATIC_URL }}utilities/images/icons/download.png" alt="download" /></a>');
 							el.removeClass('progress').addClass('generated').addClass('ready');
 						} else {
 							if (data.error) {
