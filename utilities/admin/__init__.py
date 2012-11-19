@@ -1,5 +1,6 @@
 # coding: utf-8
 import re
+import StringIO
 
 from django.contrib import admin
 from django.db import models
@@ -19,15 +20,19 @@ from django.contrib.admin.util import unquote
 from django.contrib.admin.options import csrf_protect_m
 from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import UploadedFile
-from django.utils import simplejson
+from django.utils import simplejson, translation
 from django.utils.functional import update_wrapper
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
-from utilities.models import HtmlMail, Recipient, Image, SiteEmail
+from utilities.models import HtmlMail, Recipient, Image, SiteEmail, GeneratedFile
 
 from widgets import UpdateRelatedFieldWidgetWrapper
 from django.shortcuts import render_to_response
+from django.core.files.base import ContentFile
+from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
+from utilities.templatetags.generated_file import file_image, filename, sizify, is_error
 
 class RecipientInLine(admin.TabularInline):
     model = Recipient
@@ -526,7 +531,7 @@ class CSVImportForm(forms.Form):
        
 
 class CSVExportMixin(object):
-    change_list_template = 'admin/csv_import_change_list.html'
+    #change_list_template = 'admin/csv_import_change_list.html'
     
     csv_delimiter = ';'
     csv_fields = ()
@@ -579,6 +584,77 @@ class CSVExportMixin(object):
         extra_context['csvimportmixin_super_template'] = sup.change_list_template or 'admin/change_list.html'
         extra_context['import_form'] = import_form
         return sup.changelist_view(request, extra_context=extra_context)
+
+
+class GeneratedFilesMixin(object):
+    change_list_template = 'admin/generated_files_change_list.html'
+    progress_image = '%sutilities/images/icons/progress.gif' % settings.STATIC_URL
+    error_image = '%sutilities/images/icons/error.png' % settings.STATIC_URL
+    file_images = {
+                   'csv': '%sutilities/images/icons/CSV.png' % settings.STATIC_URL, 
+                   'zip': '%sutilities/images/icons/ZIP.png' % settings.STATIC_URL, 
+                   'pdf': '%sutilities/images/icons/PDF.png' % settings.STATIC_URL, 
+                }
+    timeout = 5
+    
+    def get_urls(self):
+        from django.conf.urls.defaults import patterns, url
+        info = self.model._meta.app_label, self.model._meta.module_name
+        urlpatterns = patterns('', 
+                               url(r'^generate-files/$',self.exported_files_view, name='%s_%s_exported_files' % info),
+                               url(r'^generate-files/(.+)/$',self.exported_file_view, name='%s_%s_exported_file' % info),
+                    ) + super(GeneratedFilesMixin, self).get_urls()
+        return urlpatterns
+     
+    def changelist_view(self, request, extra_context={}):   
+        sup = super(GeneratedFilesMixin, self)  
+        extra_context['generated_files_super_template'] = sup.change_list_template or 'admin/change_list.html'
+        return sup.changelist_view(request, extra_context=extra_context)
+    
+    def exported_files_view(self, request, extra_context={}):
+        extra_context['exported_files'] = GeneratedFile.objects.filter(content_type=ContentType.objects.get_for_model(self.model)).order_by('-datetime')
+        extra_context['STATIC_URL'] = settings.STATIC_URL
+        extra_context['progress_image'] = self.progress_image
+        extra_context['error_image'] = self.error_image
+        extra_context['file_images'] = self.file_images
+        extra_context['timeout'] = self.timeout
+         
+        return render_to_response('admin/generated_files.html', extra_context)
+     
+    def exported_file_view(self, request, object_id, extra_context={}):   
+        from django.utils import simplejson  
+        generated_file = GeneratedFile.objects.get(pk=object_id)
+        if generated_file.file:
+            json_data = {
+                            'file_image': file_image(generated_file.file.name, self.file_images),
+                            'file_name':  filename(generated_file.file.name),
+                            'file_url':   generated_file.file.url,
+                            'file_size':  sizify(generated_file.file.size),
+                            'generated':  True
+                        }
+        else:
+            json_data = {
+                            'generated': False,
+                            'error': is_error(generated_file, self.timeout),
+                            'file_image': self.error_image
+                        }
+
+        json_dump = simplejson.dumps(json_data)
+        return HttpResponse(json_dump, mimetype='application/json')
+    
+class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
+    
+    
+    def export_csv(self, request, queryset):
+        from utilities.tasks import generate_csv
+        gf = GeneratedFile(content_type=ContentType.objects.get_for_model(self.model), count_objects=queryset.count())
+        gf.save()
+        messages.info(request, _('Objects is exporting to CSV'), extra_tags='generated-files-info %s' % gf.pk)
+        generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), self.csv_fields, self.csv_header, self.csv_delimiter, self.csv_quotechar, self.csv_DB_values, self.csv_formatters, self.csv_encoding, translation.get_language())
+     
+   
+        
+    
     
 class DashboardMixin(object):
     change_list_template = 'admin/dashboard_change_list.html'

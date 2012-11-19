@@ -1,0 +1,64 @@
+{% load generated_file i18n %}
+
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}admin/css/base.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}utilities/css/generated-files.css" />
+		<script src="{{ STATIC_URL }}utilities/js/jquery-1.6.4.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			function updateFiles() {
+				var callAgain = false;
+				$(".progress").each(function(){
+					var el= $(this);
+					var elId = el.attr('id');
+					$.getJSON('./'+elId+'/', function(data) {
+						if (data.generated) {
+							el.find(".image img").attr('src', data.file_image);
+							el.find(".file-name").html(data.file_name);
+							el.find(".file-size").html(data.file_size);
+							el.find(".download").append('<a href="'+data.file_url+'" target="_blank"><img src="{{ STATIC_URL }}utilities/images/icons/download.gif" alt="download" /></a>');
+							el.removeClass('progress').addClass('generated').addClass('ready');
+						} else {
+							if (data.error) {
+								el.removeClass('progress').addClass('error');
+								el.find(".file-name").html('error');
+								el.find(".image img").attr('src', data.file_image);
+							} else {
+								callAgain = true;
+							}
+						}			  
+
+					});
+				})
+				
+				if (callAgain) {
+					setTimeout(function(){ 
+			    		updateFiles(); 
+			    	  }, 1000 );
+				}
+			}
+			
+			$(document).ready(function() {
+				$.ajaxSetup({'async': false});
+		    	setTimeout(function(){ 
+		    		updateFiles(); 
+		    	  }, 1000 );
+			});  
+		</script>
+	</head>
+	<base>
+		<table>
+			<tr><th>{% trans 'File type' %}</th><th>{% trans 'Count objects' %}</th><th>{% trans 'File name' %}</th><th>{% trans 'Date and time' %}</th><th>{% trans 'File size' %}</th><th>{% trans 'Download' %}</th></tr>
+			{% for file in exported_files %}
+				<tr id="{{ file.pk }}" class="{% if file.file %}generated{% else %}progress{% endif %}{% if not file.file %}{% error_class file timeout %}{% else %}{% ready_class file %}{% endif %}">
+					<td class="image"><img src="{% file_image file file_images progress_image error_image timeout %}" alt="{{ file.file.name }}" /></td>
+					<td class="count">{{ file.count_objects }}</td>
+					<td class="file-name">{% filename file timeout %}</td>
+					<td class="datetime">{{ file.datetime }}</td>
+					<td class="file-size">{% if file.file %}{{ file.file.size|sizify }}{% endif %}</td>
+					<td class="download">{% if file.file %}<a href="{{ file.file.url }}" target="_blank"><img src="{{ STATIC_URL }}utilities/images/icons/download.png" alt="download" /></a>{% endif %}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</base>
+</html>

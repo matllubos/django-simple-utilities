@@ -41,7 +41,7 @@
         {% endif %}
       {% endblock %}
 
-	  {% if import%}
+	  {% if import %}
 	    <div class="actions right">
 		    <form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
 	   		   <label>{% trans 'CSV file' %}: {{ import_form.csv_file }} </label> 
