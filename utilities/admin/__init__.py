@@ -595,7 +595,7 @@ class GeneratedFilesMixin(object):
                    'zip': '%sutilities/images/icons/ZIP.png' % settings.STATIC_URL, 
                    'pdf': '%sutilities/images/icons/PDF.png' % settings.STATIC_URL, 
                 }
-    timeout = 5
+    timeout = 30
     
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
@@ -626,8 +626,8 @@ class GeneratedFilesMixin(object):
         generated_file = GeneratedFile.objects.get(pk=object_id)
         if generated_file.file:
             json_data = {
-                            'file_image': file_image(generated_file.file.name, self.file_images),
-                            'file_name':  filename(generated_file.file.name),
+                            'file_image': file_image(generated_file, self.file_images, self.progress_image, self.error_image, self.timeout),
+                            'file_name':  filename(generated_file, self.timeout),
                             'file_url':   generated_file.file.url,
                             'file_size':  sizify(generated_file.file.size),
                             'generated':  True
@@ -649,7 +649,7 @@ class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
         from utilities.tasks import generate_csv
         gf = GeneratedFile(content_type=ContentType.objects.get_for_model(self.model), count_objects=queryset.count())
         gf.save()
-        messages.info(request, _('Objects is exporting to CSV'), extra_tags='generated-files-info %s' % gf.pk)
+        messages.info(request, _(u'Objects is exporting to CSV'), extra_tags='generated-files-info')
         generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), self.csv_fields, self.csv_header, self.csv_delimiter, self.csv_quotechar, self.csv_DB_values, self.csv_formatters, self.csv_encoding, translation.get_language())
      
    
