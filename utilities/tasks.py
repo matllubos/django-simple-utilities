@@ -9,21 +9,23 @@ from django.core.files.base import ContentFile
 from utilities.csv_generator import CsvGenerator
 from django.utils import translation
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import admin
 
 
 @task()
-def generate_csv(generated_file_pk, app_label, model_name, ids, csv_fields, csv_header, csv_delimiter, csv_quotechar, csv_DB_values, csv_formatters, csv_encoding, language):
+def generate_csv(generated_file_pk, app_label, model_name, ids, language):
     try:
         generated_file = GeneratedFile.objects.get(pk = generated_file_pk)
-        
-        csv_fields = pickle.loads(csv_fields)
-        csv_formatters = pickle.loads(csv_formatters)
+        admin.autodiscover()
+        model = get_model(app_label, model_name)
+        model_admin = admin.site._registry[model]
+
         
         translation.activate(language)
         model = get_model(app_label, model_name)
         queryset = model.objects.filter(pk__in = ids)    
         output = StringIO.StringIO()   
-        csv_generator = CsvGenerator(model, csv_fields, header=csv_header, delimiter=csv_delimiter, quotechar = csv_quotechar, DB_values = csv_DB_values, csv_formatters=csv_formatters, encoding=csv_encoding)
+        csv_generator = CsvGenerator(model, model_admin.csv_fields, header=model_admin.csv_header, delimiter=model_admin.csv_delimiter, quotechar = model_admin.csv_quotechar,  DB_values = model_admin.csv_DB_values, csv_formatters=model_admin.csv_formatters, encoding=model_admin.csv_encoding)
         csv_generator.export_csv(output, queryset)
             
         generated_file.file.save('%s-%s.csv' % (model_name, generated_file.datetime), ContentFile(output.getvalue()))

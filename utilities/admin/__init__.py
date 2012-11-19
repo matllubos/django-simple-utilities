@@ -648,10 +648,11 @@ class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
     
     def export_csv(self, request, queryset):
         from utilities.tasks import generate_csv
+
         gf = GeneratedFile(content_type=ContentType.objects.get_for_model(self.model), count_objects=queryset.count())
         gf.save()
         messages.info(request, _(u'Objects is exporting to CSV'), extra_tags='generated-files-info')
-        generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), pickle.dumps(self.csv_fields), self.csv_header, self.csv_delimiter, self.csv_quotechar, self.csv_DB_values, pickle.dumps(self.csv_formatters), self.csv_encoding, translation.get_language())
+        generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), translation.get_language())
      
    
         

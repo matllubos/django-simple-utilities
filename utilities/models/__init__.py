@@ -69,5 +69,3 @@ class GeneratedFile(models.Model):
     file = models.FileField(_(u'Exported file'), upload_to="uploads/export/", null=True, blank=True)
     count_objects = models.PositiveIntegerField(_(u'Count objects'))
     
-    
-    
