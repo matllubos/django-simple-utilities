@@ -596,7 +596,7 @@ class GeneratedFilesMixin(object):
                    'zip': '%sutilities/images/icons/ZIP.png' % settings.STATIC_URL, 
                    'pdf': '%sutilities/images/icons/PDF.png' % settings.STATIC_URL, 
                 }
-    timeout = 30
+    timeout = 120
     
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
