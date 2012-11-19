@@ -1,4 +1,5 @@
 import StringIO
+import pickle
 
 from celery import task
 from django.db.models import get_model
@@ -14,6 +15,9 @@ from django.core.exceptions import ObjectDoesNotExist
 def generate_csv(generated_file_pk, app_label, model_name, ids, csv_fields, csv_header, csv_delimiter, csv_quotechar, csv_DB_values, csv_formatters, csv_encoding, language):
     try:
         generated_file = GeneratedFile.objects.get(pk = generated_file_pk)
+        
+        csv_fields = pickle.loads(csv_fields)
+        csv_formatters = pickle.loads(csv_formatters)
         
         translation.activate(language)
         model = get_model(app_label, model_name)
