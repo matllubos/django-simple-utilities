@@ -23,17 +23,17 @@ from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import UploadedFile
 from django.utils import simplejson, translation
 from django.utils.functional import update_wrapper
-
-from utilities.deep_copy import deep_copy
-from utilities.csv_generator import CsvGenerator
-from utilities.models import HtmlMail, Recipient, Image, SiteEmail, GeneratedFile
-
-from widgets import UpdateRelatedFieldWidgetWrapper
 from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+
+from utilities.deep_copy import deep_copy
+from utilities.csv_generator import CsvGenerator
+from utilities.models import HtmlMail, Recipient, Image, SiteEmail, GeneratedFile
 from utilities.templatetags.generated_file import file_image, filename, sizify, is_error
+
+from widgets import UpdateRelatedFieldWidgetWrapper
 
 class RecipientInLine(admin.TabularInline):
     model = Recipient
@@ -652,7 +652,7 @@ class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
         gf = GeneratedFile(content_type=ContentType.objects.get_for_model(self.model), count_objects=queryset.count())
         gf.save()
         messages.info(request, _(u'Objects is exporting to CSV'), extra_tags='generated-files-info')
-        generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), translation.get_language())
+        generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), self.csv_fields, translation.get_language())
      
    
         
