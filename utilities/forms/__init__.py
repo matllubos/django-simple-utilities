@@ -184,7 +184,6 @@ class GroupsModelChoiceField(forms.ModelChoiceField):
     def __init__(self, queryset, group_by,  order_by, *args, **kwargs):
         self.group_by = group_by
         self.order_by = order_by
-        kwargs['widget'] = MultipleOptgroupSelect
         super(GroupsModelChoiceField, self).__init__(queryset, *args, **kwargs)
 
     def _get_choices(self):

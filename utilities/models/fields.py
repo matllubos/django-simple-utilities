@@ -18,7 +18,8 @@ from sorl.thumbnail import ImageField as SorlImageField
 from django.forms import Form
 from utilities.utils import fit
 from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
-    HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget, ImmutableTextInput, ImmutableSelect
+    HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget, ImmutableTextInput, ImmutableSelect,\
+    MultipleOptgroupSelect
    
 from utilities import forms as utilities_forms
 from utilities.utils import strip_accents
@@ -422,7 +423,8 @@ class GroupsForeignKey(models.ForeignKey):
             'queryset': self.rel.to._default_manager.using(db).complex_filter(self.rel.limit_choices_to),
             'to_field_name': self.rel.field_name,
             'group_by': self.group_by,
-            'order_by': self.order_by
+            'order_by': self.order_by,
+            'widget': MultipleOptgroupSelect
         }
         defaults.update(kwargs)
         return super(models.ForeignKey, self).formfield(**defaults)
