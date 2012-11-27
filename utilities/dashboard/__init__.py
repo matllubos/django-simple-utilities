@@ -6,12 +6,25 @@ from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext_lazy as _
 
+from utilities.dashboard.widgets import TableDashboardWidget, DashboardWidget,\
+    BarGraphDashboardWidget
+
+
 class DashboardFormatter(object):
     
-    def __init__(self, title, measure = None, colspan=1):
+    widget = DashboardWidget
+    
+    def __init__(self, title, name, measure = None, colspan=1, widget=None):
         self.title = title
         self.measure = measure
         self.colspan = colspan
+        widget = widget or self.widget
+        if isinstance(widget, type):
+            widget = widget()
+        widget.colspan = colspan
+        widget.name = name
+        self.widget_instance = widget
+        
 
     def get_title(self, model, admin):
         return self.title
@@ -25,17 +38,17 @@ class DashboardFormatter(object):
         return ''
     
     def render(self, qs, admin):
-        values = self.get_values(qs, admin)
+        value = self.get_values(qs, admin)
         model = qs.model  
-        return mark_safe(u'<table><th>%s:</th><td>%s %s</td></table>' % (force_unicode(self.get_title(model, admin)), force_unicode(values), force_unicode(self.get_measure(model))))
-    
+        return self.widget_instance.render(value, self.get_title(model, admin), self.get_measure(model))
+      
     def get_values(self, qs, admin):
         return None
     
 class FieldDashboardFormatter(DashboardFormatter):
     
-    def __init__(self, field_name, title = None, measure = None, colspan = 1):
-        super(FieldDashboardFormatter, self).__init__(title , measure, colspan)
+    def __init__(self, field_name, title = None, measure = None, colspan = 1, widget = None):
+        super(FieldDashboardFormatter, self).__init__(title, field_name , measure, colspan, widget)
         self.field_name = field_name
     
     def get_title(self, model, admin):
@@ -72,7 +85,7 @@ class FieldDashboardFormatter(DashboardFormatter):
 class CountDashboardFormatter(DashboardFormatter):
     
     def __init__(self, title, colspan = 1):
-        super(CountDashboardFormatter, self).__init__(title, colspan=colspan)
+        super(CountDashboardFormatter, self).__init__(title, 'objects-count', colspan=colspan)
         
     def get_values(self, qs, admin):
         return qs.count()
@@ -117,23 +130,12 @@ class AvgDashboardFormatter(FieldDashboardFormatter):
 
 class TableDashboardFormatter(FieldDashboardFormatter):
      
+    widget = TableDashboardWidget
+    
     def __init__(self, field_name, other_title = _(u'Other'), *args, **kwargs):
         super(TableDashboardFormatter, self).__init__(field_name, *args, **kwargs)
         self.other_title = other_title
-    
-    def render(self, qs, admin):
-        values = self.get_values(qs, admin)
-        model = qs.model  
-        rows = []      
-        rows.append(self.render_title(self.get_title(model, admin)))
-        
-        for key, value in values.items():
-            rows.append(u'<tr><td>%s</td><td>%s %s</td></tr>' % (force_unicode(key), force_unicode(value), force_unicode(self.get_measure(model)))) 
-        return mark_safe(u'<table>%s</table>' % u'\n'.join(rows))
-
-    def render_title(self, title):
-        return u'<tr><th colspan="2">%s</th></tr>' % title
- 
+     
     def get_field_values(self, qs):
         values = SortedDict()
         field = qs.model._meta.get_field(self.field_name) 
@@ -188,3 +190,116 @@ class TableDashboardFormatter(FieldDashboardFormatter):
             else:
                 values[val] = 1
         return values 
+    
+
+        
+    
+class DaysDashboardFormatter(FieldDashboardFormatter):    
+    widget = TableDashboardWidget
+    days = [_('Sunday'), _('Monday'), _('Tuesday'), _('Wednesday'), _('Thursday'), _('Friday'), _('Saturday')]
+    first_day = 1
+    
+    def get_field_values(self, qs):
+        values = SortedDict()
+        i = self.first_day
+        while i < self.first_day + 7:
+            values[force_unicode(self.days[i % 7])] = qs.filter(**{'%s__week_day' % self.field_name: i % 7}).count()
+            i+= 1
+        return values
+    
+    def get_method_values(self, qs):
+        values = SortedDict()
+        for obj in qs:
+            val = getattr(obj, self.field_name)().isoweekday()
+            if val == 7:
+                val = 0
+
+            day_name = force_unicode(self.days[val])
+            
+            if (values.has_key(day_name)):
+                values[day_name] += 1
+            else:
+                values[day_name] = 1
+        return values 
+    
+    def get_admin_method_values(self, qs, admin):       
+        values = SortedDict()
+        for obj in qs:
+            val = getattr(admin, self.field_name)(obj).isoweekday()
+            if val == 7:
+                val = 0
+
+            day_name = force_unicode(self.days[val])
+            
+            if (values.has_key(day_name)):
+                values[day_name] += 1
+            else:
+                values[day_name] = 1
+        return values 
+    
+
+class DayPartsDashboardFormatter(FieldDashboardFormatter):    
+    widget = TableDashboardWidget
+    
+    def __init__(self, field_name, part_size = 3, *args, **kwargs):
+        super(DayPartsDashboardFormatter, self).__init__(field_name, *args, **kwargs)
+        self.part_size = part_size
+    
+    
+    def get_parts(self):
+        parts = []
+        for i in range(0, 24, self.part_size):
+            parts.append({'from': i, 'to':i+self.part_size})
+        return parts
+        
+        
+    def get_field_values(self, qs):
+        values = SortedDict()
+        parts = self.get_parts()
+        for part in parts:
+            part_name = '%sh - %sh' %(part['from'], part['to'])
+            values[part_name] = 0
+        
+        for obj in qs:
+            val = getattr(obj, self.field_name).hour
+            
+            for part in parts:
+                if val >= part['from'] and val < part['to']:
+                    part_name = '%sh - %sh' %(part['from'], part['to'])
+                    values[part_name] += 1
+                    
+        return values
+    
+    def get_method_values(self, qs):
+        values = SortedDict()
+        parts = self.get_parts()
+        for part in parts:
+            part_name = '%sh - %sh' %(part['from'], part['to'])
+            values[part_name] = 0
+        for obj in qs:
+            val = getattr(obj, self.field_name)().hour
+            
+            for part in parts:
+                if val >= part['from'] and val < part['to']:
+                    part_name = '%sh - %sh' %(part['from'], part['to'])
+                    values[part_name] += 1
+
+        return values 
+    
+    def get_admin_method_values(self, qs, admin):           
+        values = SortedDict()
+        parts = self.get_parts()
+        for part in parts:
+            part_name = '%sh - %sh' %(part['from'], part['to'])
+            values[part_name] = 0
+        for obj in qs:
+            val = getattr(admin, self.field_name)(obj).hour
+            
+            for part in parts:
+                if val >= part['from'] and val < part['to']:
+                    part_name = '%sh - %sh' %(part['from'], part['to'])
+                    values[part_name] += 1
+                    
+        return values 
+    
+    
