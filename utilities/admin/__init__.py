@@ -599,11 +599,16 @@ class GeneratedFilesMixin(object):
     timeout = 120
     
     def get_urls(self):
+        def wrap(view):
+            def wrapper(*args, **kwargs):
+                return self.admin_site.admin_view(view)(*args, **kwargs)
+            return update_wrapper(wrapper, view)
+        
         from django.conf.urls.defaults import patterns, url
         info = self.model._meta.app_label, self.model._meta.module_name
         urlpatterns = patterns('', 
-                               url(r'^generate-files/$',self.exported_files_view, name='%s_%s_exported_files' % info),
-                               url(r'^generate-files/(.+)/$',self.exported_file_view, name='%s_%s_exported_file' % info),
+                               url(r'^generate-files/$',wrap(self.exported_files_view), name='%s_%s_exported_files' % info),
+                               url(r'^generate-files/(.+)/$',wrap(self.exported_file_view), name='%s_%s_exported_file' % info),
                     ) + super(GeneratedFilesMixin, self).get_urls()
         return urlpatterns
      
@@ -692,9 +697,14 @@ class DashboardMixin(object):
 
 
     def get_urls(self):
+        def wrap(view):
+            def wrapper(*args, **kwargs):
+                return self.admin_site.admin_view(view)(*args, **kwargs)
+            return update_wrapper(wrapper, view)
+        
         from django.conf.urls.defaults import patterns, url
         info = self.model._meta.app_label, self.model._meta.module_name
-        urlpatterns = patterns('', url(r'^dashboard/$',self.dashboard_view, name='%s_%s_dashboard' % info),) + super(DashboardMixin, self).get_urls()
+        urlpatterns = patterns('', url(r'^dashboard/$',wrap(self.dashboard_view), name='%s_%s_dashboard' % info),) + super(DashboardMixin, self).get_urls()
         return urlpatterns
     
 class HighlightedTabularInLine(admin.TabularInline):
