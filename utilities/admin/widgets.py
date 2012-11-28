@@ -42,17 +42,17 @@ class UpdateRelatedFieldWidgetWrapper(widgets.RelatedFieldWidgetWrapper):
         if self.can_add_related:
             # TODO: "id_" is hard-coded here. This should instead use the correct
             # API to determine the ID dynamically.
-            output.append(u'<a href="%s" class="add-another" id="add_id_%s" onclick="return showAddAnotherPopup(this);"> ' % \
-                (related_url, name))
+            output.append(u'<a href="%s" class="add-another" id="add_id_%s" onclick="return showAddAnotherPopup(this);" title="%s"> ' % \
+                (related_url, name, _('Add Another')))
             output.append(u'<img src="%simg/admin/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Add Another')))
         
         if can_update_related:   
-            output.append(u'<a href="%s" class="edit-another" id="edit_id_%s" onclick="return showEditAnotherPopup(this);"> ' % \
-                (update_related_url, name))
+            output.append(u'<a href="%s" class="edit-another" id="edit_id_%s" onclick="return showEditAnotherPopup(this);" title="%s"> ' % \
+                (update_related_url, name, _('Change')))
             output.append(u'<img src="%simg/admin/selector-search.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Change')))
               
-            output.append(u'<a href="%s" class="delete-another" id="delete_id_%s" onclick="return showDeleteAnotherPopup(this);"> ' % \
-                (delete_related_url, name))
+            output.append(u'<a href="%s" class="delete-another" id="delete_id_%s" onclick="return showDeleteAnotherPopup(this);" title="%s"> ' % \
+                (delete_related_url, name, _('Delete')))
             output.append(u'<img src="%simg/admin/icon_deletelink.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Delete')))
             
             
