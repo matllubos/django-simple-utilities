@@ -678,17 +678,22 @@ class DashboardMixin(object):
         cl = self.get_changelist(request)(request, self.model, self.list_display, self.list_display_links, self.list_filter, self.date_hierarchy, self.search_fields, self.list_select_related, self.list_per_page, self.list_editable, self)   
         qs =  cl.get_query_set()
         
+        
+        media = {'js': [], 'css': {'print': [], 'screen': []}}
+        
         row_num = 0
         for row in self.get_dashboard_table(request):
             dashboard_table_row = []
             
             col_num = 0
             for col in row:
+                media = col.widget_instance.get_media(media)
                 col.widget_instance.prefix = '%s-%s' % (row_num, col_num)
                 dashboard_table_row.append({'colspan': col.get_colspan(),'html':col.render(qs, self)})
                 col_num += 1
             dashboard_table.append(dashboard_table_row)    
             row_num += 1    
+        extra_context['media'] = media
         extra_context['dashboard_table'] = dashboard_table
         return render_to_response('admin/dashboard.html', extra_context)
         

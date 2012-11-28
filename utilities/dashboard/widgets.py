@@ -1,7 +1,10 @@
 # coding: utf-8
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
+from django.conf import settings
 
+    
+    
 
 class DashboardWidget(object):
         
@@ -13,7 +16,24 @@ class DashboardWidget(object):
     def render(self, value, title, measure=None):
         return mark_safe(u'<table id="dashboard-%s"><th>%s:</th><td>%s %s</td></table>' % (self.id, force_unicode(title), force_unicode(value), force_unicode(measure)))
     
-    
+    def get_media(self, media):
+        for js in self.Media.js:
+            if not js in media['js']:
+                media['js'].append(js)
+                
+        for css in self.Media.css.get('print', []):
+            if not css in media['css']['print']:
+                media['css']['print'].append(css)
+        
+        for css in self.Media.css.get('screen', []):
+            if not css in media['css']['screen']:
+                media['css']['screen'].append(css)        
+        
+        return media
+        
+    class Media():
+        js = []
+        css = {'print': [], 'screen': []}
     
 class TableDashboardWidget(DashboardWidget):
     
@@ -53,7 +73,9 @@ class BarGraphDashboardWidget(DashboardWidget):
                             plot1 = $.jqplot(\'%s\', [values], {\n\
                             // Only animate if we\'re not using excanvas (not in IE 7 or IE 8)..\n\
                             animate: !$.jqplot.use_excanvas,\n\
-                            series:[{renderer:$.jqplot.BarRenderer}], \n\
+                            seriesDefaults:{\n\
+                                renderer:$.jqplot.BarRenderer,\n\
+                            },\n\
                             axesDefaults: {\n\
                                 tickRenderer: $.jqplot.CanvasAxisTickRenderer ,\n\
                                 tickOptions: { \n\
@@ -74,9 +96,26 @@ class BarGraphDashboardWidget(DashboardWidget):
                               }\n\
                             }\n\
                         });\n\
-                    });</script>' % (u', '.join(graph_data), 'chart-%s' % self.id))
+                    });</script>' % (u','.join(graph_data), 'chart-%s' % self.id))
         return mark_safe(u'<table id="dashboard-%s">%s</table>' % (self.id, u'\n'.join(rows)))
-        
+    
+    class Media():
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/jquery.jqplot.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.barRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.pieRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.categoryAxisRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.dateAxisRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.canvasTextRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.canvasAxisTickRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.categoryAxisRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.pointLabels.min.js' % settings.STATIC_URL,
+        )
+        css = {'screen': (
+                      '%sutilities/jqplot/css/jquery.jqplot.min.css' % settings.STATIC_URL,
+                      '%sutilities/jqplot/css/dashboard.css' % settings.STATIC_URL,      
+                      )}
         
         
         
