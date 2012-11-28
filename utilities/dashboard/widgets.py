@@ -58,7 +58,7 @@ class BarGraphDashboardWidget(DashboardWidget):
         rows = []      
         rows.append(self.render_title(title))
         
-        rows.append(u'<tr><td><div id="chart-%s" style="margin-top:20px; margin-left:20px; width:350px; height:300px;"></div></td></tr>' % (self.id)) 
+        rows.append(u'<tr><td><div id="chart-%s" style="margin-top:20px; margin-left:20px; width:350px; height:300px;"></div>' % (self.id)) 
         
         graph_data = []
         for key, value in values.items():
@@ -68,9 +68,9 @@ class BarGraphDashboardWidget(DashboardWidget):
         
         rows.append(u'<script class="code" type="text/javascript">$(document).ready(function(){\n\
                         $.jqplot.config.enablePlugins = true;\n\
-                            var values = [%s];\n\
+                            var values_%s = [%s];\n\
                             \n\
-                            plot1 = $.jqplot(\'%s\', [values], {\n\
+                            plot_%s = $.jqplot(\'%s\', [values_%s], {\n\
                             // Only animate if we\'re not using excanvas (not in IE 7 or IE 8)..\n\
                             animate: !$.jqplot.use_excanvas,\n\
                             seriesDefaults:{\n\
@@ -96,7 +96,9 @@ class BarGraphDashboardWidget(DashboardWidget):
                               }\n\
                             }\n\
                         });\n\
-                    });</script>' % (u','.join(graph_data), 'chart-%s' % self.id))
+                    });</script>' % (self.id.replace('-', '_'),u','.join(graph_data), self.id.replace('-', '_'), 'chart-%s' % self.id, self.id.replace('-', '_'),))
+        
+        rows.append('</td></tr>')
         return mark_safe(u'<table id="dashboard-%s">%s</table>' % (self.id, u'\n'.join(rows)))
     
     class Media():
@@ -107,10 +109,14 @@ class BarGraphDashboardWidget(DashboardWidget):
               '%sutilities/jqplot/js/plugins/jqplot.pieRenderer.min.js' % settings.STATIC_URL,
               '%sutilities/jqplot/js/plugins/jqplot.categoryAxisRenderer.min.js' % settings.STATIC_URL,
               '%sutilities/jqplot/js/plugins/jqplot.dateAxisRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.logAxisRenderer.min.js' % settings.STATIC_URL,
               '%sutilities/jqplot/js/plugins/jqplot.canvasTextRenderer.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.canvasAxisLabelRenderer.min.js' % settings.STATIC_URL,
               '%sutilities/jqplot/js/plugins/jqplot.canvasAxisTickRenderer.min.js' % settings.STATIC_URL,
               '%sutilities/jqplot/js/plugins/jqplot.categoryAxisRenderer.min.js' % settings.STATIC_URL,
               '%sutilities/jqplot/js/plugins/jqplot.pointLabels.min.js' % settings.STATIC_URL,
+              '%sutilities/jqplot/js/plugins/jqplot.dateAxisRenderer.min.js' % settings.STATIC_URL,
+
         )
         css = {'screen': (
                       '%sutilities/jqplot/css/jquery.jqplot.min.css' % settings.STATIC_URL,

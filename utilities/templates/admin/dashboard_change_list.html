@@ -9,12 +9,12 @@
 
 {% block extrahead %}
 	{{ block.super }}
-	<script src="{{ STATIC_URL }}utilities/js/jquery-1.6.4-min.js" type="text/javascript"></script>
+	<script src="{{ STATIC_URL }}utilities/js/jquery-1.6.4.min.js" type="text/javascript"></script>
 	<script src="{{ STATIC_URL }}utilities/admin/js/jquery.colorbox-min.js" type="text/javascript"></script>
 	{% if show_dashboard %}
 		<script type="text/javascript">
 			$(document).ready(function() {
-		    	$(".dashboard-link").colorbox({iframe:true, width:"1000px", height:"90%", opacity: 0.7});
+		    	$(".dashboard-link").colorbox({transition: 'none', iframe: true, width:"1000px", height:"90%", opacity: 0.7});
 		    });  
 		</script>
 	{% endif %}
@@ -26,25 +26,3 @@
     {% endif %}
     {{block.super}}
 {% endblock %}
-
-{% block content %}
-	{{ block.super }}
-	{% if dashboard_table %}
-		<div style="display: none;">
-			<div class="dashboard mycolorbox" id="dashboard">
-				<table>
-					{% for row in dashboard_table %}
-						<tr>
-							{% for col in row %}
-								<td style="border: none; padding: 15px 30px;">{{ col }}</td>
-							{% endfor %}
-						</tr>
-					{% endfor %}
-				</table>
-			</div>
-		</div>
-	{% endif %}
-{% endblock %}
-
-
-

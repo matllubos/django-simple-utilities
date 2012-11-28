@@ -138,6 +138,8 @@ class TableDashboardFormatter(FieldDashboardFormatter):
      
     def get_field_values(self, qs):
         values = SortedDict()
+        other = 0
+        
         field = qs.model._meta.get_field(self.field_name) 
         if (field.choices):
             count = 0
@@ -145,7 +147,7 @@ class TableDashboardFormatter(FieldDashboardFormatter):
                 num = qs.filter(**{field.name:choice[0]}).count()
                 if (choice[0] != 'other'): values[choice[1]] = num
                 count += num
-            if (qs.count() != count): values[self.other_title] = qs.count() - count
+            if (qs.count() != count): other = qs.count() - count
            
         elif (field.get_internal_type() == "ManyToManyField"):
             for obj in qs:
@@ -162,33 +164,44 @@ class TableDashboardFormatter(FieldDashboardFormatter):
         elif (field.get_internal_type() == "OrderedForeignKey" or field.get_internal_type() == "ForeignKey" or field.get_internal_type() == "CharField"):
             for obj in qs:
                 val = getattr(obj, field.name)
-                if (not val): val = self.other_title
-                if (values.has_key(val)):
+                if (not val): other += 1
+                elif (values.has_key(val)):
                     values[val] += 1
                 else:
                     values[val] = 1
+        
+        if other != 0:          
+            values[self.other_title] = other
         return values
     
     def get_method_values(self, qs):
         values = SortedDict()
+        other = 0
         for obj in qs:
             val = getattr(obj, self.field_name)()
-            if (not val): val = self.other_title
-            if (values.has_key(val)):
+            if (not val): other += 1
+            elif (values.has_key(val)):
                 values[val] += 1
             else:
                 values[val] = 1
+        
+        if other != 0:          
+            values[self.other_title] = other
         return values 
     
     def get_admin_method_values(self, qs, admin):
         values = SortedDict()
+        other = 0
         for obj in qs:
             val = getattr(admin, self.field_name)(obj)
-            if (not val): val = self.other_title
-            if (values.has_key(val)):
+            if (not val): other += 1
+            elif (values.has_key(val)):
                 values[val] += 1
             else:
                 values[val] = 1
+        
+        if other != 0:          
+            values[self.other_title] = other
         return values 
     
 
