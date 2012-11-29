@@ -71,8 +71,6 @@ class BarGraphDashboardWidget(DashboardWidget):
                             var values_%s = [%s];\n\
                             \n\
                             plot_%s = $.jqplot(\'%s\', [values_%s], {\n\
-                            // Only animate if we\'re not using excanvas (not in IE 7 or IE 8)..\n\
-                            animate: !$.jqplot.use_excanvas,\n\
                             seriesDefaults:{\n\
                                 renderer:$.jqplot.BarRenderer,\n\
                             },\n\
