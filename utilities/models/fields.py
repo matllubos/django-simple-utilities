@@ -443,3 +443,18 @@ class ImmutableForeignKey(models.ForeignKey):
         defaults.update(kwargs)
         defaults['widget'] = WidgetFactory().create(ImmutableSelect, {}, kwargs.get('widget', None))
         return super(ImmutableForeignKey, self).formfield(**defaults)
+
+
+class NullableCharField(models.CharField):
+    description = "CharField that obeys null=True"
+    
+    def __init__(self, *args, **kwargs):
+        super(NullableCharField, self).__init__(null=True, blank=True, *args,  **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, models.CharField):
+            return value
+        return value or ""
+
+    def get_db_prep_value(self, value):
+        return value or None

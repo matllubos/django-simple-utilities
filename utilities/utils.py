@@ -1,9 +1,11 @@
 # coding: utf-8
 import re
 import unicodedata
+from types import UnicodeType
 
-from django.contrib.admin.util import quote as django_quote, unquote as django_unquote
-from django.utils.encoding import force_unicode
+from django.contrib.admin.util import quote as django_quote
+from django.utils.functional import lazy
+from django.utils.safestring import mark_safe
 
 def listToDict(aList):
     i = 0
@@ -45,3 +47,6 @@ def quote(url):
 
 def strip_accents(s):
     return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
+
+
+mark_safe_lazy = lazy(mark_safe, UnicodeType)

@@ -25,9 +25,10 @@ def rename_unique(obj):
             origin_val = getattr(obj, field.name)
             val = origin_val
             i = 1
-            while (obj.__class__.objects.filter(**{field.name: val})):
-                val = origin_val + '(%s)' % i
-                i +=1
+            if val == None:
+                while (obj.__class__.objects.filter(**{field.name: val})):
+                    val = origin_val + '(%s)' % i
+                    i +=1
 
             setattr(obj, field.name, val)
     
