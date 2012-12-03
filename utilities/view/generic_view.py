@@ -21,8 +21,8 @@ class FormsMixin(object):
             return self.messages_invalid.get(form_key)
         return self.messages_invalid.get('default')
     
-    def form_invalid(self, form, form_key):
-        message_text = self.get_invalid_message(form, form_key)
+    def form_invalid(self, form, form_key, message_text= None):
+        message_text = message_text or self.get_invalid_message(form, form_key)
         if message_text:
             messages.error(
                 self.request,
@@ -31,8 +31,8 @@ class FormsMixin(object):
             )
         return self.get(self.request)
     
-    def form_valid(self, form, form_key):
-        message_text = self.get_valid_message(form, form_key)
+    def form_valid(self, form, form_key, message_text = None):
+        message_text = message_text or self.get_valid_message(form, form_key)
         if message_text:
             messages.success(
                 self.request,
@@ -100,3 +100,4 @@ class ListFormsView(FormsMixin, ListView):
     
 class FormsView(FormsMixin, TemplateView):
     pass
+    
