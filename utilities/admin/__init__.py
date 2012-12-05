@@ -103,7 +103,8 @@ class RelatedToolsAdmin(admin.ModelAdmin):
         extra_context['is_popup'] = "_popup" in request.REQUEST
         return super(RelatedToolsAdmin, self).delete_view(request, object_id, extra_context=extra_context)
             
-        
+    
+
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         if isinstance(db_field, (models.ForeignKey, models.ManyToManyField)):
@@ -117,18 +118,20 @@ class RelatedToolsAdmin(admin.ModelAdmin):
                 formfield = self.formfield_for_manytomany(db_field, request, **kwargs)
 
 
-            if formfield and db_field.name not in self.raw_id_fields:
+            if formfield and db_field.name not in self.raw_id_fields and (not hasattr(db_field.rel.to._meta, 'admin_foreign_key_tools') or db_field.rel.to._meta.admin_foreign_key_tools):
                 related_modeladmin = self.admin_site._registry.get(
                                                             db_field.rel.to)
                 can_add_related = bool(related_modeladmin and
                             related_modeladmin.has_add_permission(request))
+
                 formfield.widget = UpdateRelatedFieldWidgetWrapper(
                             formfield.widget, db_field.rel, self.admin_site,
                             can_add_related=can_add_related)
 
             return formfield
         return super(RelatedToolsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    
+            
+         
     def response_change(self, request, obj):     
         if "_popup" in request.POST:
             pk_value = obj._get_pk_val()
@@ -481,7 +484,6 @@ class AdminPagingMixin(object):
             extra_context['prev_obj'] = None
         extra_context['pagingmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
         return sup.change_view(request, object_id, extra_context)
-    
 
 class TreeChangeList(ChangeList):
     
