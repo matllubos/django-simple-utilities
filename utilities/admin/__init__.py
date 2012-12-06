@@ -398,7 +398,6 @@ class DynamicListDisplayModelMixin(object):
             if (not field in self.list_display):
                 self.list_display.append(field)
      
-     
     def get_list_display(self, request):
         return self.default_list_display
                 
@@ -412,7 +411,6 @@ class DynamicFieldsetsModelMixin(object):
         super(DynamicFieldsetsModelMixin, self).__init__(model, admin_site)
         self.default_fieldsets = self.fieldsets
  
-    
     def change_view(self, request, object_id, extra_context=None):
         self.fieldsets = self.get_fieldsets(request) 
         return super(DynamicFieldsetsModelMixin, self).change_view(request, object_id, extra_context=extra_context)  
@@ -457,6 +455,12 @@ class CloneModelMixin(object):
         extra_context['clonemodelmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
         return sup.change_view(request, object_id, extra_context)
 
+    def _media(self):  
+        media = super(CloneModelMixin, self)._media()
+        js = ['%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL]
+        media.add_js(js)
+        return media
+    media = property(_media)
 
 class AdminPagingMixin(object): 
     change_form_template = 'admin/paging_change_form.html'
@@ -491,6 +495,13 @@ class AdminPagingMixin(object):
         extra_context['pagingmixin_super_template'] = sup.change_form_template or 'admin/change_form.html'
         return sup.change_view(request, object_id, extra_context)
 
+    def _media(self):  
+        media = super(AdminPagingMixin, self)._media()
+        css = {'screen': ['%sutilities/admin/css/paging-admin.css' % settings.STATIC_URL]}
+        media.add_css(css)
+        return media
+    media = property(_media)
+    
 class TreeChangeList(ChangeList):
     
     def tree_sort(self, parent):
@@ -594,7 +605,6 @@ class CSVExportMixin(object):
         extra_context['import_form'] = import_form
         return sup.changelist_view(request, extra_context=extra_context)
 
-
 class GeneratedFilesMixin(object):
     change_list_template = 'admin/generated_files_change_list.html'
     progress_image = '%sutilities/images/icons/progress.gif' % settings.STATIC_URL
@@ -656,8 +666,20 @@ class GeneratedFilesMixin(object):
         json_dump = simplejson.dumps(json_data)
         return HttpResponse(json_dump, mimetype='application/json')
     
-class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
+    def _media(self):  
+        media = super(GeneratedFilesMixin, self)._media()
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/jquery.colorbox-min.js' % settings.STATIC_URL
+              )
+        media.add_js(js)
+        
+        css = {'screen': ['%sutilities/admin/css/colorbox.css' % settings.STATIC_URL]}
+        media.add_css(css)
+        return media
+    media = property(_media)
     
+class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
     
     def export_csv(self, request, queryset):
         from utilities.tasks import generate_csv
@@ -666,10 +688,7 @@ class AsynchronousCSVExportMixin(GeneratedFilesMixin, CSVExportMixin):
         gf.save()
         messages.info(request, _(u'Objects is exporting to CSV'), extra_tags='generated-files-info')
         generate_csv.delay(gf.pk, self.model._meta.app_label, self.model._meta.object_name, queryset.values_list('pk', flat=True), self.csv_fields, translation.get_language())
-     
-   
-        
-    
+  
     
 class DashboardMixin(object):
     change_list_template = 'admin/dashboard_change_list.html'
@@ -719,6 +738,19 @@ class DashboardMixin(object):
         info = self.model._meta.app_label, self.model._meta.module_name
         urlpatterns = patterns('', url(r'^dashboard/$',wrap(self.dashboard_view), name='%s_%s_dashboard' % info),) + super(DashboardMixin, self).get_urls()
         return urlpatterns
+    
+    def _media(self):  
+        media = super(DashboardMixin, self)._media()
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/js/jquery.colorbox-min.js' % settings.STATIC_URL
+              )
+        media.add_js(js)
+        
+        css = {'screen': ['%sutilities/admin/css/colorbox.css' % settings.STATIC_URL]}
+        media.add_css(css)
+        return media
+    media = property(_media)
     
 class HighlightedTabularInLine(admin.TabularInline):
     template = 'admin/edit_inline/highlighted_tabular.html'

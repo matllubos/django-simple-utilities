@@ -1,10 +1,5 @@
 {% extends pagingmixin_super_template %}
 
-{% block extrastyle %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}utilities/admin/css/paging-admin.css" />
-{% endblock %}
-
 {% load i18n %}
 
 {% block object-tools-items %}
