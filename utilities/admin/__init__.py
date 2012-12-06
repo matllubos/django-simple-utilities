@@ -139,23 +139,15 @@ class RelatedToolsAdmin(admin.ModelAdmin):
                 # escape() calls force_unicode.
                 (escape(pk_value), escapejs(obj)))
         return super(RelatedToolsAdmin, self).response_change(request, obj)
-        
-    def _media(self):
-        from django.conf import settings
-            
-        js = ['js/core.js', 'js/admin/RelatedObjectLookups.js',
-                'js/jquery.min.js', 'js/jquery.init.js']
-        if self.actions is not None:
-            js.extend(['js/actions.min.js'])
-        if self.prepopulated_fields:
-            js.append('js/urlify.js')
-            js.append('js/prepopulate.min.js')
-        if self.opts.get_ordered_objects():
-            js.extend(['js/getElementsBySelector.js', 'js/dom-drag.js' , 'js/admin/ordering.js'])
-        js = ['%s%s' % (settings.ADMIN_MEDIA_PREFIX, url) for url in js]
+       
+    
+    def _media(self):  
+        media = super(RelatedToolsAdmin, self)._media()
+        js = []
         js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
         js.append('%sutilities/admin/js/RelatedObjectLookups.js' % settings.STATIC_URL)
-        return forms.Media(js=js)
+        media.add_js(js)
+        return media
     media = property(_media)
         
 class HiddenModelMixin(object):
@@ -374,7 +366,21 @@ class MultipleFilesImportMixin(object):
             mimetype = 'text/plain'
         
         return HttpResponse(response_data, mimetype=mimetype)
-
+    
+    def _media(self):  
+        media = super(MultipleFilesImportMixin, self)._media()
+        js = []
+        js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
+        js.append('%sutilities/js/jquery.colorbox-min.js' % settings.STATIC_URL)
+        media.add_js(js)
+        
+        css = {'screen': [], 'pring': []}
+        css['screen'].append('%sutilities/css/colorbox.css' % settings.STATIC_URL) 
+        media.add_css(css)
+        return media
+    media = property(_media)
+    
+    
 class DynamicListDisplayModelMixin(object):
     
     def __init__(self, model, admin_site):
@@ -718,18 +724,12 @@ class HighlightedTabularInLine(admin.TabularInline):
     template = 'admin/edit_inline/highlighted_tabular.html'
     
     def _media(self):
-        from django.conf import settings
-        js = ['js/jquery.min.js', 'js/jquery.init.js', 'js/inlines.min.js']
-        if self.prepopulated_fields:
-            js.append('js/urlify.js')
-            js.append('js/prepopulate.min.js')
-        if self.filter_vertical or self.filter_horizontal:
-            js.extend(['js/SelectBox.js' , 'js/SelectFilter2.js'])
-        
-        js=['%s%s' % (settings.ADMIN_MEDIA_PREFIX, url) for url in js]    
+        media = super(HighlightedTabularInLine, self)._media()
+        js = []
         js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
         js.append('%sutilities/admin/js/highlighted-tabular.js' % settings.STATIC_URL)
-        return forms.Media(js=js)
+        media.add_js(js)
+        return media
     media = property(_media)
 
 
