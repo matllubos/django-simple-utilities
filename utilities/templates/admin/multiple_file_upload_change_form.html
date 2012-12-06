@@ -19,7 +19,7 @@
 		    	$(".fileupload-link").colorbox({inline:true, href:"#fileupload-box",opacity: 0.7, scrolling: true, height: 500, width:600, 
 		    		
 		    		onClosed: function () {
-		    			if (filesChanged) window.location.replace(window.location.href);
+		    			if (filesChanged) window.location.replace(window.location.href.split("?")[0]);
 		    			$('button.cancel').click();
 		        	}
 		    	});	
@@ -35,7 +35,7 @@
 				$.colorbox({inline:true, href:"#fileupload-box",opacity: 0.7, scrolling: true, height: 500, width:600, 
 	    		
 	    		onClosed: function () {
-	    			if (filesChanged) window.location.replace(window.location.href);
+	    			if (filesChanged) window.location.replace(window.location.href.split("?")[0]);
 	    			$('button.cancel').click();
 	        	}
 	    	});
