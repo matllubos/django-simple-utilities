@@ -260,8 +260,8 @@ class InitialModelForm(ModelForm):
         
            
     def set_initial_values(self):
-        for key, val in self.initial_values.items():
-            if (self.fields[key].__class__.__name__ in ('TypedChoiceField', 'ModelChoiceField')):
+        for key, val in self.initial_values.items():        
+            if hasattr(self.fields[key].widget, 'choices'):
                 choices =  list(self.fields[key].widget.choices) 
                 choices[0] = ('', val)
                 self.fields[key].widget.choices = choices

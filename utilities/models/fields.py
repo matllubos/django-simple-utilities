@@ -327,11 +327,11 @@ class OtherCharField(models.CharField):
         defaults = {
             'choices': self.other_choices,
             'other_label': self.other_label,
-            'hide_relations': self.hide_relations
+            'hide_relations': self.hide_relations,
         }
         defaults.update(kwargs)
-        t =  super(OtherCharField, self).formfield(form_class=utilities_forms.OtherSelectField, **defaults)
-        return t
+        return super(OtherCharField, self).formfield(form_class=utilities_forms.OtherSelectField, **defaults)
+
     
     '''
     Z důvodu get_FOO_display, původně jsem chtěl udělat pomocí přepsání formfield a nastavení choices ale to bych musel přepsat i validaci a celou metodu formfield
