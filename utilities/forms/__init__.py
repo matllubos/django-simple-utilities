@@ -263,7 +263,10 @@ class InitialModelForm(ModelForm):
         for key, val in self.initial_values.items():        
             if hasattr(self.fields[key].widget, 'choices'):
                 choices =  list(self.fields[key].widget.choices) 
-                choices[0] = ('', val)
+                if choices[0][0] == '':
+                    choices[0] = ('', val)
+                else:
+                    choices.insert(0, ('', val))
                 self.fields[key].widget.choices = choices
             else:
                 self.fields[key].initial = val
