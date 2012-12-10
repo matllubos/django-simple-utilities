@@ -275,7 +275,7 @@ class OtherSelectWidget(forms.widgets.MultiWidget):
         
         widgets = (
                    HideSelectWidget(choices = choices_with_other, attrs={'class':'other-select'}, hide_relations=hide_relations),
-                   forms.TextInput(),
+                   forms.TextInput(attrs={'class':'other-input'}),
        
         )
         

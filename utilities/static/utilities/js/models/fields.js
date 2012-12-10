@@ -262,9 +262,11 @@ function otherSelectFields() {
 		var select = $(this);
 		var otherSelectFunc = function() {
 			if (select.val() == '__other__') {
-				select.parent().find('input[type=text]').css('display', 'inline');
+				select.parent().find('input[type=text]').css('display', 'inline').addClass('open');
+				select.addClass('open');
 			} else {
-				select.parent().find('input[type=text]').css('display', 'none');
+				select.parent().find('input[type=text]').css('display', 'none').removeClass('open');
+				select.removeClass('open');
 			}
 		}
 		select.change(otherSelectFunc);

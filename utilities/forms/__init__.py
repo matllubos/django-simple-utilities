@@ -261,23 +261,26 @@ class InitialModelForm(ModelForm):
            
     def set_initial_values(self):
         for key, val in self.initial_values.items():        
-            if hasattr(self.fields[key].widget, 'choices'):
-                choices =  list(self.fields[key].widget.choices) 
-                if choices[0][0] == '':
-                    choices[0] = ('', val)
-                else:
-                    choices.insert(0, ('', val))
-                self.fields[key].widget.choices = choices
+            self.set_inital_value(key, val)
+     
+    
+    def set_inital_value(self, key, val):
+        if hasattr(self.fields[key].widget, 'choices'):
+            choices =  list(self.fields[key].widget.choices) 
+            if choices[0][0] == '':
+                choices[0] = ('', val)
             else:
-                self.fields[key].initial = val
-            self.fields[key].widget.attrs['title'] = val
-            class_names = self.fields[key].widget.attrs.get('class', None)
-            if class_names:
-                class_names += ' initial'
-            else:
-                class_names = 'initial'
-            self.fields[key].widget.attrs['class']= class_names
-            
+                choices.insert(0, ('', val))
+            self.fields[key].widget.choices = choices
+        else:
+            self.fields[key].initial = val
+        self.fields[key].widget.attrs['title'] = val
+        class_names = self.fields[key].widget.attrs.get('class', None)
+        if class_names:
+            class_names += ' initial'
+        else:
+            class_names = 'initial'
+        self.fields[key].widget.attrs['class']= class_names       
             
     def remove_initial_values(self, data):
         if (data):
