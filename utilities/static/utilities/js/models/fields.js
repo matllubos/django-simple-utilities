@@ -1,3 +1,86 @@
+// Set caret position easily in jQuery
+// Written by and Copyright of Luke Morton, 2011
+// Licensed under MIT
+(function ($) {
+    // Behind the scenes method deals with browser
+    // idiosyncrasies and such
+    $.caretTo = function (el, index) {
+        if (el.createTextRange) { 
+            var range = el.createTextRange(); 
+            range.move("character", index); 
+            range.select(); 
+        } else if (el.selectionStart != null) { 
+            el.focus(); 
+            el.setSelectionRange(index, index); 
+        }
+    };
+    
+    // Another behind the scenes that collects the
+    // current caret position for an element
+    
+    // TODO: Get working with Opera
+    $.caretPos = function (el) {
+        if ("selection" in document) {
+            var range = el.createTextRange();
+            try {
+                range.setEndPoint("EndToStart", document.selection.createRange());
+            } catch (e) {
+                // Catch IE failure here, return 0 like
+                // other browsers
+                return 0;
+            }
+            return range.text.length;
+        } else if (el.selectionStart != null) {
+            return el.selectionStart;
+        }
+    };
+
+    // The following methods are queued under fx for more
+    // flexibility when combining with $.fn.delay() and
+    // jQuery effects.
+
+    // Set caret to a particular index
+    $.fn.caret = function (index, offset) {
+        if (typeof(index) === "undefined") {
+            return $.caretPos(this.get(0));
+        }
+        
+        return this.queue(function (next) {
+            if (isNaN(index)) {
+                var i = $(this).val().indexOf(index);
+                
+                if (offset === true) {
+                    i += index.length;
+                } else if (typeof(offset) !== "undefined") {
+                    i += offset;
+                }
+                
+                $.caretTo(this, i);
+            } else {
+                $.caretTo(this, index);
+            }
+            
+            next();
+        });
+    };
+
+    // Set caret to beginning of an element
+    $.fn.caretToStart = function () {
+        return this.caret(0);
+    };
+
+    // Set caret to the end of an element
+    $.fn.caretToEnd = function () {
+        return this.queue(function (next) {
+            $.caretTo(this, $(this).val().length);
+            next();
+        });
+    };
+}(jQuery));
+
+
+
+
 if(typeof String.prototype.trim !== 'function') {
   String.prototype.trim = function() {
     return this.replace(/^\s+|\s+$/g, ''); 
@@ -278,17 +361,46 @@ validators = {"CZ-phone":PhoneValidator,"psc":PscValidator}
 
 
 function styleIntegerInput(el) {
-	val = el.val().split(' ').join('').replace(/^[0]+(\d)/g,"$1").replace(/[^\d]/g, "");	
+	var position = 0;
+	var focus = false;
+	if (el.is(":focus")){
+		var position = el.caret();
+		focus=true;
+	}
+	var val = el.val();
+	var stylizedValue = "";
+	var stylizedPosition = position;
+	var firstZero = true;
+	for (i=0; i<val.length;i++) {
+		if (!/^\d$/.test(val.charAt(i)) || (val.length != 1 && val.charAt(i) == '0' && firstZero)) {
+			if (i < position){
+				stylizedPosition--;
+			}
+		} else {
+			stylizedValue += val.charAt(i);
+			firstZero = false;
+		}
+	}
+	
 	out = ''
 	j = 0;
-	for (i=val.length - 1; i>=0;i--){
-		if (j % 3 == 0){
+	for (i=stylizedValue.length - 1; i>=0;i--){
+		if (j % 3 == 0 && j != 0){
 			out = ' '+out
+			if (i + 1 <= stylizedPosition) {
+				stylizedPosition++;
+			}
 		}
-		out = val.charAt(i) + out;		
+		out = stylizedValue.charAt(i) + out;		
 		j++;
 	}
-	el.val(out.trim());
+
+	if (val != out.trim()){
+		el.val(out.trim());
+		if (focus){
+			el.caret(stylizedPosition);
+		}
+	}
 }
 
 function autoFormatInteger() {

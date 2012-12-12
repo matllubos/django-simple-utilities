@@ -118,7 +118,7 @@ class RelatedToolsAdmin(admin.ModelAdmin):
                 formfield = self.formfield_for_manytomany(db_field, request, **kwargs)
 
 
-            if formfield and db_field.name not in self.raw_id_fields and (not hasattr(db_field.rel.to._meta, 'admin_foreign_key_tools') or db_field.rel.to._meta.admin_foreign_key_tools):
+            if formfield and db_field.name not in self.raw_id_fields and (not hasattr(db_field.rel.to._meta, 'admin_foreign_key_tools') or db_field.rel.to._meta.admin_foreign_key_tools) and (not hasattr(db_field, 'admin_foreign_key_tools') or db_field.admin_foreign_key_tools):
                 related_modeladmin = self.admin_site._registry.get(
                                                             db_field.rel.to)
                 can_add_related = bool(related_modeladmin and
