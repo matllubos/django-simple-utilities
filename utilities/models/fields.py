@@ -26,6 +26,7 @@ from utilities.utils import strip_accents
 
 from django.utils.encoding import smart_unicode
 from django.db.models.fields.subclassing import SubfieldBase
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class FieldError(Exception):
@@ -299,14 +300,39 @@ class SelectDateField(models.DateField):
         year = date.today().year - 10
         kwargs['widget'] = SelectMonthYearWidget(years=range(year, year+20))
         return super(SelectDateField, self).formfield(form_class=forms.DateField, **kwargs)
-    
-class OrderField(models.PositiveIntegerField):
+ 
+#Renamed  
+class DragAndDropInlineOrderField(models.PositiveIntegerField):
    
     def formfield(self, **kwargs):
         kwargs['widget'] = OrderWidget()
-        return super(OrderField, self).formfield(**kwargs)        
+        return super(DragAndDropInlineOrderField, self).formfield(**kwargs)        
+  
+  
+#In the future will be added ordering for diffrenet fields
+class OrderField(models.PositiveIntegerField): 
+            
+    def pre_save(self, model_instance, add):
+        val =  super(OrderField, self).pre_save(model_instance, add)
+        if val:
+            qs = model_instance.__class__.objects.all()
+            if not add:
+                qs = qs.exclude(pk = model_instance.pk)
+            try:
+                obj = qs.get(**{self.name: val})
 
+                setattr(obj, self.name, val + 1)
+                obj.save()
+            except ObjectDoesNotExist:
+                pass
+        return val
 
+    def formfield(self, **kwargs):
+        defaults = {'min_value': 1}
+        defaults.update(kwargs)
+        return super(OrderField, self).formfield(**defaults)
+        
+        
 class FullSizeManyToManyField(models.ManyToManyField):
     def formfield(self, **kwargs):
         defaults = {
