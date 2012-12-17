@@ -26,8 +26,8 @@
 #cboxNext.hover{background-position:bottom right;}
 #cboxLoadingOverlay{background:#efefef;}
 #cboxLoadingGraphic{background:url(../../images/loading.gif) center center no-repeat;}
-#cboxClose{position:absolute; top:5px; right:5px; display:block; background:url(../../images/controls.png) top left no-repeat; width:25px; height:25px; text-indent:-9999px;}
- #cboxClose.hover{background-position:bottom left;}
+#cboxClose{position:absolute; top:10px; right:10px; display:block; background:url(../../images/controls.png) top 25px no-repeat; width:25px; height:25px; text-indent:-9999px;}
+ #cboxClose.hover{background-position:bottom 25px;}
         
         
 #colorbox .box
