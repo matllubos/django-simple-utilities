@@ -474,7 +474,13 @@ class AdminPagingMixin(object):
     def change_view(self, request, object_id, extra_context={}):
         sup = super(AdminPagingMixin, self)
         
+        model = self.model
+        opts = model._meta
+        
         obj = sup.get_object(request, object_id)
+        if obj is None:
+            raise Http404(_('%(name)s object with primary key %(key)r does not exist.') % {'name': force_unicode(opts.verbose_name), 'key': escape(object_id)})
+        
         if hasattr(sup, 'parent'):
             qs = sup.queryset(request, True)
         else:
