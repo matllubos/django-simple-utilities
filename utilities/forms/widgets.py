@@ -255,6 +255,28 @@ class HideSelectWidget(forms.Select):
         
         
 class HideCheckboxWidget(forms.CheckboxInput):
+    
+    def __init__(self, attrs=None, hide_fields=None, *args, **kwargs):
+        super(HideCheckboxWidget, self).__init__(attrs=attrs, *args, **kwargs)
+        self.hide_fields = hide_fields
+        
+    def render(self, name, value, attrs={}):
+        if self.hide_fields:
+            class_names = [];
+            for hide in self.hide_fields:
+                class_name = 'checked'
+                if (hide.hide_if_set):
+                    class_name = 'unchecked'
+                class_names.append('%s--%s' % (class_name, hide.field))
+            if (class_names):
+                if (attrs.has_key('class')):
+                    attrs['class'] = '%s %s' % (attrs['class'], 'checkbox-hide %s' % ' '.join(class_names))
+                elif (self.attrs.has_key('class')):
+                    attrs['class'] = '%s %s' % (self.attrs['class'], 'checkbox-hide %s' % ' '.join(class_names))
+                else:
+                    attrs['class'] = 'checkbox-hide %s' % ' '.join(class_names)
+        return super(HideCheckboxWidget, self).render(name, value, attrs)  
+    
     class Media:
         js = (
               '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,

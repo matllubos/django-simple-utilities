@@ -266,18 +266,18 @@ function pageUrl() {
 
 
 function hideFields(){
-	$(".hide").each( function() {
+	$(".checkbox-hide").each( function() {
 		var el = $(this);
 		
 		var hideF = function(){
-			var hide_relations = el.attr('class').split(" ");
-			for (var i = 1; i<hide_relations.length;i++) {
+			var hide_fields = el.attr('class').split(" ");
+			for (var i = 1; i<hide_fields.length;i++) {
 								
-				hide_relation = hide_relations[i].split('-');
-				if((hide_relation[0] == 'unchecked' && el.is(':checked')) || (hide_relation[0] == 'checked' && !el.is(':checked')) ){
-		            $('.'+hide_relation[1]).css('display','none');
+				hide_field = hide_fields[i].split('--');
+				if((hide_field[0] == 'unchecked' && el.is(':checked')) || (hide_field[0] == 'checked' && !el.is(':checked')) ){
+		            $('.'+hide_field[1]).css('display','none');
 				} else {
-		            $('.'+hide_relation[1]).css('display','block');
+		            $('.'+hide_field[1]).css('display','block');
 				}
 			
 			}

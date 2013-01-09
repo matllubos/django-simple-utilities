@@ -207,18 +207,13 @@ class HideCharField(models.CharField):
 
 class HideBooelanField(models.BooleanField):
     
-    def __init__(self, verbose_name=None, hide=None, hide_if_checked=False, **kwargs):
+    def __init__(self, verbose_name=None, hide_fields=None, **kwargs):
         super(HideBooelanField, self).__init__(verbose_name, **kwargs)
-        self.hide = hide
-        self.hide_if_checked = hide_if_checked
+        self.hide_fields = hide_fields
         
-    def formfield(self, **kwargs):
-        class_name = 'hide unchecked'
-        if (self.hide_if_checked):
-            class_name = 'hide checked'
-        
-        if (self.hide):
-            kwargs['widget'] = WidgetFactory().create(HideCheckboxWidget, {'class': '%s-%s' % (class_name, self.hide)}, kwargs.get('widget', None))
+    def formfield(self, **kwargs):       
+        if (self.hide_fields):
+            kwargs['widget'] = HideCheckboxWidget(hide_fields=self.hide_fields)
         return super(HideBooelanField, self).formfield(**kwargs)
    
 class GoogleMapUrlField(models.URLField):
