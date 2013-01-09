@@ -47,9 +47,10 @@ class DashboardFormatter(object):
     
 class FieldDashboardFormatter(DashboardFormatter):
     
-    def __init__(self, field_name, title = None, measure = None, colspan = 1, widget = None):
+    def __init__(self, field_name, title = None, measure = None, colspan = 1, widget = None, qs_filter=None):
         super(FieldDashboardFormatter, self).__init__(title, field_name , measure, colspan, widget)
         self.field_name = field_name
+        self.qs_filter = qs_filter
     
     def get_title(self, model, admin):
         if self.title:
@@ -73,6 +74,8 @@ class FieldDashboardFormatter(DashboardFormatter):
         return None
     
     def get_values(self, qs, admin):
+        if (self.qs_filter):
+            qs = qs.filter(**self.qs_filter)
         try: 
             qs.model._meta.get_field(self.field_name) 
             return self.get_field_values(qs)
