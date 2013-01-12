@@ -477,5 +477,5 @@ class NullableCharField(models.CharField):
             return value
         return value or ""
 
-    def get_db_prep_value(self, value):
+    def get_db_prep_value(self, value, *args, **kwargs):
         return value or None
