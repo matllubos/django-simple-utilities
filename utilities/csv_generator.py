@@ -141,7 +141,7 @@ class DefaultModelFormatter(object):
         elif (self.csv_formatters.has_key(csv_field_parts[1])):
             formatter = self.csv_formatters[csv_field_parts[1]]
                         
-        val = formatter.get_csv_field_value(model_obj, csv_field_parts[1], DB_values)
+        val = formatter.get_csv_field_value(model_obj, admin, csv_field_parts[1], DB_values)
         return val
         
     def set_db_val(self, obj, csv_field, csv_data): 
