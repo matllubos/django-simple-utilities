@@ -36,7 +36,7 @@ class NumberingValue(DefaultValue):
 
 class DefaultFormatter(object):
    
-    def get_csv_field_value(self, obj, csv_field, DB_values):
+    def get_csv_field_value(self, obj, admin, csv_field, DB_values):
         try: 
             field = obj._meta.get_field(csv_field)
             val = getattr(obj, field.name)
@@ -66,10 +66,14 @@ class DefaultFormatter(object):
                 val = re.sub(r'"', '', val)
             return val
         except FieldDoesNotExist:
-            val = getattr(obj, csv_field)()
+            try:
+                val = getattr(obj, csv_field)()
+            except AttributeError:
+                val = getattr(admin, csv_field)(obj)
             if self.get_val(val):
                 return self.get_val(val)
             return val
+            
     
     def get_val(self, val):
         return None
@@ -123,7 +127,7 @@ class DefaultModelFormatter(object):
         self.field_name = None
         
         
-    def get_csv_field_value(self, obj, csv_field, DB_values):
+    def get_csv_field_value(self, obj, admin, csv_field, DB_values):
         csv_field_parts = csv_field.split('.', 2)
         model_obj = getattr(obj, csv_field_parts[0])
         
@@ -186,7 +190,7 @@ class DateFormatter(DefaultFormatter):
     
 class CsvGenerator:
     
-    def __init__(self, model, csv_fields, header = True, delimiter=';',  quotechar = '"', DB_values = False, csv_formatters = {}, encoding='utf-8'):
+    def __init__(self, admin, model, csv_fields, header = True, delimiter=';',  quotechar = '"', DB_values = False, csv_formatters = {}, encoding='utf-8'):
         self.header = header
         self.quotechar = quotechar
         self.DB_values = DB_values
@@ -195,6 +199,7 @@ class CsvGenerator:
         self.delimiter = delimiter
         self.csv_fields = csv_fields
         self.encoding = encoding
+        self.admin = admin
         
     def export_csv(self, output_stream, qs):
         if self.quotechar:
@@ -217,7 +222,10 @@ class CsvGenerator:
                     try: 
                         headers.append(force_unicode(self.model._meta.get_field(field).verbose_name).encode(self.encoding, 'ignore'))
                     except FieldDoesNotExist:
-                        headers.append(force_unicode(getattr(self.model(), field).short_description).encode(self.encoding, 'ignore'))
+                        try:
+                            headers.append(force_unicode(getattr(self.model(), field).short_description).encode(self.encoding, 'ignore'))
+                        except AttributeError:
+                            headers.append(force_unicode(getattr(self.admin, field).short_description).encode(self.encoding, 'ignore'))
                 else:
                     headers.append('')
 
@@ -241,7 +249,7 @@ class CsvGenerator:
                             formatter = self.csv_formatters[field]
                        
                        
-                        val = formatter.get_csv_field_value(obj, field, self.DB_values)
+                        val = formatter.get_csv_field_value(obj, self.admin, field, self.DB_values)
 
                         if (not val):
                             val = ''
