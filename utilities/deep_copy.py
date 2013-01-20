@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 from copy import copy as copy_object
 
 def change_id(obj, id):
@@ -22,13 +24,17 @@ def change_id(obj, id):
 def rename_unique(obj):
     for field in obj._meta.fields:
         if (field.get_internal_type() ==  "CharField" and field.unique):
-            origin_val = getattr(obj, field.name)
-            val = origin_val
-            i = 1
+            val = getattr(obj, field.name)
             if val != None:
+                m = re.match(r'^.* \((\d+)\)$', val)
+                i = 1
+                if m:
+                    i =  int(m.group(1)) + 1
+                origin_val = re.sub(r' \(\d+\)$', '', val)
+                val = origin_val + ' (%s)' % i
                 while (obj.__class__.objects.filter(**{field.name: val})):
-                    val = origin_val + '(%s)' % i
-                    i +=1
+                    val = origin_val + ' (%s)' % i
+                    i += 1
 
             setattr(obj, field.name, val)
     
