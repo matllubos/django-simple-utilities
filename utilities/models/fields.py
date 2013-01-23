@@ -327,7 +327,10 @@ class OrderField(models.PositiveIntegerField):
             except ObjectDoesNotExist:
                 pass
         elif self.auto_add:
-            val = model_instance.__class__.objects.all().aggregate(Max('order'))['order__max'] + 1
+            val = model_instance.__class__.objects.all().aggregate(Max('order'))['order__max'] 
+            if not val:
+                val = 0
+            val += 1
         return val
 
     def formfield(self, **kwargs):
