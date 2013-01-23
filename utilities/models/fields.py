@@ -313,7 +313,6 @@ class OrderField(models.PositiveIntegerField):
         super(OrderField, self).__init__(*args,  **kwargs)
                
     def pre_save(self, model_instance, add):
-        print 'tady'
         val =  super(OrderField, self).pre_save(model_instance, add)
         if val:
             qs = model_instance.__class__.objects.all()
