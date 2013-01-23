@@ -27,6 +27,7 @@ from utilities.utils import strip_accents
 from django.utils.encoding import smart_unicode
 from django.db.models.fields.subclassing import SubfieldBase
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.aggregates import Max
 
 
 class FieldError(Exception):
@@ -306,8 +307,13 @@ class DragAndDropInlineOrderField(models.PositiveIntegerField):
   
 #In the future will be added ordering for diffrenet fields
 class OrderField(models.PositiveIntegerField): 
-            
+     
+    def __init__(self, *args, **kwargs):
+        self.auto_add = kwargs.pop('auto_add', False)
+        super(OrderField, self).__init__(*args,  **kwargs)
+               
     def pre_save(self, model_instance, add):
+        print 'tady'
         val =  super(OrderField, self).pre_save(model_instance, add)
         if val:
             qs = model_instance.__class__.objects.all()
@@ -320,6 +326,8 @@ class OrderField(models.PositiveIntegerField):
                 obj.save()
             except ObjectDoesNotExist:
                 pass
+        elif self.auto_add:
+            val = model_instance.__class__.objects.all().aggregate(Max('order'))['order__max'] + 1
         return val
 
     def formfield(self, **kwargs):
