@@ -2,6 +2,7 @@
 import re
 import StringIO
 import pickle
+import json
 
 from django.contrib import admin
 from django.db import models
@@ -131,15 +132,27 @@ class RelatedToolsAdmin(admin.ModelAdmin):
             return formfield
         return super(RelatedToolsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
             
-         
+    
+    def response_add(self, request, obj, post_url_continue='../%s/'):
+        if "_popup" in request.POST:
+            pk_value = obj._get_pk_val()
+            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s", %s);</script>' % \
+                # escape() calls force_unicode.
+                (escape(pk_value), escapejs(obj), json.dumps(self.popup_attrs(obj))))
+                
     def response_change(self, request, obj):     
         if "_popup" in request.POST:
             pk_value = obj._get_pk_val()
-            return HttpResponse('<script type="text/javascript">opener.dismissEditPopup(window, "%s", "%s");</script>' % \
+            return HttpResponse('<script type="text/javascript">opener.dismissEditPopup(window, "%s", "%s", %s);</script>' % \
                 # escape() calls force_unicode.
-                (escape(pk_value), escapejs(obj)))
+                (escape(pk_value), escapejs(obj), json.dumps(self.popup_attrs(obj))))
         return super(RelatedToolsAdmin, self).response_change(request, obj)
-       
+    
+    
+    
+    def popup_attrs(self, obj):
+        return {}
+           
     
     def _media(self):  
         media = super(RelatedToolsAdmin, self)._media()
