@@ -139,6 +139,7 @@ class RelatedToolsAdmin(admin.ModelAdmin):
             return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s", %s);</script>' % \
                 # escape() calls force_unicode.
                 (escape(pk_value), escapejs(obj), json.dumps(self.popup_attrs(obj))))
+        return super(RelatedToolsAdmin, self).response_add( request, obj, post_url_continue)
                 
     def response_change(self, request, obj):     
         if "_popup" in request.POST:
