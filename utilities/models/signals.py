@@ -42,7 +42,14 @@ class DefaultPostSave(object):
     
 class NotificationPostSave(DefaultPostSave):
     
+    models_data = {}
+
     def pre_register(self, model, **kwargs):
+        subject = kwargs.get('subject', _(u'It was created a new item'))       
+        template = kwargs.get('template','mail/admin/notification.html')
+        
+        self.models_data[model._meta.db_table] = {'subject': subject, 'template': template}
+        
         content_type = ContentType.objects.get_for_model(model)
         codename = 'can_receive_notification_%s' % content_type.model
         if not Permission.objects.filter(content_type=content_type, codename=codename):
@@ -69,8 +76,8 @@ class NotificationPostSave(DefaultPostSave):
                      }
             content_type = ContentType.objects.get_for_model(instance)
             codename = 'can_receive_notification_%s' % content_type.model
-            perm = Permission.objects.get(content_type=content_type, codename=codename)
-            mail_sender.send_admin_mail(_(u'It was created a new item'), 'mail/admin/notification.html', context, perm=perm)
+            perm = Permission.objects.get(content_type=content_type, codename=codename)       
+            mail_sender.send_admin_mail(self.models_data[instance._meta.db_table]['subject'], self.models_data[instance._meta.db_table]['template'], context, perm=perm)
 
 class SendCustomerNotificationPostSave(DefaultPostSave):
     
@@ -86,7 +93,7 @@ class SendCustomerNotificationPostSave(DefaultPostSave):
             mail_sender = MailSender()
             recip = getattr(instance, self.models_data[instance._meta.db_table]['email_field'])
             context={'obj': instance,}
-            mail_sender.send_mail(_(self.models_data[instance._meta.db_table]['subject']), recip, self.models_data[instance._meta.db_table]['template'], context)
+            mail_sender.send_mail(self.models_data[instance._meta.db_table]['subject'], recip, self.models_data[instance._meta.db_table]['template'], context)
 
 
 send_notification = NotificationPostSave()

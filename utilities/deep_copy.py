@@ -66,6 +66,7 @@ def deep_copy(obj, copy_related = True):
     if (copy_related):   
         # clone related objects
         links = [rel.get_accessor_name() for rel in obj._meta.get_all_related_objects()]
+
         for link in links:
             for original in getattr(obj, link).all():
                 copied_related = deep_copy(original)

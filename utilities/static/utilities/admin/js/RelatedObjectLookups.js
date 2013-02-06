@@ -101,7 +101,7 @@ function deleteSelectChange(el, val) {
 
 function dismissDeletePopup(win, chosen) {
 	for (var i=0; i<chosen.length; i++) {
-    		//alert("."+chosen[i].app+"_"+chosen[i].model+" option[value='"+chosen[i].id+"']");
+    	//	alert("."+chosen[i].app+"_"+chosen[i].model+" option[value='"+chosen[i].id+"']");
 		$("."+chosen[i].app+"_"+chosen[i].model+" option[value='"+chosen[i].id+"']").remove();
 		$("."+chosen[i].app+"_"+chosen[i].model).change();	
 	}
