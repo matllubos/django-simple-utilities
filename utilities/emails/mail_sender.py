@@ -60,7 +60,7 @@ class MailSender:
     def send_admin_mail(self, sbj, template, context, perm= None, images = []):
         try:
             site_email = SiteEmail.objects.get(pk = 1)
-            users = User.objects.all()
+            users = User.objects.filter(is_active=True, is_staff=True)
             if (perm):
                 users = users.filter(Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
            
