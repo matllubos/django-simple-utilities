@@ -596,7 +596,7 @@ class CSVExportMixin(object):
         response = HttpResponse(mimetype='text/csv')
         response['Content-Disposition'] = 'attachment; filename=%s.csv' % slugify(queryset.model.__name__)
         if self.csv_bom:
-            response.write("\xEF\xBB\xBF\n")
+            response.write("\xEF\xBB\xBF")
         csv_generator = CsvGenerator(self, self.model,self.get_csv_fields(request), header=self.csv_header, delimiter=self.csv_delimiter, quotechar = self.csv_quotechar, DB_values = self.csv_DB_values, csv_formatters=self.csv_formatters, encoding=self.csv_encoding)
         csv_generator.export_csv(response, queryset)
         return response
