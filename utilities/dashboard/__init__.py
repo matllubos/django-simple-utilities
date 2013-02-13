@@ -219,23 +219,26 @@ class DaysDashboardFormatter(FieldDashboardFormatter):
         values = SortedDict()
         i = self.first_day
         while i < self.first_day + 7:
-            values[force_unicode(self.days[i % 7])] = qs.filter(**{'%s__week_day' % self.field_name: i % 7}).count()
+            values[force_unicode(self.days[(i % 7)])] = qs.filter(**{'%s__week_day' % self.field_name: (i % 7) + 1}).count()
             i+= 1
         return values
     
     def get_method_values(self, qs):
         values = SortedDict()
+        i = self.first_day
+        
+        #firstly defined order
+        while i < self.first_day + 7:
+            values[force_unicode(self.days[(i % 7)])] = 0
+        
         for obj in qs:
             val = getattr(obj, self.field_name)().isoweekday()
             if val == 7:
                 val = 0
 
             day_name = force_unicode(self.days[val])
+            values[day_name] += 1
             
-            if (values.has_key(day_name)):
-                values[day_name] += 1
-            else:
-                values[day_name] = 1
         return values 
     
     def get_admin_method_values(self, qs, admin):       
