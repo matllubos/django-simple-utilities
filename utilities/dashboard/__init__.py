@@ -161,8 +161,8 @@ class TableDashboardFormatter(FieldDashboardFormatter):
                         values[m2mobj.__unicode__()] = 1
                 
         elif (field.get_internal_type() == "BooleanField"):
-            values[_('Yes')] = qs.filter(**{field.name: True}).count()
-            values[_('No')] = qs.filter(**{field.name: False}).count()
+            values[force_unicode(_('Yes'))] = qs.filter(**{field.name: True}).count()
+            values[force_unicode(_('No'))] = qs.filter(**{field.name: False}).count()
             
         elif (field.get_internal_type() == "OrderedForeignKey" or field.get_internal_type() == "ForeignKey" or field.get_internal_type() == "CharField"):
             for obj in qs:
