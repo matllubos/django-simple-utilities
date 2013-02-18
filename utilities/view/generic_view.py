@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.encoding import force_unicode
+from django.forms.widgets import Media
 
 class FormsMixin(object):
     success_url = None
@@ -42,11 +43,13 @@ class FormsMixin(object):
         return HttpResponseRedirect('')
     
     def get_success_url(self):
-        return self.success_url
+        return self.success_url or ''
     
     def get_context_data(self, **kwargs):
         context = super(FormsMixin, self).get_context_data(**kwargs)
-        context['forms'] = self.get_forms()
+        forms = self.get_forms()
+        context['forms'] = forms
+        context['media'] = self.get_media(forms)
         return context
     
     def post(self, request, *args, **kwargs):
@@ -68,6 +71,7 @@ class FormsMixin(object):
     def get_form(self, form_class, form_key):
         form = form_class(**self.get_form_kwargs(form_key))
         form.messages = self.get_form_messages(form_key)
+        form.form_key = form_key
         return form
     
     def get_form_kwargs(self, form_key):
@@ -77,17 +81,32 @@ class FormsMixin(object):
                 'data': self.request.POST,
                 'files': self.request.FILES,
             })
+        
+        instance = self.get_instance(form_key)
+        if instance:
+            kwargs['instance'] = instance
         return kwargs
     
     def get_initial(self, form_key):
         return self.initials.get(form_key)
-        
+     
+    def get_instance(self, form_key):
+        return None
+           
     def get_forms(self):
         forms = {}
         for key, val in self.forms_class.items():
             forms[key] = self.get_form(val, key)
         return forms
 
+    def get_media(self, forms):
+        media = Media()
+        for key, form in forms.items():
+            media += form.media
+        return media
+        
+        
+        
 
 class DetailFormsView(FormsMixin, DetailView):
     pass

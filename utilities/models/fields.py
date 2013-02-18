@@ -19,7 +19,7 @@ from django.forms import Form
 from utilities.utils import fit
 from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget,\
     HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget, ImmutableTextInput, ImmutableSelect,\
-    MultipleOptgroupSelect
+    MultipleOptgroupSelect, DatepickerWidget
    
 from utilities import forms as utilities_forms
 from utilities.utils import strip_accents
@@ -77,7 +77,15 @@ class FloatField(models.FloatField):
         defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure) 
         return super(FloatField, self).formfield(**defaults)
  
- 
+
+class DateField(models.DateField):
+    def formfield(self, **kwargs):
+        defaults = {}
+        defaults.update(kwargs)
+        defaults['widget'] = WidgetFactory().create(DatepickerWidget, {'class': 'datepicker-widget'}, kwargs.get('widget', None))
+        return super(DateField, self).formfield(**defaults)
+    
+
 class PhoneField(models.CharField):
     
     def __init__(self, verbose_name=None, name=None, format='CZ', **kwargs):

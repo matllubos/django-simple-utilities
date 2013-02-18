@@ -16,6 +16,7 @@ from django.utils import datetime_safe
 from django.utils.dates import MONTHS
 from django.forms import extras
 from django.utils.html import escape, conditional_escape
+from django.forms.widgets import DateInput
 
 class WidgetFactory:
     def create(self, widget , attrs,  old_widget, **kwargs):
@@ -349,3 +350,20 @@ class MultipleOptgroupSelect(forms.Select):
         selected_choices = set([force_unicode(v) for v in selected_choices])
         output = self.process_list(selected_choices, chain(self.choices, choices))
         return u'\n'.join(output)
+    
+    
+class DatepickerWidget(DateInput):
+    
+    def __init__(self, *args, **kwargs):
+        super(DatepickerWidget, self).__init__(*args, **kwargs)
+    
+    class Media:
+        js = (
+              '%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL,
+              '%sutilities/jquery-ui/jquery-ui-1.10.1.custom.min.js' % settings.STATIC_URL,
+              '%sutilities/jquery-ui/jquery-ui-timepicker-addon.js' % settings.STATIC_URL,
+              '%sutilities/js/models/jquery-ui-fields.js' % settings.STATIC_URL,
+              )
+        css = {'screen': (
+                '%sutilities/jquery-ui/jquery-ui-1.10.1.custom.min.css' % settings.STATIC_URL,
+            )}

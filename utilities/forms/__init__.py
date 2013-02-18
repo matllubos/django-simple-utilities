@@ -303,7 +303,6 @@ class MultiFieldsValidationModelForm(ModelForm):
             except KeyError:
                 pass
         return cleaned_data
-    
 
 class AntispamField(forms.IntegerField):
     def __init__(self, *args, **kwargs):

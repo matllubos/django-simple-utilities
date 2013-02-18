@@ -6,7 +6,6 @@ from django.utils.translation import ugettext as _
 from django.db.models.fields.related import ManyToOneRel
 
 class UpdateRelatedFieldWidgetWrapper(widgets.RelatedFieldWidgetWrapper):
-    
 
     def render(self, name, value, *args, **kwargs):
         rel_to = self.rel.to
@@ -24,13 +23,6 @@ class UpdateRelatedFieldWidgetWrapper(widgets.RelatedFieldWidgetWrapper):
         
         info = (rel_to._meta.app_label, rel_to._meta.object_name.lower())
 
-        
-        try:
-            related_url = reverse('admin:%s_%s_add' % info, current_app=self.admin_site.name)
-        except NoReverseMatch:
-            info = (self.admin_site.root_path, rel_to._meta.app_label, rel_to._meta.object_name.lower())
-            related_url = '%s%s/%s/add/' % info
-
 
         if can_update_related:
             update_info = ('/admin/', rel_to._meta.app_label, rel_to._meta.object_name.lower(), value)
@@ -40,21 +32,25 @@ class UpdateRelatedFieldWidgetWrapper(widgets.RelatedFieldWidgetWrapper):
         self.widget.choices = self.choices
         output = [self.widget.render(name, value, *args, **kwargs)]
         if self.can_add_related:
+            related_url = reverse('admin:%s_%s_add' % info, current_app=self.admin_site.name)
             # TODO: "id_" is hard-coded here. This should instead use the correct
             # API to determine the ID dynamically.
             output.append(u'<a href="%s" class="add-another" id="add_id_%s" onclick="return showAddAnotherPopup(this);" title="%s"> ' % \
                 (related_url, name, _('Add Another')))
-            output.append(u'<img src="%simg/admin/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Add Another')))
+            output.append(u'<img src="%simg/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Add Another')))
         
         if can_update_related:   
             output.append(u'<a href="%s" class="edit-another" id="edit_id_%s" onclick="return showEditAnotherPopup(this);" title="%s"> ' % \
                 (update_related_url, name, _('Change')))
-            output.append(u'<img src="%simg/admin/selector-search.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Change')))
+            output.append(u'<img src="%simg/selector-search.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Change')))
               
             output.append(u'<a href="%s" class="delete-another" id="delete_id_%s" onclick="return showDeleteAnotherPopup(this);" title="%s"> ' % \
                 (delete_related_url, name, _('Delete')))
-            output.append(u'<img src="%simg/admin/icon_deletelink.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Delete')))
+            output.append(u'<img src="%simg/icon_deletelink.gif" width="10" height="10" alt="%s"/></a>' % (settings.ADMIN_MEDIA_PREFIX, _('Delete')))
             
             
         return mark_safe(u''.join(output))
+    
+    
+
     
