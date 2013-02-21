@@ -54,8 +54,15 @@ class FormsMixin(object):
     
     def post(self, request, *args, **kwargs):
         forms = self.get_forms()
+        if 'all' in self.request.POST:
+            for key, val in forms.items():
+                if (not val.is_valid()):
+                    return self.form_invalid(forms, key)
+            return self.form_valid(forms, key)
+        
+        
         for key, val in forms.items():
-            if (key in self.request.POST):
+            if key in self.request.POST:
                 if (val.is_valid()):
                     return self.form_valid(val, key)
                 else:
@@ -76,7 +83,7 @@ class FormsMixin(object):
     
     def get_form_kwargs(self, form_key):
         kwargs = {'initial': self.get_initial(form_key)}
-        if self.request.method in ('POST', 'PUT') and form_key in self.request.POST:
+        if self.request.method in ('POST', 'PUT') and (form_key in self.request.POST or 'all' in self.request.POST):
             kwargs.update({
                 'data': self.request.POST,
                 'files': self.request.FILES,

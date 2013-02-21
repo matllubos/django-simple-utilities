@@ -10,7 +10,8 @@ from django.utils.safestring import mark_safe
 from django.core import validators
 from django.core.validators import EmailValidator, BaseValidator
 
-from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect
+from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect,\
+    DatepickerWidget
 
 
 class CommaDecimalField(forms.FloatField):
@@ -310,3 +311,16 @@ class AntispamField(forms.IntegerField):
         super(AntispamField, self).__init__(*args,**kwargs)
         self.validators.append(BaseValidator(2))
         self.widget.attrs['class'] = 'antispam'
+
+
+class DatepickerField(forms.DateField):
+    widget = DatepickerWidget
+    
+    def widget_attrs(self, widget):
+        return {'class': 'datepicker-widget'}
+    
+    
+        
+    
+    
+    
