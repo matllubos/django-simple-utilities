@@ -24,7 +24,7 @@ from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import UploadedFile
 from django.utils import simplejson, translation
 from django.utils.functional import update_wrapper
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -221,6 +221,8 @@ class MarshallingAdmin(RelatedToolsAdmin):
         from django.contrib.contenttypes.models import ContentType
         if object_id:
             obj = self.get_object(request, object_id)
+            if not obj:
+                raise Http404
             if ContentType.objects.get_for_model(type(obj)) != getattr(obj, self.real_type_field):
                 return HttpResponseRedirect('../../%s/%s' % (getattr(obj, self.real_type_field).model, object_id))
             

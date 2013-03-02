@@ -154,6 +154,10 @@ var Validator = $class({
     
     style: function(val) {
     	return val;
+    },
+    
+    beforeSubmit: function(val) {
+    	return val;
     }
 
 });
@@ -186,6 +190,11 @@ var PhoneValidator = $class({
     		result[1] = "+"+result[1];
     	}
     	return result[1]+" "+result[2]+" "+result[3]+" "+result[4];
+    },
+    
+    beforeSubmit: function(val) {
+    	if (val == "+420") return "";
+    	return val;
     }
 });
 
@@ -275,9 +284,9 @@ function hideFields(){
 								
 				hide_field = hide_fields[i].split('--');
 				if((hide_field[0] == 'unchecked' && el.is(':checked')) || (hide_field[0] == 'checked' && !el.is(':checked')) ){
-		            $('.'+hide_field[1]).css('display','none');
+		            $('.field-'+hide_field[1]).css('display','none');
 				} else {
-		            $('.'+hide_field[1]).css('display','block');
+		            $('.field-'+hide_field[1]).css('display','block');
 				}
 			
 			}
@@ -315,18 +324,18 @@ function hideFields(){
 
 			for(var className in show_relations) {
 			    if (show_relations[className]) {
-			    	$('.'+className).css('display','block');
+			    	$('.field-'+className).show();
 			    } else {
-			    	$('.'+className).css('display','none');
-					if ($('.'+className+' select').length != 0) {
-						$('.'+className+" option:selected").removeAttr("selected");
-						$('.'+className+" select").each(function() { 
+			    	$('.field-'+className).hide();
+					if ($('.field-'+className+' select').length != 0) {
+						$('.field-'+className+" option:selected").removeAttr("selected");
+						$('.field-'+className+" select").each(function() { 
 							$(this).find("option:first").attr("selected", "selected");
   						
 						});
 	
 					}					
-					$('.'+className+ ' input').val('');
+					$('.field-'+className+ ' input').val('');
 			    }
 			}
 			
@@ -413,6 +422,32 @@ function autoFormatInteger() {
 	
 }
 
+
+forms = {}
+
+function addBeforeSubmitAction(form, action) {
+	if(forms[form] == undefined) {
+		forms[form] = [];
+		var submitForm = false;
+		form.submit(function() {
+			if(!submitForm){
+				form = $(this);
+				for (key in forms[form]) {
+					forms[form][key]();
+				}
+				submitForm = true;
+				form.submit();
+				return false;
+			}
+			return true;
+		});
+	}
+	
+	forms[form].push(action);
+
+	
+}
+
 $(document).ready(function(){
 		//phone();
 		pageUrl();
@@ -428,7 +463,7 @@ $(document).ready(function(){
 		for(var key in validators)
 	    {
 			$('input.'+key).each(function(){
-				el = $(this);
+				var el = $(this);
 				var validator = new (validators[key])($(this));
 				el.focus(function() {
 					validator.focus();
@@ -436,6 +471,13 @@ $(document).ready(function(){
 		    	el.blur(function() {
 		    		validator.blur();
 		    	});
+		    	addBeforeSubmitAction(el.parents('form'), function(){
+		    		val = el.val();
+		    		beforeSubmitVal = validator.beforeSubmit(val);
+		    		if (val != beforeSubmitVal) {
+		    			el.val(beforeSubmitVal);
+		    		}
+		    	});	    	
 		    });
 
 	    }

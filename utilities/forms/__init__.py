@@ -9,9 +9,11 @@ from django.forms.models import ModelChoiceIterator, ModelForm
 from django.utils.safestring import mark_safe
 from django.core import validators
 from django.core.validators import EmailValidator, BaseValidator
+from django.contrib.localflavor.cz import forms as localforms
 
 from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect,\
     DatepickerWidget
+from django.forms.fields import RegexField
 
 
 class CommaDecimalField(forms.FloatField):
@@ -321,6 +323,26 @@ class DatepickerField(forms.DateField):
     
     
         
+class ICQNumberField(RegexField):
+    default_error_messages = {
+        'invalid': _(u'Enter an ICQ number in the format XXXXXXXXX.'),
+        }
+    def __init__(self, max_length=None, min_length=None, *args, **kwargs):
+        super(ICQNumberField, self).__init__(r'\d{5,32}$',
+            max_length, min_length, *args, **kwargs)
+
     
+class CZBirthNumberField(localforms.CZBirthNumberField):
     
+    def __init__(self, max_length=None, *args, **kwargs): 
+        super(CZBirthNumberField, self).__init__(*args, **kwargs)
+        
+class CZDICField(RegexField):
     
+    def __init__(self, *args, **kwargs):
+        super(CZDICField, self).__init__(r'^[a-zA-Z]{2}\d{8,10}$', *args, **kwargs)
+        
+        
+class CZICNumberField(localforms.CZICNumberField):
+    def __init__(self, max_length=None, *args, **kwargs): 
+        super(CZICNumberField, self).__init__(*args, **kwargs)

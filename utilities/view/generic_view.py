@@ -4,6 +4,7 @@ from django.shortcuts import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.encoding import force_unicode
 from django.forms.widgets import Media
+from django.utils.datastructures import SortedDict
 
 class FormsMixin(object):
     success_url = None
@@ -53,20 +54,24 @@ class FormsMixin(object):
         return context
     
     def post(self, request, *args, **kwargs):
-        forms = self.get_forms()
-        if 'all' in self.request.POST:
-            for key, val in forms.items():
-                if (not val.is_valid()):
-                    return self.form_invalid(forms, key)
-            return self.form_valid(forms, key)
-        
+        forms = self.get_forms()     
         
         for key, val in forms.items():
             if key in self.request.POST:
-                if (val.is_valid()):
-                    return self.form_valid(val, key)
+                if isinstance(val, dict):
+                    valid = True
+                    for sub_key, sub_val in val.items():
+                        if (not sub_val.is_valid()):
+                            valid = False
+                        
+                        
+                    if not valid: return self.form_invalid(val, key)
+                    else: return self.form_valid(val, key)
                 else:
-                    return self.form_invalid(val, key)
+                    if (val.is_valid()):
+                        return self.form_valid(val, key)
+                    else:
+                        return self.form_invalid(val, key)
 
     def get_form_messages(self, tag):
         form_messages =[]
@@ -81,9 +86,22 @@ class FormsMixin(object):
         form.form_key = form_key
         return form
     
+    def get_form_group(self, form_key):
+        for key, val in self.get_forms_class().items():
+            if key == form_key:
+                return None
+            
+            
+            if isinstance(val, dict): 
+                for sub_key, sub_val in val.items():
+                    if sub_key == form_key:
+                        return key
+        return None
+        
+        
     def get_form_kwargs(self, form_key):
         kwargs = {'initial': self.get_initial(form_key)}
-        if self.request.method in ('POST', 'PUT') and (form_key in self.request.POST or 'all' in self.request.POST):
+        if self.request.method in ('POST', 'PUT') and (form_key in self.request.POST or self.get_form_group(form_key) in self.request.POST):
             kwargs.update({
                 'data': self.request.POST,
                 'files': self.request.FILES,
@@ -102,14 +120,28 @@ class FormsMixin(object):
            
     def get_forms(self):
         forms = {}
-        for key, val in self.forms_class.items():
-            forms[key] = self.get_form(val, key)
+        for key, val in self.get_forms_class().items():
+            if isinstance(val, dict):
+                forms[key] = SortedDict()
+                forms[key].messages = self.get_form_messages(key)
+                for sub_key, sub_val in val.items():
+                    forms[key][sub_key] = self.get_form(sub_val, sub_key)
+            else:
+                forms[key] = self.get_form(val, key)
         return forms
 
+    def get_forms_class(self):
+        return self.forms_class
+        
+        
     def get_media(self, forms):
         media = Media()
         for key, form in forms.items():
-            media += form.media
+            if isinstance(form, dict):
+                for sub_key, sub_form in form.items():
+                    media += sub_form.media
+            else:
+                media += form.media
         return media
         
         

@@ -28,6 +28,7 @@ from django.utils.encoding import smart_unicode
 from django.db.models.fields.subclassing import SubfieldBase
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Max
+from django.contrib.localflavor.cz import forms as localforms
 
 
 class FieldError(Exception):
@@ -497,3 +498,42 @@ class NullableCharField(models.CharField):
 
     def get_db_prep_value(self, value, *args, **kwargs):
         return value or None
+    
+    
+class ICQNumberField(models.CharField):
+    
+    def __init__(self, *args, **kwargs):
+        super(ICQNumberField, self).__init__(max_length=32, *args, **kwargs)
+    
+    def formfield(self, **kwargs):
+        defaults = {'form_class': utilities_forms.ICQNumberField}
+        defaults.update(kwargs)
+        return super(ICQNumberField, self).formfield(**defaults)
+    
+class CZBirthNumberField(models.CharField):
+    
+    def __init__(self, *args, **kwargs):
+        super(CZBirthNumberField, self).__init__(max_length=11, *args, **kwargs)
+    
+    def formfield(self, **kwargs):
+        defaults = {'form_class': utilities_forms.CZBirthNumberField}
+        defaults.update(kwargs)
+        return super(CZBirthNumberField, self).formfield(**defaults)    
+    
+class CZICNumberField(models.SlugField):
+
+    def formfield(self, **kwargs):
+        defaults = {'form_class': utilities_forms.CZICNumberField}
+        defaults.update(kwargs)
+        return super(CZICNumberField, self).formfield(**defaults)    
+  
+class CZDICField(models.SlugField):
+    
+    def __init__(self, *args, **kwargs):
+        super(CZDICField, self).__init__(max_length=12, *args, **kwargs) 
+        
+    def formfield(self, **kwargs):
+        defaults = {'form_class': utilities_forms.CZDICField}
+        defaults.update(kwargs)
+        return super(CZDICField, self).formfield(**defaults)  
+    
