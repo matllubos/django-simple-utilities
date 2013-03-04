@@ -13,6 +13,8 @@ class FormsMixin(object):
     messages_valid = {}
     messages_invalid = {}
     
+    readonly_forms = []
+    
     def get_valid_message(self, form, form_key):
         if self.messages_valid.get(form_key):
             return self.messages_valid.get(form_key)
@@ -61,7 +63,7 @@ class FormsMixin(object):
                 if isinstance(val, dict):
                     valid = True
                     for sub_key, sub_val in val.items():
-                        if (not sub_val.is_valid()):
+                        if not sub_val.is_valid():
                             valid = False
                         
                         
@@ -84,8 +86,15 @@ class FormsMixin(object):
         form = form_class(**self.get_form_kwargs(form_key))
         form.messages = self.get_form_messages(form_key)
         form.form_key = form_key
+        
+        if form_key in self.readonly_forms:
+            self.set_form_readonly(form)
         return form
     
+    def set_form_readonly(self, form):
+        for fkey, field in form.fields.items():
+            field.widget.attrs['disabled'] = 'disabled'
+            
     def get_form_group(self, form_key):
         for key, val in self.get_forms_class().items():
             if key == form_key:
