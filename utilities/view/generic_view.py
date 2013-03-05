@@ -39,7 +39,7 @@ class FormsMixin(object):
                 force_unicode(message_text),
                 extra_tags=form_key
             )
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect(self.get_success_url())
     
     def get_success_url(self):
         return self.success_url
