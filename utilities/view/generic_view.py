@@ -14,6 +14,7 @@ class FormsMixin(object):
     messages_invalid = {}
     
     readonly_forms = []
+    forms = {}
     
     def get_valid_message(self, form, form_key):
         if self.messages_valid.get(form_key):
@@ -43,9 +44,9 @@ class FormsMixin(object):
                 force_unicode(message_text),
                 extra_tags=form_key
             )
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(self.get_success_url(form_key))
     
-    def get_success_url(self):
+    def get_success_url(self, form_key):
         return self.success_url or ''
     
     def get_context_data(self, **kwargs):
@@ -65,7 +66,11 @@ class FormsMixin(object):
                     for sub_key, sub_val in val.items():
                         if not sub_val.is_valid():
                             valid = False
-                        
+                    
+                    val.errors = not valid    
+                    
+                    print val
+                    print val.errors
                         
                     if not valid: return self.form_invalid(val, key)
                     else: return self.form_valid(val, key)
@@ -128,32 +133,39 @@ class FormsMixin(object):
         return None
            
     def get_forms(self):
-        forms = {}
-        for key, val in self.get_forms_class().items():
-            if isinstance(val, dict):
-                forms[key] = SortedDict()
-                forms[key].messages = self.get_form_messages(key)
-                for sub_key, sub_val in val.items():
-                    forms[key][sub_key] = self.get_form(sub_val, sub_key)
-            else:
-                forms[key] = self.get_form(val, key)
-        return forms
+        if not self.forms:
+            forms = {}
+            for key, val in self.get_forms_class().items():
+                if isinstance(val, dict):
+                    forms[key] = SortedDict()
+                    forms[key].messages = self.get_form_messages(key)
+                    for sub_key, sub_val in val.items():
+                        forms[key][sub_key] = self.get_form(sub_val, sub_key)
+                else:
+                    forms[key] = self.get_form(val, key)
+            self.forms = forms
+        return self.forms
 
     def get_forms_class(self):
         return self.forms_class
-        
-        
+           
     def get_media(self, forms):
         media = Media()
+        media.add_js(getattr(self.Media, 'js', []))
+        media.add_css(getattr(self.Media, 'css', {}))
+    
         for key, form in forms.items():
             if isinstance(form, dict):
                 for sub_key, sub_form in form.items():
                     media += sub_form.media
             else:
                 media += form.media
+                
         return media
-        
-        
+    
+    class Media():
+        js = []
+        css = {'screen':[], 'print':[]}    
         
 
 class DetailFormsView(FormsMixin, DetailView):
