@@ -42,7 +42,7 @@ class FormsMixin(object):
         return HttpResponseRedirect(self.get_success_url())
     
     def get_success_url(self):
-        return self.success_url
+        return self.success_url or ''
     
     def get_context_data(self, **kwargs):
         context = super(FormsMixin, self).get_context_data(**kwargs)
