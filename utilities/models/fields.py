@@ -498,7 +498,21 @@ class NullableCharField(models.CharField):
 
     def get_db_prep_value(self, value, *args, **kwargs):
         return value or None
+ 
+ 
+class NullableSlugField(models.SlugField):
+    description = "SlugField that obeys null=True"
     
+    def __init__(self, *args, **kwargs):
+        super(NullableSlugField, self).__init__(null=True, blank=True, *args,  **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, models.SlugField):
+            return value
+        return value or ""
+
+    def get_db_prep_value(self, value, *args, **kwargs):
+        return value or None   
     
 class ICQNumberField(models.CharField):
     

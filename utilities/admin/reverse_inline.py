@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 adminreverse from here http://djangosnippets.org/snippets/2032/
 changed for working with ForeignKeys
@@ -204,6 +205,16 @@ class ReverseModelMixin(object):
     allow the reverse inline formsets to be saved before the parent
     model.
     '''
+
+    def __init__(self, model, admin_site):
+        super(ReverseModelMixin, self).__init__(model, admin_site)
+        if not self.exclude:
+            self.exclude = [] 
+        
+        for inline_class in self.inline_reverse:
+            self.exclude.append(inline_class.parent_fk_name)
+            
+            
     
     def get_inline_instances(self, request):
         inline_instances = super(ReverseModelMixin, self).get_inline_instances(request)
@@ -222,7 +233,6 @@ class ReverseModelMixin(object):
                                                  )
 
                 inline_instances.append(inline)
-                self.exclude.append(name)
         return inline_instances
 
     def save_reverse_formset(self, request, form, formset, inline, obj):
