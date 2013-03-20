@@ -185,8 +185,8 @@ class FormsMixin(object):
                 forms[key] = self.get_formset(val, key)
             else:
                 forms[key] = self.get_form(val, key)
-        
-        if form_key in self.get_readonly_forms():
+
+        if not hasattr(forms, 'is_readonly') and form_key in self.get_readonly_forms():
             self.set_form_readonly(forms)
         
         forms.submit_key = self.get_submit_key(form_key)
