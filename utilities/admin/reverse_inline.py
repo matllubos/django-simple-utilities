@@ -218,6 +218,7 @@ class ReverseModelMixin(object):
     
     def get_inline_instances(self, request):
         inline_instances = super(ReverseModelMixin, self).get_inline_instances(request)
+        print inline_instances
         if self.exclude is None:
             self.exclude = []
  
