@@ -46,10 +46,11 @@ class FormsMixin(object):
         split_path = path.split('/')
         split_path = filter(None, split_path)
         
-        for key, form in self.forms_class.items():
-            if split_path[-1] == self.success_url.get(key):
-                del split_path[-1]
-                break
+        if split_path:
+            for key, form in self.forms_class.items():
+                if split_path[-1] == self.success_url.get(key):
+                    del split_path[-1]
+                    break
 
         if self.success_url.get(form_key):
             split_path.append(self.success_url.get(form_key))
