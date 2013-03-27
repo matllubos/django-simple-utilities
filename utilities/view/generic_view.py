@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils.encoding import force_unicode
 
 class FormsMixin(object):
-    success_url = None
+    success_url = {}
     forms_class = {}
     initials = {}
     messages_valid = {}
@@ -39,10 +39,22 @@ class FormsMixin(object):
                 force_unicode(message_text),
                 extra_tags=form_key
             )
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(self.get_success_url(form_key))
     
-    def get_success_url(self):
-        return self.success_url or ''
+    def get_success_url(self, form_key):
+        path = self.request.path
+        split_path = path.split('/')
+        split_path = filter(None, split_path)
+        
+        for key, form in self.forms_class.items():
+            if split_path[-1] == self.success_url.get(key):
+                del split_path[-1]
+                break
+
+        if self.success_url.get(form_key):
+            split_path.append(self.success_url.get(form_key))
+
+        return '/%s' % '/'.join(split_path)
     
     def get_context_data(self, **kwargs):
         context = super(FormsMixin, self).get_context_data(**kwargs)
