@@ -79,8 +79,13 @@ class FormsMixin(object):
                 if out: return out
                 
                 if self.get_submit_key(key) in self.request.POST:
+                    
                     valid = True
                     for sub_key, sub_val in val.items():
+                        print sub_key
+                        print sub_val.is_valid()
+                        print sub_val.errors
+                        
                         if not sub_val.is_valid():
                             valid = False
                                 
@@ -128,7 +133,7 @@ class FormsMixin(object):
             
         if form_key in self.get_readonly_forms():
             self.set_form_readonly(form)
-            
+        
         form.submit_key = self.get_submit_key(form_key)
         return form
     
@@ -147,21 +152,25 @@ class FormsMixin(object):
         
         form.is_readonly = True
             
-    def get_form_group(self, form_key):
-        for key, val in self.get_forms_class().items():
+    def get_form_group(self, form_key, parent_key=None, forms_class= None):        
+        if not forms_class:
+            forms_class = self.get_forms_class()
+        
+        for key, val in forms_class.items():
             if key == form_key:
-                return None
+                return parent_key
             
             
             if isinstance(val, dict): 
-                for sub_key, sub_val in val.items():
-                    if sub_key == form_key:
-                        return key
+                out = self.get_form_group(form_key, key, val)
+                if out:
+                    return out
         return None
         
         
     def get_form_kwargs(self, form_key):
         kwargs = {'initial': self.get_initial(form_key)}
+        
         if self.request.method in ('POST', 'PUT') and (self.get_submit_key(form_key) in self.request.POST or self.get_submit_key(self.get_form_group(form_key)) in self.request.POST) and (not form_key in self.get_readonly_forms()): 
             kwargs.update({
                 'data': self.request.POST,

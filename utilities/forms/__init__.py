@@ -12,7 +12,7 @@ from django.core.validators import EmailValidator, BaseValidator
 from django.contrib.localflavor.cz import forms as localforms
 
 from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect,\
-    DatepickerWidget
+    DatepickerWidget, WidgetFactory, FieldsWidget
 from django.forms.fields import RegexField
 
 
@@ -346,3 +346,9 @@ class CZDICField(RegexField):
 class CZICNumberField(localforms.CZICNumberField):
     def __init__(self, max_length=None, *args, **kwargs): 
         super(CZICNumberField, self).__init__(*args, **kwargs)
+        
+class PSCField(forms.RegexField):
+    def __init__(self, *args, **kwargs):
+        kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'psc'}, kwargs.get('widget', None))
+        super(PSCField, self).__init__(r'^\d{3} ?\d{2}$', *args, **kwargs)
+    

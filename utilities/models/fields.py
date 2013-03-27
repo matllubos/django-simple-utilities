@@ -126,10 +126,7 @@ class PSCField(models.CharField):
         super(PSCField, self).__init__(max_length=6, *args, **kwargs)
         
     def formfield(self, **kwargs):
-        defaults = {'regex':r'^\d{3} ?\d{2}$'}
-        defaults.update(kwargs)
-        defaults['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'psc'}, kwargs.get('widget', None))
-        return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
+        return super(models.CharField, self).formfield(form_class=utilities_forms.PSCField, **kwargs)
     
     def pre_save(self, model_instance, add):
         m = re.match(r'^(\d{3}) ?(\d{2})$', getattr(model_instance, self.attname))
