@@ -1,6 +1,7 @@
 # coding: utf-8
 import re
 import unicodedata
+import pickle
 from types import UnicodeType
 
 from django.contrib.admin.util import quote as django_quote
@@ -50,3 +51,42 @@ def strip_accents(s):
 
 
 mark_safe_lazy = lazy(mark_safe, UnicodeType)
+
+
+
+
+def get_referer(request, default=None):
+    ''' 
+    Return the referer view of the current request
+    '''
+
+    # if the user typed the url directly in the browser's address bar
+    referer = request.META.get('HTTP_REFERER')
+    if not referer:
+        return default
+
+    # remove the protocol and split the url at the slashes
+    referer = re.sub('^https?:\/\/', '', referer).split('/')
+    if referer[0] == request.META.get('SERVER_NAME'):
+        return default
+
+    # add the slash at the relative path's view and finished
+    referer = u'/'.join(referer)
+    return referer
+
+
+
+class MultiCookie():
+    def __init__(self,cookie=None,values=None):
+        if cookie != None:
+            try:
+                self.values = pickle.loads(cookie)
+            except:
+                self.values = None
+        elif values != None:
+            self.values = values
+        else:
+            self.values = None
+
+    def __str__(self):
+        return pickle.dumps(self.values)
