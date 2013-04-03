@@ -123,8 +123,11 @@ class PSCField(models.CharField):
         return super(models.CharField, self).formfield(form_class=forms.RegexField, **defaults)
     
     def pre_save(self, model_instance, add):
-        m = re.match(r'^(\d{3}) ?(\d{2})$', getattr(model_instance, self.attname))
-        return '{0} {1}'.format(m.group(1), m.group(2))
+        value = getattr(model_instance, self.attname)
+        m = re.match(r'^(\d{3}) ?(\d{2})$', value)
+        if m:
+            return '{0} {1}'.format(m.group(1), m.group(2))
+        return value
 
 
 class StrictEmailField(models.EmailField):
