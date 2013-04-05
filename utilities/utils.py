@@ -71,7 +71,7 @@ def get_referer(request, default=None):
         return default
 
     # add the slash at the relative path's view and finished
-    referer = u'/'.join(referer)
+    referer = '/'.join(referer)
     return referer
 
 
