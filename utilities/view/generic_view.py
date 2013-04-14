@@ -55,7 +55,7 @@ class FormsMixin(object):
         if self.success_url.get(form_key):
             split_path.append(self.success_url.get(form_key))
 
-        return '/%s' % '/'.join(split_path)
+        return '/%s/' % '/'.join(split_path)
     
     def get_context_data(self, **kwargs):
         context = super(FormsMixin, self).get_context_data(**kwargs)
