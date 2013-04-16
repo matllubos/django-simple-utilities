@@ -93,32 +93,29 @@ class MailSender:
             fp.close()
             msgImage.add_header('Content-ID', '<'+img[1]+'>')
             msgRoot.attach(msgImage)
-        
-        
-        
- 
-        
-        smtp = SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
+
+        self.smtp.sendmail(sender, recip, msgRoot.as_string())
+    
+    def connect(self):
+        self.smtp = SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
         
         if hasattr(settings, 'EMAIL_USE_TLS') and settings.EMAIL_USE_TLS:
-            smtp.ehlo()
-            smtp.starttls()
-            smtp.ehlo()
-        
-       # smtp.connect(settings.EMAIL_HOST, settings.EMAIL_PORT)
-        
-
+            self.smtp.ehlo()
+            self.smtp.starttls()
+            self.smtp.ehlo() 
         if hasattr(settings, 'EMAIL_HOST_USER') and hasattr(settings, 'EMAIL_HOST_PASSWORD') :
-            smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-        
-        smtp.sendmail(sender, recip, msgRoot.as_string())
-        smtp.quit()
+            self.smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+    
+    def quit(self):
+        self.smtp.quit()
     
     def send_batch(self):
         num_send_mails = 0
         htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
         site_email = SiteEmail.objects.get(pk = 1) 
         out = []
+        
+        self.connect()
         while (num_send_mails < self.batch):
             htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
             if (not htmlmails.exists()):
@@ -148,7 +145,7 @@ class MailSender:
                 out.append(u"Send all emails with date {0}.".format(htmlmail))
                 htmlmail.delete()
                 
-            
+        self.quit()    
         return '\n'.join(out)     
         
         
