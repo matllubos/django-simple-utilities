@@ -121,6 +121,8 @@ class FormsMixin(object):
     def get_readonly_forms(self):
         return list(self.readonly_forms)
         
+    def is_form_readonly(self, form_key):
+        return form_key in self.get_readonly_forms()
           
     def get_form(self, form_class, form_key):
         form = form_class(**self.get_form_kwargs(form_key))
@@ -131,7 +133,7 @@ class FormsMixin(object):
             if form.forms:
                 form.fields = form.forms[0]
             
-        if form_key in self.get_readonly_forms():
+        if self.is_form_readonly(form_key):
             self.set_form_readonly(form)
         
         form.submit_key = self.get_submit_key(form_key)

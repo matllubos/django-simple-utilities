@@ -3,7 +3,7 @@ import re
 
 from datetime import datetime
 
-from smtplib import SMTP
+from smtplib import SMTP, SMTP_SSL
 
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
@@ -28,30 +28,19 @@ class MailSender:
     def send_massmails(self, sbj, recips, template, context, images = []):
         html = render_to_string(template, context)
                 
-        htmlmail = HtmlMail()
-        htmlmail.html = html
-        htmlmail.subject = sbj
-        htmlmail.save()
+        htmlmail = HtmlMail.objects.create(html = html, subject = sbj)
         
         for image in images:
-            mail_image = Image()
-            mail_image.htmlmail = htmlmail
-            mail_image.image = image
-            mail_image.save()
+            Image.objects.create(htmlmail = htmlmail, image = image)
          
         for recip in recips:   
-            recipient = Recipient()
-            recipient.mail = recip
-            recipient.htmlmail = htmlmail
-            recipient.save()
+            Recipient.objects.create(mail=recip, htmlmail=htmlmail)
         
         
-    def send_mail(self, sbj, recip, template, context, sender=None, images = []):
+    def send_mail(self, sbj, recip, template, context, images = []):
         try:
-            if (not sender):
-                sender = SiteEmail.objects.get(pk = 1).mail
-            html = render_to_string(template, context)
-            self.htmlmail(force_unicode(sbj), recip, html, images, sender)
+            self.send_massmails(sbj, [recip], template, context, images)
+
             return True
         except ObjectDoesNotExist:
             return False
@@ -73,9 +62,11 @@ class MailSender:
                         translation.activate(user_lang)
                     except ObjectDoesNotExist:
                         translation.activate(settings.LANGUAGE_CODE)
-                        
-                    self.htmlmail(force_unicode(sbj), user.email, render_to_string(template, context), images, site_email.mail)
+                     
+                     
+                    self.send_massmails(sbj, [user.email], template, context, images)
             translation.activate(lang)
+            return True
         except ObjectDoesNotExist:
             return False
     
@@ -103,8 +94,23 @@ class MailSender:
             msgImage.add_header('Content-ID', '<'+img[1]+'>')
             msgRoot.attach(msgImage)
         
-        smtp = SMTP()
-        smtp.connect('localhost')
+        
+        
+ 
+        
+        smtp = SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        
+        if hasattr(settings, 'EMAIL_USE_TLS') and settings.EMAIL_USE_TLS:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.ehlo()
+        
+       # smtp.connect(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        
+
+        if hasattr(settings, 'EMAIL_HOST_USER') and hasattr(settings, 'EMAIL_HOST_PASSWORD') :
+            smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        
         smtp.sendmail(sender, recip, msgRoot.as_string())
         smtp.quit()
     
