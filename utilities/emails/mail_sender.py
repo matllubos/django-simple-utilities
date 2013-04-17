@@ -31,13 +31,10 @@ class MailSender:
         except ObjectDoesNotExist:
             return False
         
-        
-        
-        
         html = render_to_string(template, context)                
         htmlmail = HtmlMail.objects.create(
                                            html = html,
-                                           subject = sbj,
+                                           subject = force_unicode(sbj),
                                            sender = sender
                                            )
         
