@@ -20,6 +20,7 @@ class UserLanguageProfile(models.Model):
 class HtmlMail(models.Model):
     subject = models.CharField(_('Subject'), max_length=255, blank=False)
     html = models.TextField(_('Content'))
+    sender = models.EmailField(_('Sender E-mail'))
     datetime = models.DateTimeField(_('Date and time'), auto_now = True)
     
     def __unicode__(self):

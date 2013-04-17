@@ -18,48 +18,51 @@ from django.utils import translation
 
 from utilities.models import  Recipient, Image, UserLanguageProfile, SiteEmail, HtmlMail
 from django.utils.encoding import force_unicode
+from django.core.mail import send_mass_mail
 
 class MailSender:
     day_abbr = ((u'pondělí', u'úterý', u'středa', u'čtvrtek', u'pátek', u'sobota', u'neděle'))
     
-    batch = 50
     
-    
-    def send_massmails(self, sbj, recips, template, context, images = []):
-        html = render_to_string(template, context)
-                
-        htmlmail = HtmlMail()
-        htmlmail.html = html
-        htmlmail.subject = sbj
-        htmlmail.save()
-        
-        for image in images:
-            mail_image = Image()
-            mail_image.htmlmail = htmlmail
-            mail_image.image = image
-            mail_image.save()
-         
-        for recip in recips:   
-            recipient = Recipient()
-            recipient.mail = recip
-            recipient.htmlmail = htmlmail
-            recipient.save()
-        
-        
-    def send_mail(self, sbj, recip, template, context, sender=None, images = []):
+    def send_massmails(self, sbj, recips, template, context, sender=None, images = []):
         try:
             if (not sender):
-                sender = SiteEmail.objects.get(pk = 1).mail
-            html = render_to_string(template, context)
-            self.htmlmail(force_unicode(sbj), recip, html, images, sender)
-            return True
+                sender = SiteEmail.objects.get(pk = 1).mail   
         except ObjectDoesNotExist:
             return False
-
+        
+        
+        
+        
+        html = render_to_string(template, context)                
+        htmlmail = HtmlMail.objects.create(
+                                           html = html,
+                                           subject = sbj,
+                                           sender = sender
+                                           )
+        
+        for image in images:
+            Image.objects.create(
+                                htmlmail = htmlmail,
+                                image = image
+                                )
+         
+        for recip in recips:   
+            Recipient.objects.create(
+                                    mail = recip,
+                                    htmlmail = htmlmail
+                                    )        
+        return True;
+        
+    def send_mail(self, sbj, recip, template, context, sender=None, images = []):
+        return self.send_massmails(sbj, [recip], template, context, sender, images)
         
     def send_admin_mail(self, sbj, template, context, perm= None, images = []):
         try:
             site_email = SiteEmail.objects.get(pk = 1)
+            
+            sent = False
+            
             users = User.objects.filter(is_active=True, is_staff=True)
             if (perm):
                 users = users.filter(Q(groups__permissions=perm) | Q(user_permissions=perm) ).distinct()
@@ -73,9 +76,11 @@ class MailSender:
                         translation.activate(user_lang)
                     except ObjectDoesNotExist:
                         translation.activate(settings.LANGUAGE_CODE)
-                        
-                    self.htmlmail(force_unicode(sbj), user.email, render_to_string(template, context), images, site_email.mail)
+                    
+                    sent = self.send_massmails(sbj, [user.email], template, context, site_email.mail, images)   
+
             translation.activate(lang)
+            return sent
         except ObjectDoesNotExist:
             return False
     
@@ -103,17 +108,31 @@ class MailSender:
             msgImage.add_header('Content-ID', '<'+img[1]+'>')
             msgRoot.attach(msgImage)
         
-        smtp = SMTP()
-        smtp.connect('localhost')
-        smtp.sendmail(sender, recip, msgRoot.as_string())
-        smtp.quit()
+        self.smtp.sendmail(sender, recip, msgRoot.as_string())
+
+    
+    def connect(self):
+        self.smtp = SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        
+        if settings.EMAIL_USE_TLS:
+            self.smtp.ehlo()
+            self.smtp.starttls()
+            self.smtp.ehlo() 
+        if settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD :
+            self.smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+    
+    def quit(self):
+        self.smtp.quit()
+   
     
     def send_batch(self):
         num_send_mails = 0
         htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
-        site_email = SiteEmail.objects.get(pk = 1) 
         out = []
-        while (num_send_mails < self.batch):
+        
+        batch = settings.COUNT_MAILS_IN_BATCH
+        self.connect()
+        while (num_send_mails < batch):
             htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
             if (not htmlmails.exists()):
                 out.append("No mass emails to send.")
@@ -130,9 +149,9 @@ class MailSender:
             
             i = 0   
             for recipient in recipients:
-                self.htmlmail(htmlmail.subject, recipient.mail, htmlmail.html, images, site_email.mail)
+                self.htmlmail(htmlmail.subject, recipient.mail, htmlmail.html, images, htmlmail.sender)
                 recipient.delete()
-                if (num_send_mails==self.batch): break
+                if (num_send_mails==batch): break
                 num_send_mails += 1
                 i += 1
                 
@@ -142,7 +161,7 @@ class MailSender:
                 out.append(u"Send all emails with date {0}.".format(htmlmail))
                 htmlmail.delete()
                 
-            
+        self.quit()   
         return '\n'.join(out)     
         
         
