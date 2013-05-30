@@ -52,6 +52,12 @@ jQuery(function($) {
 })(jQuery);
 
 $(document).ready(function(){
-	$('.datepicker-widget').datepicker();
-	$('.datetimepicker-widget').datetimepicker();
+	$('.datepicker-widget').datepicker({
+			  changeMonth: true,
+		      changeYear: true
+	});
+	$('.datetimepicker-widget').datetimepicker({
+			changeMonth: true,
+		    changeYear: true
+	});
 });
