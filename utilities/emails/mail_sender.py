@@ -54,7 +54,7 @@ class MailSender:
     def send_mail(self, sbj, recip, template, context, sender=None, images = []):
         return self.send_massmails(sbj, [recip], template, context, sender, images)
         
-    def send_admin_mail(self, sbj, template, context, perm= None, images = []):
+    def send_admin_mail(self, sbj, template, context, perm=None, images = []):
         try:
             site_email = SiteEmail.objects.get(pk = 1)
             
