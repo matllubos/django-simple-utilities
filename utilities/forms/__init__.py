@@ -16,6 +16,11 @@ from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWi
 from django.forms.fields import RegexField
 
 
+class FieldOrderFormMixin(object):
+    def __init__(self, *args, **kw):
+        super(FieldOrderFormMixin, self).__init__(*args, **kw)
+        self.fields.keyOrder = self.Meta.fields_order
+
 class CommaDecimalField(forms.FloatField):
 
     def clean(self, value):
