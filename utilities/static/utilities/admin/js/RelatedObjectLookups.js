@@ -43,6 +43,7 @@ function showDeleteAnotherPopup(triggeringLink) {
     return false;
 }
 
+
 function dismissAddAnotherPopup(win, newId, newRepr, attrs) {
     // newId and newRepr are expected to have previously been escaped by
     // django.utils.html.escape.
@@ -50,32 +51,55 @@ function dismissAddAnotherPopup(win, newId, newRepr, attrs) {
     newRepr = html_unescape(newRepr);
     var name = windowname_to_id(win.name);
     
-    var elem = document.getElementById(name);
-    if (elem) {
-        if (elem.nodeName == 'SELECT') {
-            var o = new Option(newRepr, newId);
-            elem.options[elem.options.length] = o;
-            for (var attr in attrs) {
- 				o.setAttribute(attr,attrs[attr]);
- 			}
-            o.selected = true;
-        } else if (elem.nodeName == 'INPUT') {
-            if (elem.className.indexOf('vManyToManyRawIdAdminField') != -1 && elem.value) {
-                elem.value += ',' + newId;
-            } else {
-                elem.value = newId;
-            }
-        }
-    } else {
-        var toId = name + "_to";
-        elem = document.getElementById(toId);
-        var o = new Option(newRepr, newId);
-        SelectBox.add_to_cache(toId, o);
-        SelectBox.redisplay(toId);
+    var addOption = function(elem, selected) {
+	    if (elem) {
+	    	
+	        if (elem.nodeName == 'SELECT') {
+	            var o = new Option(newRepr, newId);
+	            elem.options[elem.options.length] = o;
+	            for (var attr in attrs) {
+	 				o.setAttribute(attr,attrs[attr]);
+	 			}
+	            o.selected = selected;
+	        } else if (elem.nodeName == 'INPUT') {
+	            if (elem.className.indexOf('vManyToManyRawIdAdminField') != -1 && elem.value) {
+	                elem.value += ',' + newId;
+	            } else {
+	                elem.value = newId;
+	            }
+	        }
+	    } else {
+	        var toId = name + "_to";
+	        elem = document.getElementById(toId);
+	        var o = new Option(newRepr, newId);       
+	        SelectBox.add_to_cache(toId, o);
+	        SelectBox.redisplay(toId);
+	    }
     }
+    
+    if (name.indexOf("-") !== -1) {
+    	splitName = name.substring(3).split('-');
+    	alert(splitName);
+    	
+    	
+    	addOption(document.getElementsByName(splitName[0]+'-__prefix__-'+splitName[2])[0], false)
+    	var i = 0;
+    	while(true) {
+    		var elem = document.getElementsByName(splitName[0]+'-'+i+'-'+splitName[2])[0];
+    		if (elem) addOption(elem, i == splitName[1]);
+    		else break;
+    		i++;
+    	}
+    } else{
+    	
+    	var elem = document.getElementsByName(name.substring(3))[0];
+    	addOption(elem, true); 	
+    }
+    
+    
     win.close();
 
-    $('#'+name).change();
+    $("[name='"+name.substring(3)+"']").change();
 }
 
 function editSelectChange(el) {

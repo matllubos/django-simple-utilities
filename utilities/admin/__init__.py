@@ -28,6 +28,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.contrib.admin.templatetags.admin_static import static
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
@@ -153,16 +154,37 @@ class RelatedToolsAdmin(admin.ModelAdmin):
     
     def popup_attrs(self, obj):
         return {}
-           
-    
-    def _media(self):  
-        media = super(RelatedToolsAdmin, self)._media()
+      
+    @property     
+    def media(self):
+        print 'ted'
+        extra = '' if settings.DEBUG else '.min'
+        js = [
+            'core.js',
+            'admin/RelatedObjectLookups.js',
+            'jquery%s.js' % extra,
+            'jquery.init.js'
+        ]
+        
+        if self.actions is not None:
+            js.append('actions%s.js' % extra)
+        if self.prepopulated_fields:
+            js.extend(['urlify.js', 'prepopulate%s.js' % extra])
+        if self.opts.get_ordered_objects():
+            js.extend(['getElementsBySelector.js', 'dom-drag.js' , 'admin/ordering.js'])
+            
+        print js
+        
+        media = forms.Media(js=[static('admin/js/%s' % url) for url in js])
+        
         js = []
         js.append('%sutilities/js/jquery-1.6.4.min.js' % settings.STATIC_URL)
         js.append('%sutilities/admin/js/RelatedObjectLookups.js' % settings.STATIC_URL)
+        
         media.add_js(js)
         return media
-    media = property(_media)
+
+
         
 class HiddenModelMixin(object):
     def get_model_perms(self, *args, **kwargs):
