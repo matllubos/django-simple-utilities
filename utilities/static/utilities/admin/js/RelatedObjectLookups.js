@@ -79,9 +79,7 @@ function dismissAddAnotherPopup(win, newId, newRepr, attrs) {
     
     if (name.indexOf("-") !== -1) {
     	splitName = name.substring(3).split('-');
-    	alert(splitName);
-    	
-    	
+
     	addOption(document.getElementsByName(splitName[0]+'-__prefix__-'+splitName[2])[0], false)
     	var i = 0;
     	while(true) {
