@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
 
 from utilities.emails.mail_sender import MailSender
+from django.utils.encoding import force_unicode
 
 def get_field_value(obj, field):
         val = getattr(obj, field.name)
@@ -76,8 +77,9 @@ class NotificationPostSave(DefaultPostSave):
                      }
             content_type = ContentType.objects.get_for_model(instance)
             codename = 'can_receive_notification_%s' % content_type.model
-            perm = Permission.objects.get(content_type=content_type, codename=codename)       
-            mail_sender.send_admin_mail(self.models_data[instance._meta.db_table]['subject'], self.models_data[instance._meta.db_table]['template'], context, perm=perm)
+            perm = Permission.objects.get(content_type=content_type, codename=codename) 
+            subject = force_unicode(self.models_data[instance._meta.db_table]['subject'])     
+            mail_sender.send_admin_mail(subject, self.models_data[instance._meta.db_table]['template'], context, perm=perm)
 
 class SendCustomerNotificationPostSave(DefaultPostSave):
     
