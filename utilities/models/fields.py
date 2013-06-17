@@ -132,6 +132,14 @@ class PSCField(models.CharField):
         m = re.match(r'^(\d{3}) ?(\d{2})$', getattr(model_instance, self.attname))
         return '{0} {1}'.format(m.group(1), m.group(2))
 
+class HouseNumberField(models.CharField):
+
+    def __init__(self, *args, **kwargs):
+        super(HouseNumberField, self).__init__(max_length=5, *args, **kwargs)
+        
+    def formfield(self, **kwargs):
+        return super(models.CharField, self).formfield(form_class=utilities_forms.HouseNumberField, **kwargs)
+
 
 class StrictEmailField(models.EmailField):
 

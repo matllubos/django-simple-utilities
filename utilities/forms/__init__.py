@@ -357,3 +357,8 @@ class PSCField(forms.RegexField):
         kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'psc'}, kwargs.get('widget', None))
         super(PSCField, self).__init__(r'^\d{3} ?\d{2}$', *args, **kwargs)
     
+class HouseNumberField(forms.RegexField):
+    def __init__(self, *args, **kwargs):
+        kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'house-number'}, kwargs.get('widget', None))
+        super(HouseNumberField, self).__init__(r'^\d{1,3}(/\d{1})?$', *args, **kwargs)
+    
