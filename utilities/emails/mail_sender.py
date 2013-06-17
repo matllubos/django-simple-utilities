@@ -1,7 +1,7 @@
 # coding: utf-8
 import re
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from smtplib import SMTP
 
@@ -124,41 +124,46 @@ class MailSender:
     
     def send_batch(self):
         num_send_mails = 0
-        htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
+        htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now(), pk_in = Recipient.objects.filter(sent = False).values('htmlmail')).order_by('-datetime') 
         out = []
         
-        batch = settings.COUNT_MAILS_IN_BATCH
-        self.connect()
-        while (num_send_mails < batch):
-            htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
-            if (not htmlmails.exists()):
-                out.append("No mass emails to send.")
-                break
-            htmlmail = htmlmails[0]
-            recipients = Recipient.objects.filter(htmlmail = htmlmail)
-            html_images = Image.objects.filter(htmlmail = htmlmail)
+        if (not htmlmails.exists()):
+            out.append("No mass emails to send.")
+        else:
+            batch = settings.COUNT_MAILS_IN_BATCH
+            self.connect()       
             
-            images = []
-            j = 1
-            for html_image in html_images:
-                images.append([j, html_image.image])
-                j += 1
+            i = 0
+            while num_send_mails < batch and htmlmails.count() > i:
+                htmlmail = htmlmails[i]
+                recipients = Recipient.objects.filter(htmlmail = htmlmail, sent = False)
+                
+                html_images = Image.objects.filter(htmlmail = htmlmail)
             
-            i = 0   
-            for recipient in recipients:
-                self.htmlmail(htmlmail.subject, recipient.mail, htmlmail.html, images, htmlmail.sender)
-                recipient.delete()
-                if (num_send_mails==batch): break
-                num_send_mails += 1
-                i += 1
+                images = []
+                j = 1
+                for html_image in html_images:
+                    images.append([j, html_image.image])
+                    j += 1
                 
-            out.append(u"Send {0} emails with date {1}.".format(i, htmlmail))    
-            recipients = Recipient.objects.filter(htmlmail = htmlmail)
-            if (not recipients):
-                out.append(u"Send all emails with date {0}.".format(htmlmail))
-                htmlmail.delete()
+                count_sent_mails = 0   
+                for recipient in recipients:
+                    self.htmlmail(htmlmail.subject, recipient.mail, htmlmail.html, images, htmlmail.sender)
+                    recipient.sent = True
+                    recipient.save()
+                    if num_send_mails == batch: break
+                    num_send_mails += 1
+                    count_sent_mails += 1
                 
-        self.quit()   
+                out.append(u"Send {0} emails with date {1}.".format(count_sent_mails, htmlmail))    
+        
+                
+            self.quit()
+            
+        for old_mail in HtmlMail.objects.filter(datetime__lte = datetime.now() + timedelta(days=settings.COUNT_DAYS_TO_DELETE_MAIL)).eclude(pk_in = Recipient.objects.filter(sent = False).values('htmlmail')):
+            old_mail.delete()
+ 
+            
         return '\n'.join(out)     
         
         

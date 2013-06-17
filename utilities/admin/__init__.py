@@ -28,6 +28,7 @@ from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.utils.text import truncate_words
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
@@ -44,6 +45,39 @@ class ImageInLine(admin.TabularInline):
         
 class HtmlMailAdmin(admin.ModelAdmin):
     inlines = [RecipientInLine, ImageInLine]
+
+    list_display = ('datetime', 'subject', 'recipients', 'status')
+    
+    def recipients(self, obj):
+        recipitents = Recipient.objects.filter(htmlmail = obj)
+        
+        return truncate_words(u', '.join([force_unicode(recipient) for recipient in recipitents]), 10)
+    recipients.short_description = _('Příjemci')
+    
+    def status(self, obj): 
+        waiting_recipitents = Recipient.objects.filter(htmlmail = obj, sent = False)
+        sent_recipitents = Recipient.objects.filter(htmlmail = obj, sent = True)
+        
+        
+        if waiting_recipitents and sent_recipitents:
+            background = '#FAE087'
+            border = '#B0A16D'
+            color ='#575755'
+            status = _('Sending')
+        elif sent_recipitents:
+            background = '#C8DE96'
+            border = '#94AC5E'
+            color ='#585A56'
+            status = _('Sent')
+        else:
+            background = '#BC3238'
+            border = '#873034'
+            color ='#FFFFFF'
+            status = _('Waiting')
+            
+        return '<span style="display: block; text-align: center; width: 60px; padding: 1px 5px; background:%s;border-radius:3px;border:1px solid %s; color:%s;">%s</span>' % (background, border, color, force_unicode(status)) 
+    status.short_description = _('State')
+    status.allow_tags = True 
 
 admin.site.register(HtmlMail, HtmlMailAdmin)
 admin.site.register(SiteEmail)

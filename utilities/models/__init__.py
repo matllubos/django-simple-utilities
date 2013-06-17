@@ -30,6 +30,7 @@ class HtmlMail(models.Model):
 class Recipient(models.Model):
     mail = models.EmailField(_('E-mail'))
     htmlmail = models.ForeignKey(HtmlMail)
+    sent = models.BooleanField(_('Is sent'), default=False)
     
     def __unicode__(self):
         return self.mail    
