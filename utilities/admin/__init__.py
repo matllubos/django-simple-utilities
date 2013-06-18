@@ -52,7 +52,7 @@ class HtmlMailAdmin(admin.ModelAdmin):
         recipitents = Recipient.objects.filter(htmlmail = obj)
         
         return truncate_words(u', '.join([force_unicode(recipient) for recipient in recipitents]), 10)
-    recipients.short_description = _('Příjemci')
+    recipients.short_description = _('Recipients')
     
     def status(self, obj): 
         waiting_recipitents = Recipient.objects.filter(htmlmail = obj, sent = False)
