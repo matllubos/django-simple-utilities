@@ -124,7 +124,7 @@ class MailSender:
     
     def send_batch(self):
         num_send_mails = 0
-        htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now(), pk_in = Recipient.objects.filter(sent = False).values('htmlmail')).order_by('-datetime') 
+        htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now(), pk__in = Recipient.objects.filter(sent = False).values('htmlmail')).order_by('-datetime') 
         out = []
         
         if (not htmlmails.exists()):
@@ -160,7 +160,7 @@ class MailSender:
                 
             self.quit()
             
-        for old_mail in HtmlMail.objects.filter(datetime__lte = datetime.now() + timedelta(days=settings.COUNT_DAYS_TO_DELETE_MAIL)).eclude(pk_in = Recipient.objects.filter(sent = False).values('htmlmail')):
+        for old_mail in HtmlMail.objects.filter(datetime__lte = datetime.now() - timedelta(days=settings.COUNT_DAYS_TO_DELETE_MAIL)).exclude(pk__in = Recipient.objects.filter(sent = False).values('htmlmail')):
             old_mail.delete()
  
             
