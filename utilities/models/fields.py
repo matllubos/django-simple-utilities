@@ -24,7 +24,7 @@ from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, Mea
 from utilities import forms as utilities_forms
 from utilities.utils import strip_accents
 
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_unicode, force_unicode
 from django.db.models.fields.subclassing import SubfieldBase
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Max
@@ -365,7 +365,6 @@ class OtherCharField(models.CharField):
         }
         defaults.update(kwargs)
         return super(OtherCharField, self).formfield(form_class=utilities_forms.OtherSelectField, **defaults)
-
     
     '''
     Z důvodu get_FOO_display, původně jsem chtěl udělat pomocí přepsání formfield a nastavení choices ale to bych musel přepsat i validaci a celou metodu formfield
