@@ -82,10 +82,6 @@ class FormsMixin(object):
                     
                     valid = True
                     for sub_key, sub_val in val.items():
-                        print sub_key
-                        print sub_val.is_valid()
-                        print sub_val.errors
-                        
                         if not sub_val.is_valid():
                             valid = False
                                 
