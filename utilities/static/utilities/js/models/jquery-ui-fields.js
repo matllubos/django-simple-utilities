@@ -4,7 +4,7 @@ jQuery(function($) {
         duration: '',
         changeMonth: false,
         changeYear: false,
-        yearRange: '2010:2020',
+        yearRange: '1900:2060',
         showTime: false,
         time24h: true
       });
@@ -54,7 +54,8 @@ jQuery(function($) {
 $(document).ready(function(){
 	$('.datepicker-widget').datepicker({
 			  changeMonth: true,
-		      changeYear: true
+		      changeYear: true,
+		      yearRange: '1900:2060',
 	});
 	$('.datetimepicker-widget').datetimepicker({
 			changeMonth: true,
