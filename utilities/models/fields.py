@@ -491,3 +491,14 @@ class NullableCharField(models.CharField):
 
     def get_db_prep_value(self, value, *args, **kwargs):
         return value or None
+    
+    
+    
+class NonUTFFieldFile(models.FileField):
+    
+    def get_filename(self, filename):
+        print filename
+        return super(NonUTFFieldFile, self).get_filename('test.png')
+    
+    
+    
