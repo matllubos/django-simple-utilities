@@ -135,7 +135,7 @@ class PSCField(models.CharField):
 class HouseNumberField(models.CharField):
 
     def __init__(self, *args, **kwargs):
-        super(HouseNumberField, self).__init__(max_length=5, *args, **kwargs)
+        super(HouseNumberField, self).__init__(max_length=6, *args, **kwargs)
         
     def formfield(self, **kwargs):
         return super(models.CharField, self).formfield(form_class=utilities_forms.HouseNumberField, **kwargs)
