@@ -556,3 +556,9 @@ class CZDICField(models.SlugField):
         defaults.update(kwargs)
         return super(CZDICField, self).formfield(**defaults)  
     
+    
+class NonUTFFieldFile(models.FileField):
+
+    def get_filename(self, filename):
+        from unidecode import unidecode
+        return super(NonUTFFieldFile, self).get_filename(unidecode(filename))
