@@ -295,9 +295,28 @@ class ResizableImageField(ImageField):
     
 class SelectDateField(models.DateField):
 
+    def __init__(self, verbose_name=None, name=None, auto_now=False,
+                 auto_now_add=False, from_year=None, to_year=None, 
+                 from_year_increment=None, to_year_increment=None,
+                 **kwargs):
+        super(SelectDateField, self).__init__(verbose_name, name, auto_now, auto_now_add, **kwargs)
+        self.from_year = date.today().year - 10
+        self.to_year = date.today().year + 10
+
+        if from_year_increment != None:
+            self.from_year = date.today().year + from_year_increment
+        
+        if to_year_increment != None:
+            self.to_year = date.today().year + to_year_increment
+        
+        if from_year != None:
+            self.from_year = from_year
+        if to_year != None:
+            self.to_year = to_year
+
+
     def formfield(self, **kwargs):
-        year = date.today().year - 10
-        kwargs['widget'] = SelectMonthYearWidget(years=range(year, year+20))
+        kwargs['widget'] = SelectMonthYearWidget(years=range(self.from_year, self.to_year + 1), required= not self.blank)
         return super(SelectDateField, self).formfield(form_class=forms.DateField, **kwargs)
  
 #Renamed  

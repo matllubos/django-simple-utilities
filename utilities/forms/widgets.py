@@ -171,6 +171,7 @@ class SelectMonthYearWidget(extras.SelectDateWidget):
                     match = RE_DATE.match(value)
                     if match:
                         year_val, month_val = [int(v) for v in match.groups()]
+
         choices = [(i, i) for i in self.years]
         year_html = self.create_select(name, self.year_field, value, year_val, choices)
         choices = MONTHS.items()
@@ -183,7 +184,8 @@ class SelectMonthYearWidget(extras.SelectDateWidget):
                 output.append(year_html)
             elif field == 'month':
                 output.append(month_html)
-        return mark_safe(u'\n'.join(output))
+        return mark_safe(u'\n'.join(output))    
+    
     
     def value_from_datadict(self, data, files, name):
         y = data.get(self.year_field % name)
