@@ -360,5 +360,5 @@ class PSCField(forms.RegexField):
 class HouseNumberField(forms.RegexField):
     def __init__(self, *args, **kwargs):
         kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'house-number'}, kwargs.get('widget', None))
-        super(HouseNumberField, self).__init__(r'^\d{1,4}(/\d{1})?$', *args, **kwargs)
+        super(HouseNumberField, self).__init__(r'^\d{1,4}(/(\d{1,5}|[MCDXLIV]{1,5}))?$', *args, **kwargs)
     
