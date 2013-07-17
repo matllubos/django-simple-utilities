@@ -157,7 +157,6 @@ class RelatedToolsAdmin(admin.ModelAdmin):
       
     @property     
     def media(self):
-        print 'ted'
         extra = '' if settings.DEBUG else '.min'
         js = [
             'core.js',
@@ -173,8 +172,6 @@ class RelatedToolsAdmin(admin.ModelAdmin):
         if self.opts.get_ordered_objects():
             js.extend(['getElementsBySelector.js', 'dom-drag.js' , 'admin/ordering.js'])
             
-        print js
-        
         media = forms.Media(js=[static('admin/js/%s' % url) for url in js])
         
         js = []
