@@ -18,7 +18,7 @@ fieldset.columns
 
 fieldset.table-layout
 {
-	max-width: 40%;
+	width: 400px;
 }
 
 fieldset.table-layout div.form-row 

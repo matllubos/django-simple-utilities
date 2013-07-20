@@ -77,7 +77,7 @@ class MeasureWidget(FieldsWidget):
             # Only add the 'value' attribute if a value is non-empty.
             final_attrs['value'] = force_unicode(self._format_value(value))
         if self.measure:
-            return mark_safe(u'<input%s /> %s' % (flatatt(final_attrs),self.measure))
+            return mark_safe(u'<input%s />&nbsp;%s' % (flatatt(final_attrs),self.measure))
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
 class CommaMeasureWidget(MeasureWidget):
