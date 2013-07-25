@@ -21,8 +21,6 @@ from utilities.models import  Recipient, Image, UserLanguageProfile, SiteEmail, 
 class MailSender:
     day_abbr = ((u'pondělí', u'úterý', u'středa', u'čtvrtek', u'pátek', u'sobota', u'neděle'))
     
-    batch = 50
-    
     
     def send_massmails(self, sbj, recips, template, context, images = []):
         html = render_to_string(template, context)
@@ -115,7 +113,7 @@ class MailSender:
         out = []
         
         self.connect()
-        while (num_send_mails < self.batch):
+        while (num_send_mails < settings.COUNT_MAILS_IN_BATCH):
             htmlmails = HtmlMail.objects.filter(datetime__lte = datetime.now()).order_by('-datetime') 
             if (not htmlmails.exists()):
                 out.append("No mass emails to send.")
