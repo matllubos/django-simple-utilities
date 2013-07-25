@@ -132,7 +132,7 @@ class MailSender:
             for recipient in recipients:
                 self.htmlmail(htmlmail.subject, recipient.mail, htmlmail.html, images, site_email.mail)
                 recipient.delete()
-                if (num_send_mails==self.COUNT_MAILS_IN_BATCH): break
+                if (num_send_mails==settings.COUNT_MAILS_IN_BATCH): break
                 num_send_mails += 1
                 i += 1
                 
