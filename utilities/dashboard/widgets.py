@@ -51,14 +51,17 @@ class TableDashboardWidget(DashboardWidget):
     
 class BarGraphDashboardWidget(DashboardWidget):
 
+    def __init__(self, width = 350):
+        self.width = width
+
     def render_title(self, title):
         return u'<tr><th>%s</th></tr>' % title
         
     def render(self, values, title, measure=None):
         rows = []      
         rows.append(self.render_title(title))
-        
-        rows.append(u'<tr><td><div id="chart-%s" style="margin-top:20px; margin-left:20px; width:350px; height:300px;"></div>' % (self.id)) 
+
+        rows.append(u'<tr><td><div id="chart-%s" style="margin-top:20px; margin-left:20px; width:%spx; height:300px;"></div>' % (self.id, self.width)) 
         
         graph_data = []
         for key, value in values.items():
