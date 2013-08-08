@@ -28,12 +28,7 @@ def get_args(obj, fields):
     return args
     
 def rename_unique_together(obj):
-    print obj._meta.unique_together
-    
     for unique_together in obj._meta.unique_together:  
-        print get_args(obj, unique_together)
-        
-        print  obj.__class__._default_manager.filter(**{'ad_id': 'fsda', 'archive': True})    
         if obj.__class__._default_manager.filter(**get_args(obj, unique_together)):
             for field in unique_together:
                 if obj._meta.get_field(field).get_internal_type() ==  "CharField":
