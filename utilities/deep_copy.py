@@ -19,8 +19,40 @@ def change_id(obj, id):
     change_related(obj, old)
     old.delete()  
     
+
+
+def get_args(obj, fields):
+    args = {}
+    for field in fields:
+        args[field] =  getattr(obj, field)
+    return args
     
+def rename_unique_together(obj):
+    print obj._meta.unique_together
     
+    for unique_together in obj._meta.unique_together:  
+        print get_args(obj, unique_together)
+        
+        print  obj.__class__._default_manager.filter(**{'ad_id': 'fsda', 'archive': True})    
+        if obj.__class__._default_manager.filter(**get_args(obj, unique_together)):
+            for field in unique_together:
+                if obj._meta.get_field(field).get_internal_type() ==  "CharField":
+                    val = getattr(obj, field)
+                    if val != None:
+                        m = re.match(r'^.* \((\d+)\)$', val)
+                        i = 1
+                        if m:
+                            i =  int(m.group(1)) + 1
+                        origin_val = re.sub(r' \(\d+\)$', '', val)
+                        val = origin_val + ' (%s)' % i
+                        setattr(obj, field, val)
+                        
+                        while obj.__class__._default_manager.filter(**get_args(obj, unique_together)):
+                            val = origin_val + ' (%s)' % i
+                            i += 1
+                            setattr(obj, field, val)
+                    break
+
 def rename_unique(obj):
     for field in obj._meta.fields:
         if (field.get_internal_type() ==  "CharField" and field.unique):
@@ -32,7 +64,7 @@ def rename_unique(obj):
                     i =  int(m.group(1)) + 1
                 origin_val = re.sub(r' \(\d+\)$', '', val)
                 val = origin_val + ' (%s)' % i
-                while (obj.__class__.objects.filter(**{field.name: val})):
+                while (obj.__class__._default_manager.filter(**{field.name: val})):
                     val = origin_val + ' (%s)' % i
                     i += 1
 
@@ -47,6 +79,7 @@ def deep_copy(obj, copy_related = True):
     if hasattr(copied_obj,'clone'):
         copied_obj.clone() 
     rename_unique(copied_obj)
+    rename_unique_together(copied_obj)
     copied_obj.save() 
        
     for original, copy in zip(obj._meta.many_to_many, copied_obj._meta.many_to_many): 
