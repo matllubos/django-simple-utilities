@@ -5,7 +5,7 @@ from django.utils.encoding import smart_str, smart_unicode
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from django.forms.models import ModelChoiceIterator, ModelForm
+from django.forms.models import ModelChoiceIterator, ModelForm, BaseInlineFormSet
 from django.utils.safestring import mark_safe
 from django.core import validators
 from django.core.validators import EmailValidator, BaseValidator

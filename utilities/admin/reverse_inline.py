@@ -148,12 +148,15 @@ class ReverseInlineModelAdmin(InlineModelAdmin):
     '''
     parent_fk_name = None
     inline_type = 'tabular'
+    template = ''
     
     def __init__(self,
                  parent_model,
                  model, admin_site,
                  ):
-        self.template = 'admin/edit_inline/%s.html' % self.inline_type
+        
+        if not self.template:
+            self.template = 'admin/edit_inline/%s.html' % self.inline_type
         self.model = model
         
         field_descriptor = getattr(parent_model, self.parent_fk_name)
