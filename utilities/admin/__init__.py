@@ -36,6 +36,7 @@ from utilities.models import HtmlMail, Recipient, Image, SiteEmail, GeneratedFil
 from utilities.templatetags.generated_file import file_image, filename, sizify, is_error
 
 from widgets import UpdateRelatedFieldWidgetWrapper
+from django.core.urlresolvers import reverse
 
 class RecipientInLine(admin.TabularInline):
     model = Recipient
@@ -818,6 +819,24 @@ class HighlightedTabularInLine(admin.TabularInline):
         return media
     media = property(_media)
 
+
+class DefaultFilterMixin(admin.ModelAdmin):
+    def changelist_view(self, request, *args, **kwargs):
+        from django.http import HttpResponseRedirect
+        if self.default_filters:
+            try:
+                test = request.META['HTTP_REFERER'].split(request.META['PATH_INFO'])
+                if test and test[-1] and not test[-1].startswith('?'):
+                    url = reverse('admin:%s_%s_changelist' % (self.opts.app_label, self.opts.module_name))
+                    filters = []
+                    for filter in self.default_filters:
+                        key = filter.split('=')[0]
+                        if not request.GET.has_key(key):
+                            filters.append(filter)
+                    if filters:                        
+                        return HttpResponseRedirect("%s?%s" % (url, "&".join(filters)))
+            except: pass
+        return super(DefaultFilterMixin, self).changelist_view(request, *args, **kwargs)            
 
 try:
     from sorl.thumbnail.shortcuts import get_thumbnail
