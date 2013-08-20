@@ -562,3 +562,11 @@ class NonUTFFieldFile(models.FileField):
     def get_filename(self, filename):
         from unidecode import unidecode
         return super(NonUTFFieldFile, self).get_filename(unidecode(filename))
+    
+class BankAccountField(models.CharField):
+    
+    def __init__(self, *args, **kwargs):
+        super(BankAccountField, self).__init__(max_length=22, *args, **kwargs) 
+    
+    def formfield(self, **kwargs):
+        return super(BankAccountField, self).formfield(form_class=utilities_forms.BankAccountField, **kwargs) 
