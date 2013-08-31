@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-31 15:49+0200\n"
+"POT-Creation-Date: 2013-08-31 15:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Lubos Matl <EMAIL@ADDRESS>\n"
 "Language-Team: CZ <LL@li.org>\n"
@@ -55,8 +55,9 @@ msgid "File must be in CSV format."
 msgstr "Soubor musí být ve formatu CSV"
 
 #: admin/__init__.py:730
+#, fuzzy
 msgid "Objects is exporting to CSV"
-msgstr "Objekt se exportuje do CSV"
+msgstr "Exportovat do CSV"
 
 #: admin/reverse_inline.py:333
 #, python-format
@@ -92,11 +93,11 @@ msgstr "Jiné"
 
 #: dashboard/__init__.py:164
 msgid "Yes"
-msgstr "Ano"
+msgstr ""
 
 #: dashboard/__init__.py:165
 msgid "No"
-msgstr "Ne"
+msgstr ""
 
 #: dashboard/__init__.py:215
 msgid "Sunday"
@@ -130,25 +131,26 @@ msgstr ""
 msgid "This is not Google maps URL."
 msgstr "Toto není URL Google map"
 
-#: forms/__init__.py:111 forms/__init__.py:112
-msgid "Insert a valid account number"
-msgstr "Vložte platné číslo účtu"
+#: forms/__init__.py:112 forms/__init__.py:113
+msgid "Vložte platné číslo účtu"
+msgstr ""
 
-#: forms/__init__.py:113 forms/__init__.py:114
-msgid "Insert a valid bank code"
-msgstr "Vložte platný kód banky"
+#: forms/__init__.py:114 forms/__init__.py:115
+msgid "Vložte platný kód banky"
+msgstr ""
 
-#: forms/__init__.py:265
+#: forms/__init__.py:266
 msgid "Enter a valid phone number"
 msgstr "Uveďte Vaše telefonní číslo ve formátu +420 xxx yyy zzz"
 
-#: forms/__init__.py:293
+#: forms/__init__.py:294
+#, fuzzy
 msgid "Enter a valid e-mail address."
-msgstr "Prosím vložte e-mailovou adresu ve správném formátu"
+msgstr "Prosím vložte vaše telefonní číslo"
 
-#: forms/__init__.py:373
+#: forms/__init__.py:374
 msgid "Enter an ICQ number in the format XXXXXXXXX."
-msgstr "Vložte ICQ ve formátu XXXXXXXXX"
+msgstr ""
 
 #: forms/forms.py:43
 msgid "Nejméně jedna položka musí být vyplněna"
@@ -187,8 +189,9 @@ msgid "Date and time of creation"
 msgstr ""
 
 #: models/__init__.py:70
+#, fuzzy
 msgid "Exported file"
-msgstr "Exportované soubory"
+msgstr "Uploadovat soubory"
 
 #: models/__init__.py:71 templates/admin/generated_files.html:51
 msgid "Count objects"
@@ -206,18 +209,6 @@ msgstr ""
 #: models/fields.py:405
 msgid "Can not select an object that causes the cycle."
 msgstr "Nelze vybrat objekt, který zapřičiní cyklus"
-
-#: models/fields.py:535
-msgid "Enter a birth number in the format XXXXXX/XXXX or XXXXXXXXXX."
-msgstr "Vložte rodné číslo ve formátu XXXXXX/XXXX nebo XXXXXXXXXX."
-
-#: models/fields.py:536
-msgid "Invalid optional parameter Gender, valid values are 'f' and 'm'"
-msgstr "Neplatný volitelný parametr pohlaví, možné hodnoty jsou 'f' nebo 'm'"
-
-#: models/fields.py:537
-msgid "Enter a valid birth number."
-msgstr "Vložte rodné číslo ve správném formátu."
 
 #: models/signals.py:48
 msgid "It was created a new item"
@@ -348,8 +339,9 @@ msgid "You don't have permission to edit anything."
 msgstr ""
 
 #: templates/admin/multiple_file_upload_change_form.html:28
+#, fuzzy
 msgid "Safe before upload files"
-msgstr "Uložit před uploudovaním souborů"
+msgstr "Uploadovat soubory"
 
 #: templates/admin/multiple_file_upload_change_form.html:56
 msgid "Add files..."

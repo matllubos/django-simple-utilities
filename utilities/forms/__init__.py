@@ -107,12 +107,11 @@ class BankAccountWidget(django_forms.MultiWidget):
 class BankAccountField(django_forms.MultiValueField):
     
     def __init__(self, *args, **kwargs):
-        print 'ted'
         fields = (
-            django_forms.CharField(error_messages={'incomplete': _(u'Vložte platné číslo účtu')},
-                      validators=[RegexValidator(r'^(\d{1,6}-)?\d{2,10}$', _(u'Vložte platné číslo účtu'))]),
-            django_forms.CharField(error_messages={'incomplete': _(u'Vložte platný kód banky')},
-                      validators=[RegexValidator(r'^\d{4}$', _(u'Vložte platný kód banky'))])
+            django_forms.CharField(error_messages={'incomplete': _(u'Insert a valid account number')},
+                      validators=[RegexValidator(r'^(\d{1,6}-)?\d{2,10}$', _(u'Insert a valid account number')]),
+            django_forms.CharField(error_messages={'incomplete': _(u'Insert a valid bank code')},
+                      validators=[RegexValidator(r'^\d{4}$', _(u'Insert a valid bank code'))])
         )
         del kwargs['max_length']
         kwargs['widget'] = BankAccountWidget
