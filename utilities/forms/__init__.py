@@ -11,7 +11,7 @@ from django.core import validators
 from django.core.validators import EmailValidator, BaseValidator
 from django.contrib.localflavor.cz import forms as localforms
 
-from utilities.forms.widgets import FullSizeMultipleSelectWidget,  OtherSelectWidget, MultipleOptgroupSelect,\
+from utilities.forms.widgets import FullSizeMultipleSelectWidget, OtherSelectWidget, MultipleOptgroupSelect, \
     DatepickerWidget, WidgetFactory, FieldsWidget
 from django.forms.fields import RegexField, MultiValueField
 
@@ -26,14 +26,14 @@ class CommaDecimalField(django_forms.FloatField):
     def clean(self, value):
         value = smart_str(value).replace(',', '.')
         return super(CommaDecimalField, self).clean(value)
-    
+
 class StylizedIntegerField(django_forms.IntegerField):
-    
+
     def clean(self, value):
         value = smart_str(value).replace(' ', '')
         return super(StylizedIntegerField, self).clean(value)
-    
-    
+
+
 class GoogleMapUrlField(django_forms.URLField):
     def clean(self, value):
         m = re.match(r"^.*src=\"([^\"]+)\".*$", value)
@@ -44,23 +44,23 @@ class GoogleMapUrlField(django_forms.URLField):
 
         if (not re.search(r"^https?://maps\.google\.cz/maps", value)):
             raise ValidationError(_(u'This is not Google maps URL.'))
-        return super(GoogleMapUrlField, self).clean(value) 
+        return super(GoogleMapUrlField, self).clean(value)
 
 
 class GoogleSpreadsheetField(django_forms.CharField):
     def clean(self, value):
-        value = re.sub(r'^.*\?key=([^&#"]*).*$',r'\g<1>', value)
-        return super(GoogleSpreadsheetField, self).clean(value) 
+        value = re.sub(r'^.*\?key=([^&#"]*).*$', r'\g<1>', value)
+        return super(GoogleSpreadsheetField, self).clean(value)
 
 
 class FullSizeModelMultipleChoiceField(django_forms.ModelMultipleChoiceField):
     widget = FullSizeMultipleSelectWidget
-    
+
 class OtherSelectField(django_forms.MultiValueField):
 
     def __init__(self, choices=[], other_label=_(u'Other'), hide_relations=None, *args, **kwargs):
         fields = (django_forms.CharField(required=True),
-                  django_forms.CharField(required=False, max_length = kwargs['max_length']),)
+                  django_forms.CharField(required=False, max_length=kwargs['max_length']),)
         del kwargs['max_length']
         kwargs['widget'] = OtherSelectWidget(choices, other_label, hide_relations=hide_relations)
         self.fields = fields
@@ -74,7 +74,7 @@ class OtherSelectField(django_forms.MultiValueField):
         out = self.compress(value)
         self.validate(out)
         return out
-    
+
     def compress(self, data_list):
         if data_list:
             if (data_list[0] == '__other__'):
@@ -99,17 +99,17 @@ class BankAccountWidget(django_forms.MultiWidget):
     def decompress(self, value):
         if value:
             return value.split('/')
-        return ['','']
+        return ['', '']
 
     def format_output(self, rendered_widgets):
         return u'&nbsp;/&nbsp;'.join(rendered_widgets)
 
 class BankAccountField(django_forms.MultiValueField):
-    
+
     def __init__(self, *args, **kwargs):
         fields = (
             django_forms.CharField(error_messages={'incomplete': _(u'Insert a valid account number')},
-                      validators=[RegexValidator(r'^(\d{1,6}-)?\d{2,10}$', _(u'Insert a valid account number')]),
+                      validators=[RegexValidator(r'^(\d{1,6}-)?\d{2,10}$', _(u'Insert a valid account number'))]),
             django_forms.CharField(error_messages={'incomplete': _(u'Insert a valid bank code')},
                       validators=[RegexValidator(r'^\d{4}$', _(u'Insert a valid bank code'))])
         )
@@ -117,7 +117,7 @@ class BankAccountField(django_forms.MultiValueField):
         kwargs['widget'] = BankAccountWidget
         self.fields = fields
         super(django_forms.MultiValueField, self).__init__(*args, **kwargs)
-    
+
     def compress(self, data_list):
         print data_list
         return '/'.join(data_list)
@@ -131,25 +131,25 @@ class TreeModelChoiceIterator(ModelChoiceIterator):
     def tree_sort(self, parent):
         result = []
         filter_values = {self.parent: parent}
-        
+
         ordering = self.queryset.model._meta.ordering
-         
+
         qs = self.queryset.filter(**filter_values)
         if (ordering):
             qs.order_by(*ordering)
         for obj in qs:
             result = result + [obj] + self.tree_sort(obj)
         return result
-    
+
     def get_depth(self, obj):
         depth = 0
-        parent =  getattr(obj, self.parent)
+        parent = getattr(obj, self.parent)
         obj.parent
         while(parent != None):
             parent = getattr(parent, self.parent)
             depth += 1
         return depth
-    
+
     def __iter__(self):
         if self.field.empty_label is not None:
             yield (u"", self.field.empty_label)
@@ -163,11 +163,11 @@ class TreeModelChoiceIterator(ModelChoiceIterator):
         else:
             for obj in self.tree_sort(None):
                 yield self.choice(obj)
-                
-     
+
+
     def choice(self, obj):
-        return (self.field.prepare_value(obj), mark_safe(u'%s|- %s' % ('&nbsp;' * self.get_depth(obj) * 2, self.field.label_from_instance(obj)))) 
-              
+        return (self.field.prepare_value(obj), mark_safe(u'%s|- %s' % ('&nbsp;' * self.get_depth(obj) * 2, self.field.label_from_instance(obj))))
+
 class TreeModelChoiceField(django_forms.ModelChoiceField):
     def __init__(self, queryset, parent, *args, **kwargs):
         self.parent = parent
@@ -177,15 +177,15 @@ class TreeModelChoiceField(django_forms.ModelChoiceField):
         if hasattr(self, '_choices'):
             return self._choices
         return TreeModelChoiceIterator(self.parent, self)
-    choices = property(_get_choices, django_forms.ChoiceField._set_choices)  
-  
-  
+    choices = property(_get_choices, django_forms.ChoiceField._set_choices)
+
+
 class GroupsModelChoiceIterator(ModelChoiceIterator):
     def __init__(self, group_by, order_by, *args, **kwargs):
         super(GroupsModelChoiceIterator, self).__init__(*args, **kwargs)
         self.group_by = group_by
         self.order_by = order_by
-    
+
     def __iter__(self):
         if self.field.empty_label is not None:
             yield (u"", self.field.empty_label)
@@ -198,12 +198,12 @@ class GroupsModelChoiceIterator(ModelChoiceIterator):
                 yield choice
         else:
             group = []
-            
-            order_by = list(self.group_by) + list(self.order_by)      
+
+            order_by = list(self.group_by) + list(self.order_by)
             for obj in self.queryset.all().order_by(*order_by):
                 current_group = group
                 prev_group = None
-                i = 0 
+                i = 0
                 for group_name in self.group_by:
                     if current_group and group_name == self.group_by[0] and getattr(obj, group_name) != current_group[0]:
                         yield group
@@ -212,24 +212,24 @@ class GroupsModelChoiceIterator(ModelChoiceIterator):
                     if not current_group or getattr(obj, group_name) != current_group[0]:
                         current_group = (getattr(obj, group_name), [])
                         if prev_group:
-                            
+
                             prev_group[1].append(current_group)
                         else:
                             group = current_group
-                            
+
                         prev_group = current_group
                         current_group = ()
                     else:
                         prev_group = current_group
                         current_group = current_group[1][-1]
-                    i+= 1
+                    i += 1
                 prev_group[1].append(self.choice(obj))
             if group:
                 yield group
-        
-      
+
+
 class GroupsModelChoiceField(django_forms.ModelChoiceField):
-    def __init__(self, queryset, group_by,  order_by, *args, **kwargs):
+    def __init__(self, queryset, group_by, order_by, *args, **kwargs):
         self.group_by = group_by
         self.order_by = order_by
         super(GroupsModelChoiceField, self).__init__(queryset, *args, **kwargs)
@@ -238,14 +238,14 @@ class GroupsModelChoiceField(django_forms.ModelChoiceField):
         if hasattr(self, '_choices'):
             return self._choices
         return GroupsModelChoiceIterator(self.group_by, self.order_by, self)
-    choices = property(_get_choices, django_forms.ChoiceField._set_choices)  
+    choices = property(_get_choices, django_forms.ChoiceField._set_choices)
 
 
 class NotRegexValidator(validators.RegexValidator):
     def __call__(self, value):
         if self.regex.search(smart_unicode(value)):
             raise validators.ValidationError(self.message, code=self.code)
-     
+
 class CzPhoneFormField(django_forms.RegexField):
     def __init__(self, max_length=None, min_length=None, error_message=None, *args, **kwargs):
         codes = ['601', '602', '606', '607', '702', '720', '721', '722', '723', '724', '725', '726', '727', '728', '729',
@@ -255,21 +255,21 @@ class CzPhoneFormField(django_forms.RegexField):
                  '797',
                  '791',
                  '799',
-                 '2\d\d', '31\d', '32\d', '35\d', '37\d', '38\d', '39\d', '41\d', '47\d', '46\d', '48\d', '49\d', 
+                 '2\d\d', '31\d', '32\d', '35\d', '37\d', '38\d', '39\d', '41\d', '47\d', '46\d', '48\d', '49\d',
                  '51\d', '53\d', '54\d', '55\d', '59\d', '56\d', '57\d', '58\d'  ]
-        
-        
+
+
         regex = r'^(\+?\d{3})? ?(%s) ?\d{3} ?\d{3}$' % ('|').join(codes)
-        
-        
-        super(CzPhoneFormField, self).__init__(regex, max_length, min_length, error_message = _(u'Enter a valid phone number'), *args, **kwargs)
+
+
+        super(CzPhoneFormField, self).__init__(regex, max_length, min_length, error_message=_(u'Enter a valid phone number'), *args, **kwargs)
         invalid_numbers = []
         for i in range(0, 9):
-            invalid_numbers.append('((\+?\d{3})? ?%s{3} ?%s{3} ?%s{3})' % (i,i,i))
-        
+            invalid_numbers.append('((\+?\d{3})? ?%s{3} ?%s{3} ?%s{3})' % (i, i, i))
+
         invalid_numbers.append('((\+?\d{3})? ?123 ?456 ?789)')
         invalid_numbers.append('((\+?\d{3})? ?987 ?654 ?321)')
-        self.validators.append(NotRegexValidator(regex='%s' % '|'.join(invalid_numbers)))  
+        self.validators.append(NotRegexValidator(regex='%s' % '|'.join(invalid_numbers)))
 
     def clean(self, value):
         if value == '+420':
@@ -277,44 +277,44 @@ class CzPhoneFormField(django_forms.RegexField):
         return super(CzPhoneFormField, self).clean(value)
 
 class AutoFormatIntegerField(django_forms.IntegerField):
-    
+
     def __init__(self, *args, **kwargs):
         super(AutoFormatIntegerField, self).__init__(*args, **kwargs)
 
-            
+
     def clean(self, value):
         value = smart_str(value).replace(' ', '')
-        return super(AutoFormatIntegerField, self).clean(value)   
- 
+        return super(AutoFormatIntegerField, self).clean(value)
+
 email_re = re.compile(
     r"(^[0-9A-Z]+([-\._][0-9A-Z]+)*"  # dot-atom
-    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"'  # quoted-string
     r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
 validate_email = EmailValidator(email_re, _(u'Enter a valid e-mail address.'), 'invalid')
-   
+
 class StrictEmailField(django_forms.EmailField):
-    default_validators = [validate_email]        
-    
-    
-    
+    default_validators = [validate_email]
+
+
+
 class InitialModelForm(ModelForm):
-    
+
     initial_values = {}
-    
+
     def __init__(self, data=None, files=None, initial=None):
         data = self.remove_initial_values(data)
         ModelForm.__init__(self, data=data, files=files, initial=initial)
         self.set_initial_values()
-        
-           
+
+
     def set_initial_values(self):
-        for key, val in self.initial_values.items():        
+        for key, val in self.initial_values.items():
             self.set_inital_value(key, val)
-     
-    
+
+
     def set_inital_value(self, key, val):
         if hasattr(self.fields[key].widget, 'choices'):
-            choices =  list(self.fields[key].widget.choices) 
+            choices = list(self.fields[key].widget.choices)
             if choices[0][0] == '':
                 choices[0] = ('', val)
             else:
@@ -328,8 +328,8 @@ class InitialModelForm(ModelForm):
             class_names += ' initial'
         else:
             class_names = 'initial'
-        self.fields[key].widget.attrs['class']= class_names       
-            
+        self.fields[key].widget.attrs['class'] = class_names
+
     def remove_initial_values(self, data):
         if (data):
             data = data.copy()
@@ -337,12 +337,12 @@ class InitialModelForm(ModelForm):
                 if (data.get(key) == val):
                     data[key] = ''
         return data
-                       
-            
+
+
 class MultiFieldsValidationModelForm(ModelForm):
     validators = ()
-    
-    
+
+
     def clean(self):
         cleaned_data = super(MultiFieldsValidationModelForm, self).clean()
         for validator in self.validators:
@@ -355,19 +355,19 @@ class MultiFieldsValidationModelForm(ModelForm):
 class AntispamField(django_forms.IntegerField):
     def __init__(self, *args, **kwargs):
         kwargs['label'] = '1+1=?'
-        super(AntispamField, self).__init__(*args,**kwargs)
+        super(AntispamField, self).__init__(*args, **kwargs)
         self.validators.append(BaseValidator(2))
         self.widget.attrs['class'] = 'antispam'
 
 
 class DatepickerField(django_forms.DateField):
     widget = DatepickerWidget
-    
+
     def widget_attrs(self, widget):
         return {'class': 'datepicker-widget'}
-    
-    
-        
+
+
+
 class ICQNumberField(RegexField):
     default_error_messages = {
         'invalid': _(u'Enter an ICQ number in the format XXXXXXXXX.'),
@@ -376,27 +376,27 @@ class ICQNumberField(RegexField):
         super(ICQNumberField, self).__init__(r'\d{5,32}$',
             max_length, min_length, *args, **kwargs)
 
-    
+
 class CZBirthNumberField(localforms.CZBirthNumberField):
-    
-    def __init__(self, max_length=None, *args, **kwargs): 
+
+    def __init__(self, max_length=None, *args, **kwargs):
         super(CZBirthNumberField, self).__init__(*args, **kwargs)
-        
+
 class CZDICField(RegexField):
-    
+
     def __init__(self, *args, **kwargs):
         super(CZDICField, self).__init__(r'^[a-zA-Z]{2}\d{8,10}$', *args, **kwargs)
-        
-        
+
+
 class CZICNumberField(localforms.CZICNumberField):
-    def __init__(self, max_length=None, *args, **kwargs): 
+    def __init__(self, max_length=None, *args, **kwargs):
         super(CZICNumberField, self).__init__(*args, **kwargs)
-        
+
 class PSCField(django_forms.RegexField):
     def __init__(self, *args, **kwargs):
         kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'psc'}, kwargs.get('widget', None))
         super(PSCField, self).__init__(r'^\d{3} ?\d{2}$', *args, **kwargs)
-    
+
 class HouseNumberField(django_forms.RegexField):
     def __init__(self, *args, **kwargs):
         kwargs['widget'] = WidgetFactory().create(FieldsWidget, {'class': 'house-number'}, kwargs.get('widget', None))
