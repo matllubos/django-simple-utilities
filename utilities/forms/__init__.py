@@ -262,7 +262,7 @@ class InitialModelForm(ModelForm):
         return self.initial_values.copy()
 
     def set_initial_values(self):
-        for key, val in self.initial_values.items():
+        for key, val in self.get_initial_values().items():
             self.set_inital_value(key, val)
 
 
