@@ -13,7 +13,11 @@ from django.db.models.fields.files import FieldFile
 from django.conf import settings
 from django.utils.functional import curry
 
-from sorl.thumbnail import ImageField as SorlImageField
+try:
+    from sorl.thumbnail import ImageField
+except:
+    from django.db.models import ImageField
+
 
 from django.forms import Form
 from utilities.utils import fit
@@ -289,12 +293,6 @@ class GoogleSpreadsheetField(models.CharField):
         return GoogleSpreadsheet(value)
 
 
-class ImageField(SorlImageField):
-
-    def clean(self, value, model_instance):
-        value.name = strip_accents(value.name)
-        return super(ImageField, self).clean(value, model_instance)
-
 class ResizableFieldFile(FieldFile):
 
     def save(self, name, content, save=True):
@@ -569,6 +567,14 @@ class NonUTFFieldFile(models.FileField):
         from unidecode import unidecode
         return super(NonUTFFieldFile, self).get_filename(unidecode(filename))
 
+
+class NonUTFImageField(ImageField):
+
+    def get_filename(self, filename):
+        from unidecode import unidecode
+        return super(NonUTFImageField, self).get_filename(unidecode(filename))
+
+
 class BankAccountField(models.CharField):
 
     def __init__(self, *args, **kwargs):
@@ -576,3 +582,4 @@ class BankAccountField(models.CharField):
 
     def formfield(self, **kwargs):
         return super(BankAccountField, self).formfield(form_class=utilities_forms.BankAccountField, **kwargs)
+
