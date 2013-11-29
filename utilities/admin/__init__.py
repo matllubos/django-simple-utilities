@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.db import transaction, router
 from django.http import Http404
 from django.core.exceptions import PermissionDenied
-from django.contrib.admin.util import get_deleted_objects
+from django.contrib.admin.util import get_deleted_objects, flatten_fieldsets
 from django.contrib.admin.util import unquote
 from django.contrib.admin.options import csrf_protect_m
 from django.template.defaultfilters import slugify
@@ -29,6 +29,7 @@ from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.utils.text import truncate_words
+from django.core.urlresolvers import reverse
 
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
@@ -36,7 +37,7 @@ from utilities.models import HtmlMail, Recipient, Image, SiteEmail, GeneratedFil
 from utilities.templatetags.generated_file import file_image, filename, sizify, is_error
 
 from widgets import UpdateRelatedFieldWidgetWrapper
-from django.core.urlresolvers import reverse
+
 
 class RecipientInLine(admin.TabularInline):
     model = Recipient
@@ -184,11 +185,8 @@ class RelatedToolsAdmin(admin.ModelAdmin):
                 (escape(pk_value), escapejs(obj), json.dumps(self.popup_attrs(obj))))
         return super(RelatedToolsAdmin, self).response_change(request, obj)
 
-
-
     def popup_attrs(self, obj):
         return {}
-
 
     def _media(self):
         media = super(RelatedToolsAdmin, self)._media()
@@ -246,18 +244,16 @@ class MarshallingAdmin(RelatedToolsAdmin):
         return qs
 
     def add_view(self, request, form_url='', extra_context={}):
-        from django.contrib.contenttypes.models import ContentType
         if self.parent:
             extra_context['parent'] = self.parent.__name__.lower()
 
         return super(MarshallingAdmin, self).add_view(request, form_url, extra_context=extra_context)
 
     def change_view(self, request, object_id, extra_context={}):
-        from django.contrib.contenttypes.models import ContentType
         if object_id:
             obj = self.get_object(request, object_id)
             if ContentType.objects.get_for_model(type(obj)) != getattr(obj, self.real_type_field):
-                return HttpResponseRedirect('../../%s/%s' % (getattr(obj, self.real_type_field).model, object_id))
+                return HttpResponseRedirect('../../%s/%s/' % (getattr(obj, self.real_type_field).model, object_id))
 
         if self.parent:
             extra_context['parent'] = self.parent.__name__.lower()
@@ -472,6 +468,20 @@ class DynamicFieldsetsModelMixin(object):
         if self.default_fieldsets:
             return self.default_fieldsets
         return super(DynamicFieldsetsModelMixin, self).get_fieldsets(request, obj=obj)
+
+    def get_exclude(self, request, obj=None):
+        if self.exclude:
+            return list(self.exclude)
+        else:
+            return []
+
+    def get_form(self, request, obj=None, **kwargs):
+        defaults = {
+            "fields": flatten_fieldsets(self.get_fieldsets(request, obj)),
+            "exclude": self.get_exclude(request, obj),
+        }
+        defaults.update(kwargs)
+        return super(DynamicFieldsetsModelMixin, self).get_form(request, obj, **defaults)
 
 
 class CloneModelMixin(object):

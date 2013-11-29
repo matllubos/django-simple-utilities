@@ -360,7 +360,9 @@ function otherSelectFields() {
 validators = {"CZ-phone":PhoneValidator,"psc":PscValidator}
 
 
-function styleIntegerInput(el) {
+function styleNumber(el, isFloat) {
+	var delimiters = ['.', ','];
+	
 	var position = 0;
 	var focus = false;
 	if (el.is(":focus")){
@@ -372,7 +374,8 @@ function styleIntegerInput(el) {
 	var stylizedPosition = position;
 	var firstZero = true;
 	for (i=0; i<val.length;i++) {
-		if (!/^\d$/.test(val.charAt(i)) || (val.length != 1 && val.charAt(i) == '0' && firstZero)) {
+		if ((!/^\d$/.test(val.charAt(i)) && (!isFloat || $.inArray(val.charAt(i), delimiters) == -1)) 
+				|| (val.length != 1 && val.charAt(i) == '0' && firstZero)) {
 			if (i < position){
 				stylizedPosition--;
 			}
@@ -384,7 +387,17 @@ function styleIntegerInput(el) {
 	
 	out = ''
 	j = 0;
+	
+	hasDelimiter = isFloat && stylizedValue.search(/[\.,\,]/) != -1;
 	for (i=stylizedValue.length - 1; i>=0;i--){
+		if (hasDelimiter) {
+			if ($.inArray(stylizedValue.charAt(i), delimiters) != -1){
+				hasDelimiter = false;
+			}
+			out = stylizedValue.charAt(i) + out;
+			continue;
+		}
+		
 		if (j % 3 == 0 && j != 0){
 			out = ' '+out
 			if (i + 1 <= stylizedPosition) {
@@ -405,12 +418,20 @@ function styleIntegerInput(el) {
 
 function autoFormatInteger() {
 	$('input.integer.auto-format').each(function(){
-        styleIntegerInput($(this));
+		styleNumber($(this), false);
 		$(this).keyup(function(objEvent){
-			styleIntegerInput($(this));
+			styleNumber($(this), false);
 		});
 	});
-	
+}
+
+function autoFormatFloat() {
+	$('input.float.auto-format').each(function(){
+		styleNumber($(this), true);
+		$(this).keyup(function(objEvent){
+			styleNumber($(this), true);
+		});
+	});
 }
 
 $(document).ready(function(){
@@ -421,6 +442,7 @@ $(document).ready(function(){
 		hideFields();
 		otherSelectFields();
 		autoFormatInteger();
+		autoFormatFloat();
 		/*$("#id_is_dynamic").click(
 				function(){hideHTML()}
 		);  */
