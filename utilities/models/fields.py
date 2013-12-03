@@ -19,7 +19,7 @@ from sorl.thumbnail import ImageField as SorlImageField
 
 from utilities.utils import fit
 from utilities.forms.widgets import WidgetFactory, FieldsWidget, HtmlWidget, MeasureWidget, SelectMonthYearWidget, OrderWidget, \
-    HideSelectWidget, CommaMeasureWidget, HideCheckboxWidget, ImmutableTextInput, ImmutableSelect, \
+    HideSelectWidget, HideCheckboxWidget, ImmutableTextInput, ImmutableSelect, \
     MultipleOptgroupSelect
 
 from utilities import forms as utilities_forms
@@ -76,10 +76,7 @@ class FloatField(models.FloatField):
             class_names.append('auto-format')
 
         defaults.update(kwargs)
-        if self.comma:
-            defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': ' '.join(class_names)}, kwargs.get('widget', None), measure=self.measure)
-        else:
-            defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': ' '.join(class_names)}, kwargs.get('widget', None), measure=self.measure)
+        defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': ' '.join(class_names)}, kwargs.get('widget', None), measure=self.measure)
         return super(FloatField, self).formfield(form_class=utilities_forms.FloatField, **defaults)
 
 

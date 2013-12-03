@@ -27,6 +27,11 @@ class FloatField(forms.FloatField):
             value = smart_str(value).replace(' ', '')
         return super(FloatField, self).clean(value)
 
+    def prepare_value(self, value):
+        if value and self.comma:
+            value = smart_str(value).replace('.', ',')
+        return value
+
 
 class StylizedIntegerField(forms.IntegerField):
 
