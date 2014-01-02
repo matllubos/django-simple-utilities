@@ -229,7 +229,7 @@ class MarshallingAdmin(RelatedToolsAdmin):
 
     def get_model_perms(self, *args, **kwargs):
         perms = super(MarshallingAdmin, self).get_model_perms(*args, **kwargs)
-        if (self.parent != self.model):
+        if self.parent != self.model:
             perms['list_hide'] = True
         perms['hide_add'] = True
         return perms
@@ -237,6 +237,7 @@ class MarshallingAdmin(RelatedToolsAdmin):
     def queryset(self, request, parent=False):
         if not parent:
             return super(MarshallingAdmin, self).queryset(request)
+
         qs = self.parent._default_manager.get_query_set()
         ordering = self.ordering or ()
         if ordering:
@@ -246,18 +247,21 @@ class MarshallingAdmin(RelatedToolsAdmin):
     def add_view(self, request, form_url='', extra_context={}):
         if self.parent:
             extra_context['parent'] = self.parent.__name__.lower()
-
+            extra_context['parent_verbose_name_plural'] = self.parent._meta.verbose_name_plural
         return super(MarshallingAdmin, self).add_view(request, form_url, extra_context=extra_context)
 
     def change_view(self, request, object_id, extra_context={}):
         if object_id:
             obj = self.get_object(request, object_id)
+            if not obj:
+                raise Http404
+
             if ContentType.objects.get_for_model(type(obj)) != getattr(obj, self.real_type_field):
                 return HttpResponseRedirect('../../%s/%s/' % (getattr(obj, self.real_type_field).model, object_id))
 
         if self.parent:
             extra_context['parent'] = self.parent.__name__.lower()
-
+            extra_context['parent_verbose_name_plural'] = self.parent._meta.verbose_name_plural
         return super(MarshallingAdmin, self).change_view(request, object_id, extra_context=extra_context)
 
 
@@ -301,10 +305,12 @@ class MarshallingAdmin(RelatedToolsAdmin):
 
         if self.parent:
             extra_context['parent'] = self.parent.__name__.lower()
+            print
+
         return super(MarshallingAdmin, self).delete_view(request, object_id, extra_context=extra_context)
 
     def response_change(self, request, obj):
-        if "_save" in request.POST:
+        if "_continue" not in request.POST and "_addanother" not in request.POST:
             opts = obj._meta
             verbose_name = opts.verbose_name
             msg = _('The %(name)s "%(obj)s" was changed successfully.') % {'name': force_unicode(verbose_name), 'obj': force_unicode(obj)}
@@ -316,7 +322,7 @@ class MarshallingAdmin(RelatedToolsAdmin):
         return super(MarshallingAdmin, self).response_change(request, obj)
 
     def response_add(self, request, obj, post_url_continue='../%s/'):
-        if "_save" in request.POST:
+        if "_continue" not in request.POST and "_addanother" not in request.POST:
             opts = obj._meta
             msg = _('The %(name)s "%(obj)s" was added successfully.') % {'name': force_unicode(opts.verbose_name), 'obj': force_unicode(obj)}
             self.message_user(request, msg)

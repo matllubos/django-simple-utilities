@@ -256,9 +256,6 @@ function pageUrl() {
 						$(this).val(output);
 					}
 				});
-				
-				
-				
 			}
 		});
     });
