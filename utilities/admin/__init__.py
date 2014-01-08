@@ -458,22 +458,6 @@ class DynamicListDisplayModelMixin(object):
 
 
 class DynamicFieldsetsModelMixin(object):
-    def __init__(self, model, admin_site):
-        super(DynamicFieldsetsModelMixin, self).__init__(model, admin_site)
-        self.default_fieldsets = self.fieldsets
-
-    def change_view(self, request, object_id, extra_context=None):
-        self.fieldsets = self.get_fieldsets(request)
-        return super(DynamicFieldsetsModelMixin, self).change_view(request, object_id, extra_context=extra_context)
-
-    def add_view(self, request, form_url='', extra_context=None):
-        self.fieldsets = self.get_fieldsets(request)
-        return super(DynamicFieldsetsModelMixin, self).add_view(request, form_url=form_url, extra_context=extra_context)
-
-    def get_fieldsets(self, request, obj=None):
-        if self.default_fieldsets:
-            return self.default_fieldsets
-        return super(DynamicFieldsetsModelMixin, self).get_fieldsets(request, obj=obj)
 
     def get_exclude(self, request, obj=None):
         if self.exclude:

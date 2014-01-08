@@ -29,6 +29,7 @@ class HtmlMail(models.Model):
         datetime = time.strptime(str(self.datetime).split(".")[0], "%Y-%m-%d %H:%M:%S")
         return time.strftime("%H:%M:%S %d.%m.%Y", datetime)
 
+
 class Recipient(models.Model):
     mail = models.EmailField(_('E-mail'))
     htmlmail = models.ForeignKey(HtmlMail)
@@ -37,12 +38,14 @@ class Recipient(models.Model):
     def __unicode__(self):
         return self.mail
 
+
 class Image(models.Model):
     htmlmail = models.ForeignKey(HtmlMail)
     image = models.CharField(_('File path'), max_length=100, blank=False)
 
     def __unicode__(self):
         return self.image
+
 
 class SiteEmail(models.Model):
     mail = models.EmailField('E-mail')
