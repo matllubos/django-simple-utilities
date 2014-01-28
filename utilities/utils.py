@@ -2,20 +2,22 @@
 import re
 import unicodedata
 import pickle
+
 from types import UnicodeType
 
 from django.contrib.admin.util import quote as django_quote
 from django.utils.functional import lazy
 from django.utils.safestring import mark_safe
+from django.http import QueryDict
 
 def listToDict(aList):
     i = 0
     aDict = {}
     for a in aList:
         aDict[i] = a
-        i+=1
+        i += 1
     return aDict
-    
+
 
 import Image
 
@@ -41,7 +43,7 @@ def fit(file_path, max_width=None, max_height=None, save_as=None):
 
 def remove_nonspacing_marks(s):
     return ''.join(c for c in unicodedata.normalize('NFKD', unicode(s)) if unicodedata.category(c) != 'Mn')
-    
+
 def quote(url):
     url = django_quote(remove_nonspacing_marks(url))
     return re.sub(r' ', '-', url)
@@ -51,8 +53,6 @@ def strip_accents(s):
 
 
 mark_safe_lazy = lazy(mark_safe, UnicodeType)
-
-
 
 
 def get_referer(request, default=None):
@@ -75,9 +75,15 @@ def get_referer(request, default=None):
     return referer
 
 
+def dict_to_querystring(dict):
+    query_dict = QueryDict('')
+    query_dict = query_dict.copy()
+    query_dict.update(dict)
+    return query_dict
+
 
 class MultiCookie():
-    def __init__(self,cookie=None,values=None):
+    def __init__(self, cookie=None, values=None):
         if cookie != None:
             try:
                 self.values = pickle.loads(cookie)
