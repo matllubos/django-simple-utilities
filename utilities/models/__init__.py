@@ -10,6 +10,7 @@ from django.contrib.contenttypes import generic
 from django.db.models.signals import post_delete
 
 from filters import *
+from django.core.exceptions import ObjectDoesNotExist
 
 class UserLanguageProfile(models.Model):
     user = models.OneToOneField(User)
@@ -115,8 +116,11 @@ class TreeModelBase(models.Model):
         return self.real_type.get_object_for_this_type(pk=self.pk)
 
     def delete(self, *args, **kwargs):
-        if ContentType.objects.get_for_model(type(self)) != self.real_type:
-            return self.cast.delete(*args, **kwargs);
+        try:
+            if ContentType.objects.get_for_model(type(self)) != self.real_type:
+                return self.cast.delete(*args, **kwargs)
+        except ObjectDoesNotExist:
+            pass
         return super(TreeModelBase, self).delete(*args, **kwargs)
 
     class Meta:
