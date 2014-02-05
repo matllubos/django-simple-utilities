@@ -305,7 +305,6 @@ class MarshallingAdmin(RelatedToolsAdmin):
 
         if self.parent:
             extra_context['parent'] = self.parent.__name__.lower()
-            print
 
         return super(MarshallingAdmin, self).delete_view(request, object_id, extra_context=extra_context)
 

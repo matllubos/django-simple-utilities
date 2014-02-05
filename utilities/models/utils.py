@@ -8,5 +8,4 @@ def filter_to_ors(filter_dict):
             output = Q(**{name:value})
         else:
             output |= Q(**{name:value})
-        print output
     return output

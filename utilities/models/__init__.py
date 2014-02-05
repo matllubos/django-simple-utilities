@@ -114,5 +114,10 @@ class TreeModelBase(models.Model):
     def cast(self):
         return self.real_type.get_object_for_this_type(pk=self.pk)
 
+    def delete(self, *args, **kwargs):
+        if ContentType.objects.get_for_model(type(self)) != self.real_type:
+            return self.cast.delete(*args, **kwargs);
+        return super(TreeModelBase, self).delete(*args, **kwargs)
+
     class Meta:
         abstract = True

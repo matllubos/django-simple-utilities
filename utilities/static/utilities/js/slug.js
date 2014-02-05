@@ -10,6 +10,6 @@ function slug(val){
 			output += bdiak.charAt(sdiak.indexOf(val.charAt(p)));
 		}
 	}
-	output = output.trim().replace(' ', '-')
+	output = output.trim().replace(/ /g, '-')
 	return output.toLowerCase()
 }
