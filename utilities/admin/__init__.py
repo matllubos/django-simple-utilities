@@ -28,7 +28,10 @@ try:
 except:
     import simplejson
 
-from django.utils.functional import update_wrapper
+try:
+    from django.utils.functional import update_wrapper
+except:
+    from functools import update_wrapper
 from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
