@@ -118,7 +118,7 @@ class RelatedToolsAdmin(admin.ModelAdmin):
     delete_confirmation_template = 'admin/delete_confirmation.html'
 
     @csrf_protect_m
-    @transaction.commit_on_success
+    @transaction.atomic
     def delete_view(self, request, object_id, extra_context={}):
         if request.POST and "_popup" in request.POST:
             opts = self.model._meta
@@ -292,7 +292,7 @@ class MarshallingAdmin(RelatedToolsAdmin):
         return super(MarshallingAdmin, self).changelist_view(request, extra_context=extra_context)
 
     @csrf_protect_m
-    @transaction.commit_on_success
+    @transaction.atomic
     def delete_view(self, request, object_id, extra_context={}):
         if request.POST and not "_popup" in request.POST:
             opts = self.model._meta
