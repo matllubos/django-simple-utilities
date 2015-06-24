@@ -36,7 +36,7 @@ from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-
+from django.utils import six
 try:
     from django.utils.text import truncate_words
 except ImportError:
