@@ -22,7 +22,12 @@ from django.contrib.admin.util import unquote
 from django.contrib.admin.options import csrf_protect_m
 from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import UploadedFile
-from django.utils import simplejson, translation
+from django.utils import translation
+try:
+    from django.utils import simplejson
+except:
+    import simplejson
+
 from django.utils.functional import update_wrapper
 from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
