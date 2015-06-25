@@ -82,9 +82,7 @@ class DecimalField(models.DecimalField):
         self.min_value, self.max_value = min_value, max_value
         self.measure = measure
         self.comma = comma
-        self.max_digits = max_digits
-        self.decimal_places = decimal_places
-        models.DecimalField.__init__(self, verbose_name, name, **kwargs)
+        models.DecimalField.__init__(self, verbose_name, name, max_digits, decimal_places, **kwargs)
     
     def formfield(self, **kwargs):
         defaults = {'min_value': self.min_value, 'max_value':self.max_value}
