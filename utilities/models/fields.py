@@ -73,7 +73,7 @@ class FloatField(models.FloatField):
         defaults.update(kwargs)
         if self.comma:
             defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure)
-            return super(FloatField, self).formfield(form_class=utilities_forms.CommaDecimalField, **defaults)
+            return super(FloatField, self).formfield(form_class=utilities_forms.CommaFloatField, **defaults)
         defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure) 
         return super(FloatField, self).formfield(**defaults)
         
