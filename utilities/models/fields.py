@@ -78,10 +78,12 @@ class FloatField(models.FloatField):
         return super(FloatField, self).formfield(**defaults)
         
 class DecimalField(models.DecimalField):
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, comma=True, **kwargs):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, comma=True, max_digits=None, decimal_places=None, **kwargs):
         self.min_value, self.max_value = min_value, max_value
         self.measure = measure
         self.comma = comma
+        self.max_digits = max_digits
+        self.decimal_places = decimal_places
         models.DecimalField.__init__(self, verbose_name, name, **kwargs)
     
     def formfield(self, **kwargs):
