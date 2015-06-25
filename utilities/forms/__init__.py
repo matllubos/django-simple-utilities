@@ -13,11 +13,19 @@ from django.core.validators import EmailValidator, BaseValidator
 from utilities.forms.widgets import FullSizeMultipleSelectWidget, OtherSelectWidget, MultipleOptgroupSelect
 
 
-class CommaDecimalField(forms.FloatField):
+class CommaFloatField(forms.FloatField):
 
     def clean(self, value):
         value = smart_str(value).replace(',', '.')
+        return super(CommaFloatlField, self).clean(value)
+
+
+class CommaDecimalField(forms.DecimalField):
+    
+    def clean(self, value):
+        value = smart_str(value).replace(',', '.')
         return super(CommaDecimalField, self).clean(value)
+
 
 class StylizedIntegerField(forms.IntegerField):
 
