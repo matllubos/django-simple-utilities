@@ -25,12 +25,12 @@ from django.core.files.uploadedfile import UploadedFile
 from django.utils import translation
 try:
     from django.utils import simplejson
-except:
+except ImportError:
     import simplejson
 
 try:
     from django.utils.functional import update_wrapper
-except:
+except ImportError:
     from functools import update_wrapper
 from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
