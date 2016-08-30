@@ -16,8 +16,10 @@ def listToDict(aList):
         i+=1
     return aDict
     
-
-import Image
+try:
+    from PIL import Image
+except:
+    import Image
 
 def fit(file_path, max_width=None, max_height=None, save_as=None):
     # Open file
