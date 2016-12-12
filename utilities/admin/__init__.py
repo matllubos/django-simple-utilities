@@ -22,14 +22,32 @@ from django.contrib.admin.util import unquote
 from django.contrib.admin.options import csrf_protect_m
 from django.template.defaultfilters import slugify
 from django.core.files.uploadedfile import UploadedFile
-from django.utils import simplejson, translation
-from django.utils.functional import update_wrapper
+from django.utils import translation
+try:
+    from django.utils import simplejson
+except ImportError:
+    import simplejson
+
+try:
+    from django.utils.functional import update_wrapper
+except ImportError:
+    from functools import update_wrapper
 from django.shortcuts import render_to_response
 from django.core.files.base import ContentFile
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-from django.utils.text import truncate_words
-
+from django.utils import six
+try:
+    from django.utils.text import truncate_words
+except ImportError:
+    # django >=1.5
+    from django.utils.text import Truncator
+    from django.utils.functional import allow_lazy
+    def truncate_words(s, num, end_text='...'):
+        truncate = end_text and ' %s' % end_text or ''
+        return Truncator(s).words(num, truncate=truncate)
+    truncate_words = allow_lazy(truncate_words, six.text_type)
+    
 from utilities.deep_copy import deep_copy
 from utilities.csv_generator import CsvGenerator
 from utilities.models import HtmlMail, Recipient, Image, SiteEmail, GeneratedFile
@@ -100,7 +118,7 @@ class RelatedToolsAdmin(admin.ModelAdmin):
     delete_confirmation_template = 'admin/delete_confirmation.html'
 
     @csrf_protect_m
-    @transaction.commit_on_success
+    @transaction.atomic
     def delete_view(self, request, object_id, extra_context={}):
         if request.POST and "_popup" in request.POST:
             opts = self.model._meta
@@ -274,7 +292,7 @@ class MarshallingAdmin(RelatedToolsAdmin):
         return super(MarshallingAdmin, self).changelist_view(request, extra_context=extra_context)
 
     @csrf_protect_m
-    @transaction.commit_on_success
+    @transaction.atomic
     def delete_view(self, request, object_id, extra_context={}):
         if request.POST and not "_popup" in request.POST:
             opts = self.model._meta

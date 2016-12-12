@@ -73,9 +73,25 @@ class FloatField(models.FloatField):
         defaults.update(kwargs)
         if self.comma:
             defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure)
-            return super(FloatField, self).formfield(form_class=utilities_forms.CommaDecimalField, **defaults)
+            return super(FloatField, self).formfield(form_class=utilities_forms.CommaFloatField, **defaults)
         defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure) 
         return super(FloatField, self).formfield(**defaults)
+        
+class DecimalField(models.DecimalField):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, measure=None, comma=True, max_digits=None, decimal_places=None, **kwargs):
+        self.min_value, self.max_value = min_value, max_value
+        self.measure = measure
+        self.comma = comma
+        models.DecimalField.__init__(self, verbose_name, name, max_digits, decimal_places, **kwargs)
+    
+    def formfield(self, **kwargs):
+        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
+        defaults.update(kwargs)
+        if self.comma:
+            defaults['widget'] = WidgetFactory().create(CommaMeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure)
+            return super(DecimalField, self).formfield(form_class=utilities_forms.CommaDecimalField, **defaults)
+        defaults['widget'] = WidgetFactory().create(MeasureWidget, {'class': 'float'}, kwargs.get('widget', None), measure=self.measure) 
+        return super(DecimalField, self).formfield(**defaults)
  
  
 class PhoneField(models.CharField):
