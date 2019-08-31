@@ -19,7 +19,7 @@ def listToDict(aList):
     return aDict
 
 
-import Image
+import PIL import Image
 
 def fit(file_path, max_width=None, max_height=None, save_as=None):
     # Open file
